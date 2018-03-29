@@ -36,7 +36,7 @@ python manage.py migrate
 ```
 _初始化会报createSuperuser的错误，此处忽略即可，下面会用命令创建用户。_
 
-另：内置关键字 在wiki 关键字创建页面（可以了解一下）
+另：内置关键字 在wiki #关键字创建 页面（可以了解一下）
 
 #### 创建管理员用户
 ```bash
