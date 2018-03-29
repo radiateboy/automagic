@@ -21,8 +21,8 @@ status_id:
 
 """
 result = client.send_post(
-	'add_result_for_case/1047/1036925',
-	{'status_id': 1, 'comment': 'AutoMagic Flag.' }
+    'add_result_for_case/1047/1036925',
+    {'status_id': 1, 'comment': 'AutoMagic Flag.' }
 )
 # pprint(result)
 
@@ -46,13 +46,13 @@ section = client.send_get('get_section/45752')
 send_post('add_case/[sectionid]',casedata)
 """
 casedata = {
-	"title":"AutoMagic 测试使用admin用户登录。",
-	"template_id":"1",
-	"type_id":"1",
-	"priority_id":"4",
-	"custom_caseversion_id":"8",
-	"custom_automation_status":"2",
-	"custom_steps": "Step1 跳转到登录页面：http://192.168.110.111\n Step2 输入登录用户名 admin \n Step3 输入登录密码 admin@123\n Step4 点击登录按钮"
+    "title":"AutoMagic 测试使用admin用户登录。",
+    "template_id":"1",
+    "type_id":"1",
+    "priority_id":"4",
+    "custom_caseversion_id":"8",
+    "custom_automation_status":"2",
+    "custom_steps": "Step1 跳转到登录页面：http://192.168.110.111\n Step2 输入登录用户名 admin \n Step3 输入登录密码 admin@123\n Step4 点击登录按钮"
 }
 add_case = client.send_post('add_case/45752',casedata)
 # pprint(add_case)
