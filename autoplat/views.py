@@ -398,7 +398,7 @@ def del_project(request,id):
 	project = get_object_or_404(Project,pk=int(id))
 	x = project.productid
 	project.delete()
-	return HttpResponseRedirect('/func/product/view/' + str(Product.objects.get(name=x).id))
+	return HttpResponseRedirect('/setting/product/view/' + str(Product.objects.get(name=x).id))
 
 
 @csrf_exempt
@@ -473,7 +473,7 @@ def update_module(request):
 def del_module(request,id):
 	module = get_object_or_404(Module,pk=int(id))
 	module.delete()
-	return HttpResponseRedirect('/project/view/'+str(Project.objects.get(name=module.projectid).id))
+	return HttpResponseRedirect('/setting/project/view/'+str(Project.objects.get(name=module.projectid).id))
 
 @login_required()
 def add_case(request):
