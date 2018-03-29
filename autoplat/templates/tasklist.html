@@ -1,0 +1,338 @@
+{% extends 'frame.html' %}
+{% block title %}Automagic{% endblock %}
+{% block slideshow %}
+    <div class="ak-zper-midbox ak-jsch-mid">
+         <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+               <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+                    <span class="ak-zper-remindback"></span>
+                    <span class="inbox-text">任务管理</span>
+               </div>
+                <select id="selproductid" name="productname" class="ak-right ak-left ac-aselect ac-margint8">
+                      <option value="0">-请选择产品-</option>
+                          {% for product in userandproduct  %}
+                              {% if product.username == request.user %}
+                                  <option value="{{ product.productname.id }}" {% if request.GET.productname  == product.productname %}selected{% endif %}>{{ product.productname }}</option>
+                              {% endif %}
+                          {% endfor %}
+                </select>
+          </div>
+
+<!--      ---------------------华丽的分割线 main------------------------ -->
+      	  <div class="col-md-12">
+              <div class="ac-margin-tb15" >
+                    <form id="tasklistform" class="form-inline" role="form" action="" method="GET">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <input id="check_productid" value="0" name="check_productname" hidden="true">
+                            <select id="selprojectid" name="projectid" class="ak-left ac-aselect col01">
+                              <option value="">所属项目</option>
+                            </select>
+                            <select name="tasktype" class="ak-left ac-aselect col02">
+{#                              <option value="">任务类型</option>#}
+                                 <option value="1" {% if request.GET.tasktype  == '1' %}selected{% endif %} >执行用例</option>
+                                 <option value="2" {% if request.GET.tasktype  == '2' %}selected{% endif %}>同步用例</option>
+                                 <option value="3" {% if request.GET.tasktype  == '3' %}selected{% endif %}>Jenkin任务</option>
+                            </select>
+                              <div class="input-group">
+                                <input type="input" class="form-control search-width" name="keyword" value="{{ request.GET.keyword }}"  placeholder="通过任务ID、描述、创建者搜索">
+                                  <span class="input-group-btn">
+                                      <button class="btn btn-primary" id="search_btn" type="submit">Go!</button>
+                                  </span>
+                              </div>
+{#                            <div align="right" class="form-group">#}
+{#                                <a href="/task/add/" class="ak-left ac-btn-addcase orange" >创建任务</a>#}
+{#                            </div>#}
+                            <a href="/func/task/add/" class="ak-right ac-btn-adduser blue" >创建任务</a>
+                            <!-- /input-group -->
+                        </div>
+
+                            <table id="mytable" class="table table-striped table-hover table-condensed ac-aelement-table">
+                                <thead>
+                                  <tr>
+                                      <th>任务ID</th>
+                                      <th>任务描述</th>
+                                      <th>所属项目</th>
+                                      <th>任务类型</th>
+                                      <th>任务状态</th>
+                                      <th>用例集</th>
+                                      <th>任务/用例</th>
+                                      <th>创建者</th>
+                                      <th>创建时间</th>
+                                  <th>操作</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {% for task in tasklist %}
+                                    <tr>
+                                        <td>{{ task.id }}</td>
+                                        <td class="ac-alist-width-overflow-public" title="{{ task.taskname }}">{{ task.taskname }}</td>
+                                        <td>{{ task.projectid }}</td>
+                                        <td>{% if task.tasktype == '1' %}执行用例{% elif task.tasktype == '2' %}同步用例{% elif task.tasktype == '3' %}Jenkin任务{% endif %}</td>
+                                        <td>
+                                            {% if task.status == 0 %}
+                                                <span ng-if="f.flag==true" class="label label-success ng-scope">未执行</span>
+                                            {% elif task.status == 1 %}
+                                                <span ng-if="f.flag==false" class="label label-danger ng-scope">执行中</span>
+                                            {% else %}
+                                                <span ng-if="f.flag==false" class="label label-info ng-scope">已完成</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="ac-alist-width-overflow-public" title="{{ task.caselist }}">{{ task.caselist }}</td>
+                                        <td class="ac-alist-descp ac-alist-width-overflow">
+                                            {% if task.tasktype == '1' %}
+                                                <a target="_blank" href="http://172.17.3.70/testrail/index.php?/runs/view/{{ task.testrailrunid }}"/>{{ task.testrailrunid }}
+                                            {% elif task.tasktype == '2' %}
+                                                <a target="_blank" href="http://172.17.3.70/testrail/index.php?/suites/view/{{ task.testrailsuites }}&group_by=cases:section_id&group_oder=asc&group_id={{ task.testsectionid }}"/>{{ task.testsectionid }}
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ task.createat }}</td>
+                                        <td>{{ task.createtime|date:'Y-m-d H:i:s' }}</td>
+                                        <td>
+                                            <a title="编辑" href="{% url 'taskupdate' task.id %}" class="ke-ablock" ><i class="glyphicon glyphicon-edit"></i></a>
+                                            {% if task.status == 1 %}
+                                                <a title="执行中" class="ke-ablock"><i class="glyphicon glyphicon-record"></i></a>
+                                            {% else %}
+                                                <a title="执行" id="run{{ task.id }}" href="#" onclick="runtask({{ task.id }})" class="ke-ablock"><i class="glyphicon glyphicon-play-circle"></i></a>
+                                            {% endif %}
+                                            {% if request.user.is_admin %}
+                                                <a title="删除" href="{% url 'taskdel' task.id %}" class="ke-ablock" onclick="return confirm('您确定要删除吗？')"><i class="glyphicon glyphicon-trash"></i></a>
+                                            {% endif %}
+                                            <a href="#" title="任务历史" onclick="viewhistory({{ task.id }},{{ task.tasktype }})" class="ke-ablock" data-toggle="modal" data-target="#viewhistory"><i class="glyphicon glyphicon-tasks"></i></a>
+                                        </td>
+                                    </tr>
+                                  {% endfor %}
+                                </tbody>
+                            </table>
+                    </div>
+                    {% if is_paginated %}
+                        <div class="panel-default">
+                            <ul class="pagination">
+                              <li><a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page=1'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page=1')">«</a></li>
+                              {% if page_obj.has_previous %}
+                                <!--<li><a href="{{ request.get_full_path }}&page={{ page_obj.previous_page_number }}">上一页</a></li>-->
+                                  <li><a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.href +'?page={{ page_obj.previous_page_number }}': window.location.search.replace(/page=(\d+|\s*)/, 'page={{ page_obj.previous_page_number }}')">上一页</a></li>
+                              {% else %}
+                                <li class="previous disabled"><a>上一页</a></li>
+                              {% endif %}
+                              {% for i in page_obj.paginator.page_range %}
+                                  <li {% if page_obj.number == i %}class="active"{% endif %}><a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page={{ i }}'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page={{ i }}')">{{ i }}</a></li>
+                              {% endfor %}
+                              {% if page_obj.has_next %}
+                                <li><a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page={{ page_obj.next_page_number }}'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page={{ page_obj.next_page_number }}')">下一页</a></li>
+                              {% else %}
+                                <li class="previous disabled"><a>下一页</a></li>
+                              {% endif %}
+                              <li><a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page={{ page_obj.paginator.num_pages  }}'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page={{ page_obj.paginator.num_pages  }}')">»</a></li>
+                                <li><a>当前第{{ page_obj.number }}页/共{{ tasksum }}条</a></li>
+                                <li><input id="curpage" class="ac-acaseedit-input" type="number" style="width: 80px;"></li>
+                                <li><button id="btn_skip" onclick="btn_skip_click()" type="button" class="btn btn-sm btn-primary">确定</button></li>
+                            </ul>
+                    </div>
+                    {% endif %}
+              </form>
+              </div>
+          </div>
+    <!--      ---------------------华丽的分割线 main end------------------------ -->
+
+    </div>
+    <!-- task history -->
+    <div class="modal fade ak-min-fullwidth-modal ak-znews-addsort-modal" id="viewhistory" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                  <div class="modal-content" style="width: 1000px;">
+                        <div class="modal-header clearfix">
+                              <button type="button" class="close close-back" data-dismiss="modal"> <span class="sr-only">Close</span> </button>
+                              <h4 class="modal-title text-center">任务历史</h4>
+                        </div>
+                        <div class="modal-body ak-main-body">
+                            <table class="table table-striped table-hover table-condensed ac-aelement-table">
+                                <thead>
+                                  <tr>
+                                      <th>开始时间</th>
+                                      <th>任务描述</th>
+                                      <th>All</th>
+                                      <th>Pass</th>
+                                      <th>Fail</th>
+                                      <th>Error</th>
+                                      <th>运行时间</th>
+                                      <th>执行用户</th>
+                                      <th>详细</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                                </table>
+                        </div>
+          </div>
+    </div>
+    </div>
+{% endblock %}
+{% block script %}
+    {% load staticfiles %}
+    <script>
+        function viewhistory(id, tasktype) {
+                    $.ajax({
+                        type:"GET",
+                        data:{'taskid':id},
+                        url: "/func/get/taskhistory/",
+                        cache: false,
+                        dataType:'json',
+                        async:false,
+
+                        success: function(result,TextStatus) {
+                            $("#viewhistory .ak-main-body").empty();
+                             var tmpHtml = ''
+                            if (tasktype == 1){
+                                // alert(tasktype);
+                             for(i=0; i<result.length; i++) {
+                                     tmpHtml += '<tr>' +
+                                         '<td>'+result[i].starttime+'</td>' +
+                                         '<td>'+result[i].taskname+'</td>' +
+                                         '<td>'+result[i].case_tag_all+'</td>' +
+                                         '<td>'+result[i].case_tag_pass+'</td>' +
+                                         '<td>'+result[i].case_tag_fail+'</td>' +
+                                         '<td>'+result[i].case_tag_error+'</td>' +
+                                         '<td>'+result[i].exectime+'</td>' +
+                                         '<td>'+result[i].user+'</td>' +
+                                         '<td><a target="_bank" href="http://jenkinsm.acorn-net.com/TestResults/CornerStone/'+result[i].reporturl+'"><i class="glyphicon glyphicon-indent-left"></a></td>' +
+                                         '</tr>'
+                             }
+                            var tpl = ' <table class="table table-striped table-hover table-condensed ac-aelement-table">'+
+                                '<thead>'+
+                                  '<tr>'+
+                                      '<th>开始时间</th>'+
+                                      '<th>任务描述</th>'+
+                                      '<th>All</th>'+
+                                      '<th>Pass</th>'+
+                                      '<th>Fail</th>'+
+                                      '<th>Error</th>'+
+                                      '<th>运行时间</th>'+
+                                      '<th>执行用户</th>'+
+                                      '<th>详细</th>'+
+                                  '</tr>'+
+                                '</thead>'+
+                                '<tbody>'+
+                                  tmpHtml
+                                '</tbody>'+
+                                '</table>'
+                             }
+                             else if (tasktype == 3){
+                                 var td_result = ''
+                             for(i=0; i<result.length; i++) {
+                                    if (result[i].result == 'SUCCESS'){
+                                        td_result = '<td><span class="label label-success">'+result[i].result+'</span></td>'
+                                    }
+                                    else if(result[i].result == 'ABORTED'){
+                                        td_result = '<td><span class="label label-default">'+result[i].result+'</span></td>'
+                                    }
+                                    else if(result[i].result == 'FAILURE'){
+                                        td_result = '<td><span class="label label-danger">'+result[i].result+'</span></td>'
+                                    }
+                                     tmpHtml += '<tr>' +
+                                         '<td>'+result[i].starttime+'</td>' +
+                                         '<td class="ac-alist-width-overflow-public" title="'+result[i].build_name+'"><a target="_bank" href="'+result[i].consoleurl+'" class="ac-abtn blue">'+result[i].build_name+'</td>' +
+                                         '<td>'+result[i].exectime+'</td>' +
+                                         td_result +
+                                         '<td class="ac-alist-width-overflow-public" title="'+result[i].user+'">'+result[i].user+'</td>' +
+                                         '<td><a target="_bank" href="'+result[i].reporturl+'" class="ke-block"><i class="glyphicon glyphicon-indent-left"></a></td>' +
+                                         '</tr>'
+                             }
+                             var tpl = ' <table class="table table-striped table-hover table-condensed ac-aelement-table">'+
+                                '<thead>'+
+                                  '<tr>'+
+                                      '<th>开始时间</th>'+
+                                      '<th>任务描述</th>'+
+                                      '<th>运行时间</th>'+
+                                      '<th>运行结果</th>'+
+                                      '<th>执行用户</th>'+
+                                      '<th>详细</th>'+
+                                  '</tr>'+
+                                '</thead>'+
+                                '<tbody>'+
+                                  tmpHtml
+                                '</tbody>'+
+                                '</table>'
+                            }
+                            else if (tasktype == 2){
+                                //alert(tasktype);
+                                for(i=0; i<result.length; i++) {
+                                     tmpHtml += '<tr>' +
+                                         '<td>'+result[i].starttime+'</td>' +
+                                         '<td>'+result[i].taskname+'</td>' +
+                                         '<td class="ac-alist-width-overflow-public" title="'+result[i].reporturl+'">'+result[i].reporturl+'</td>' +
+                                         '<td>'+result[i].user+'</td>' +
+                                         '</tr>'
+                                }
+                                var tpl = ' <table class="table table-striped table-hover table-condensed ac-aelement-table">'+
+                                '<thead>'+
+                                  '<tr>'+
+                                      '<th>开始时间</th>'+
+                                      '<th>任务描述</th>'+
+                                      '<th>CaseList</th>'+
+                                      '<th>执行用户</th>'+
+                                  '</tr>'+
+                                '</thead>'+
+                                '<tbody>'+
+                                  tmpHtml
+                                '</tbody>'+
+                                '</table>'
+                            }
+                             $('#viewhistory .ak-main-body').append(tpl)
+                             $('#viewhistory table').DataTable({
+                // "sScrollX": "100%",   //表格的宽
+                // "sScrollXInner": "100%",
+                "bPaginate": true,  //是否显示分页
+                "bLengthChange": true,  //每页显示的记录数
+                "bFilter": false, //搜索栏
+                "bSort": true, //是否支持排序功能
+                "bInfo": true, //显示表格信息
+                "bAutoWidth": true,  //自适应宽度
+                "aaSorting": [[0, "desc"]],  //给列表排序 ，第一个参数表示数组 (由0开始)。1 表示Browser列。第二个参数为 desc或是asc
+                "oLanguage": {
+                    "sLengthMenu": "每页显示 _MENU_ 条记录",
+                    "sZeroRecords": "对不起，查询不到任何相关数据",
+                    "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
+                    "sInfoEmtpy": "找不到相关数据",
+                    "sInfoFiltered": "数据表中共为 _MAX_ 条记录)",
+                    "sProcessing": "正在加载中...",
+                    "sSearch": "搜索",
+                    "sUrl": "", //多语言配置文件，可将oLanguage的设置放在一个txt文件中，例：Javascript/datatable/dtCH.txt
+                    "oPaginate": {
+                        "sFirst": "第一页",
+                        "sPrevious": " 上一页 ",
+                        "sNext": " 下一页 ",
+                        "sLast": " 最后一页 "
+                    }
+                }, //多语言配置
+            });
+                         },
+                        error:function (result) {
+                            alert(result);
+                        }
+                     });
+            }
+        function btn_skip_click() {
+                var currpage = $('#curpage').val() === '' ? 1 : parseInt($('#curpage').val());
+                // console.log(currpage);
+                if (currpage > {{ page_obj.paginator.num_pages }}){
+                    currpage = {{ page_obj.paginator.num_pages }};
+                }
+                if (currpage < 1){
+                    currpage =1;
+                }
+                var url = window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page='+currpage+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page='+currpage);
+                self.location = url;
+
+                return false;
+            }
+
+        $('#curpage').keypress(function(event){
+//            console.log(event.which);
+            if(event.which==13){
+                btn_skip_click()
+            }
+            event.stopPropagation();
+        });
+
+    </script>
+{% endblock %}

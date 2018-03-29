@@ -1,0 +1,297 @@
+{% extends 'frame.html' %}
+{% block title %}Automagic{% endblock %}
+{% block slideshow %}
+    <div class="ak-zper-midbox ak-jsch-mid">
+        <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+            <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+                <span class="ak-zper-remindback"></span>
+                <span class="inbox-text">接口列表</span>
+            </div>
+
+            <select id="selproductid" name="productname" class="ak-right ak-left ac-aselect ac-margint8">
+                <option value="0">-请选择产品-</option>
+                {% for product in userandproduct %}
+                    {% if product.username == request.user %}
+                        <option value="{{ product.productname.id }}"
+                                {% if request.GET.check_productname  == product.productname.id %}selected{% endif %}>{{ product.productname }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <!--      ---------------------华丽的分割线 main------------------------ -->
+        <div class="col-md-12">
+            <div class="ac-margin-tb15">
+                <div class="panel-group" id="accordion">
+                    <div class="panel-heading">
+                        <form class="form-inline" id="search" role="form" action="" method="GET">
+                            <input id="check_productid" value="0" name="check_productname" hidden="true">
+                            <select id="selprojectid" name="projectid" class="ak-left ac-aselect col01">
+
+                            </select>
+                            <select id="selmoduleid" name="moduleid" class="ak-left ac-aselect col01">
+                                <option value="">所属模块</option>
+                            </select>
+                            <select name="casestatus" class="ak-left ac-aselect col02">
+                                <option value="">状态</option>
+                                <option value="True" {% if request.GET.casestatus  == 'True' %}selected{% endif %}>启 用
+                                </option>
+                                <option value="False" {% if request.GET.casestatus  == 'False' %}selected{% endif %}>停
+                                    用
+                                </option>
+                            </select>
+                            <div class="input-group">
+                                <input type="input" class="form-control search-width" name="keyword"
+                                       value="{{ request.GET.keyword }}" placeholder="通过用例ID或描述、作者等关键字搜索">
+                                <span class="input-group-btn">
+                                      <button class="btn btn-primary" type="submit" id="search_btn">Go!</button>
+                                  </span>
+                            </div>
+                            <a href="/func/case/add/" class="ak-right ac-btn-adduser blue">添加用例</a>
+                        </form>
+                        <!-- /input-group -->
+                    </div>
+                    {% for case in caselist %}
+                        {% if case.isenabled == True %}
+                            <div class="panel panel-success">
+                                <div class="panel-heading panel0">
+                                    <div class="panel-title">
+                                        <a id="{{ case.id }}" onclick="changeIcon(this);" data-toggle="collapse"
+                                           data-parent="#accordion"
+                                           href="#case{{ case.id }}"><i
+                                                class="glyphicon glyphicon-plus"></i></a>
+                                        <label class="label label-default">{{ case.id }}</label>
+                                        <label class="label label-info">{{ case.method |upper }}</label>
+                                        <label>{{ case.url }}</label>
+                                        <span style="padding-left: 100px;"><label>{{ case.descr }}</label></span>
+                                        <span style="float: right;">
+                                            <a title="编辑" href="{% url 'caseupdate' case.id %}"
+                                               class="ke-ablock"><i class="glyphicon glyphicon-edit"></i></a>
+                                                        {#                                            <a href="{% url 'casedel' case.id %}" class="ac-abtn red" role="button" onclick="return confirm('您确定要删除吗？')">删除</a>#}
+                                                        <a href="#" title="执行" id="run{{ case.id }}"
+                                                           onclick="runcase({{ case.id }})" class="ke-ablock"><i
+                                                                class="glyphicon glyphicon-play-circle"></i></a>
+                                            {% if case.debuginfo %}
+                                                <a href="#" title="查看"
+                                                   onclick="viewdebuginfo({{ case.id }})" class="ke-ablock"
+                                                   data-toggle="modal" data-target="#debuginfo"><i
+                                                        class="glyphicon glyphicon-eye-open"></i></a>
+                                            {% else %}
+                                                <a title="查看" class="ke-ablock"><i
+                                                        class="glyphicon glyphicon-eye-close"></i></a>
+                                            {% endif %}
+                                            <a href="{% url 'copycase' case.id %}" title="复制"
+                                               class="ke-ablock"><i
+                                                    class="glyphicon glyphicon-copy"></i></a>
+                                            </span>
+                                    </div>
+                                </div>
+                                <div id="case{{ case.id }}" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <table class="table table-striped table-hover table-condensed ac-aelement-table">
+                                            <thead>
+                                            <tr>
+                                                <th>PARAMS</th>
+                                                <th>EXECTIME</th>
+                                                <th>EXPECTED</th>
+                                                <th>ACTUAL</th>
+                                                <th>STATUS_CODE</th>
+                                                <th>CONTENT</th>
+                                                <th>OPTIONS</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="panel panel-danger">
+                                <div class="panel-heading panel0">
+                                    <div class="panel-title">
+                                        <a id="{{ case.id }}" onclick="changeIcon(this);" data-toggle="collapse" data-parent="#accordion"
+                                           href="#case{{ case.id }}"><i
+                                                class="glyphicon glyphicon-plus"></i></a>
+                                        <label class="label label-default">{{ case.id }}</label>
+                                        <label class="label label-info">{{ case.method |upper }}</label>
+                                        <label>{{ case.url }}</label>
+                                        <span style="padding-left: 100px;"><label>{{ case.descr }}</label></span>
+                                        <span style="float: right;">
+                                            <a title="编辑" href="{% url 'caseupdate' case.id %}"
+                                               class="ke-ablock"><i class="glyphicon glyphicon-edit"></i></a>
+                                                        {#                                            <a href="{% url 'casedel' case.id %}" class="ac-abtn red" role="button" onclick="return confirm('您确定要删除吗？')">删除</a>#}
+                                                        <a href="#" title="执行" id="run{{ case.id }}"
+                                                           onclick="runcase({{ case.id }})" class="ke-ablock"><i
+                                                                class="glyphicon glyphicon-play-circle"></i></a>
+                                            {% if case.debuginfo %}
+                                                <a href="#" title="查看"
+                                                   onclick="viewdebuginfo({{ case.id }})" class="ke-ablock"
+                                                   data-toggle="modal" data-target="#debuginfo"><i
+                                                        class="glyphicon glyphicon-eye-open"></i></a>
+                                            {% else %}
+                                                <a title="查看" class="ke-ablock"><i
+                                                        class="glyphicon glyphicon-eye-close"></i></a>
+                                            {% endif %}
+                                            <a href="{% url 'copycase' case.id %}" title="复制"
+                                               class="ke-ablock"><i
+                                                    class="glyphicon glyphicon-copy"></i></a>
+                                            </span>
+                                    </div>
+                                </div>
+                                <div id="case{{ case.id }}" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <table class="table table-striped table-hover table-condensed ac-aelement-table">
+                                            <thead>
+                                            <tr>
+                                                <th>PARAMS</th>
+                                                <th>EXECTIME</th>
+                                                <th>EXPECTED</th>
+                                                <th>ACTUAL</th>
+                                                <th>STATUS_CODE</th>
+                                                <th>CONTENT</th>
+                                                <th>OPTIONS</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+
+                {% if is_paginated %}
+                    <div class="panel-default">
+                        <ul class="pagination">
+                            <li>
+                                <a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page=1'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page=1')">«</a>
+                            </li>
+                            {% if page_obj.has_previous %}
+                                <!--<li><a href="{{ request.get_full_path }}&page={{ page_obj.previous_page_number }}">上一页</a></li>-->
+                                <li>
+                                    <a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.href +'?page={{ page_obj.previous_page_number }}': window.location.search.replace(/page=(\d+|\s*)/, 'page={{ page_obj.previous_page_number }}')">上一页</a>
+                                </li>
+                            {% else %}
+                                <li class="previous disabled"><a>上一页</a></li>
+                            {% endif %}
+                            {#                              {% for i in page_obj.paginator.page_range %}#}
+                            {#                                  <li {% if page_obj.number == i %}class="active"{% endif %}><a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page={{ i }}'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page={{ i }}')">{{ i }}</a></li>#}
+                            {#                                <li {% if page_obj.number == i %}class="active"{% endif %}><a href="{{ request.get_full_path }}&page={{ i }}">{{ i }}</a></li>#}
+                            {#                              {% endfor %}#}
+                            {% if page_obj.has_next %}
+                                <li>
+                                    <a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page={{ page_obj.next_page_number }}'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page={{ page_obj.next_page_number }}')">下一页</a>
+                                </li>
+                            {% else %}
+                                <li class="previous disabled"><a>下一页</a></li>
+                            {% endif %}
+                            <li>
+                                <a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page={{ page_obj.paginator.num_pages }}'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page={{ page_obj.paginator.num_pages }}')">»</a>
+                            </li>
+                            <li><a>当前第{{ page_obj.number }}页/共{{ casesum }}条</a></li>
+                            <li><input id="curpage" class="ac-acaseedit-input" type="number" style="width: 80px;"></li>
+                            <li>
+                                <button id="btn_skip" onclick="btn_skip_click()" type="button"
+                                        class="btn btn-sm btn-primary">确定
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <!--      ---------------------华丽的分割线 main end------------------------ -->
+
+    </div>
+
+    <div class="modal fade ak-min-fullwidth-modal ak-znews-addsort-modal" id="debuginfo" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header clearfix">
+                    <button type="button" class="close close-back" data-dismiss="modal"><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title text-center">调试信息</h4>
+                </div>
+                <div class="modal-body ak-main-body">
+                            <pre id="divdebuginfo">
+                            </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            $("#accordion").find(".panel-collapse").each(function () {
+                $(this).collapse('hide')
+            })
+        })
+        function btn_skip_click() {
+            var currpage = $('#curpage').val() === '' ? 1 : parseInt($('#curpage').val());
+            // console.log(currpage);
+            if (currpage > {{ page_obj.paginator.num_pages }}) {
+                currpage = {{ page_obj.paginator.num_pages }};
+            }
+            if (currpage < 1) {
+                currpage = 1;
+            }
+            var url = window.location.search.match(/page=(\d+|\s*)/) === null ? window.location.origin + (window.location.pathname + '?page=' + currpage + (window.location.search ? window.location.search.replace('?', '&') : '')) : window.location.search.replace(/page=(\d+|\s*)/, 'page=' + currpage);
+            self.location = url;
+
+            return false;
+        }
+
+        function changeIcon(ele) {
+                        /* 根据产品名称查询关键字列表 */
+            var webinterfaceid = $(ele).attr('id');
+            if ($("#case"+webinterfaceid).find("tbody tr").length == 0){
+            $.ajax({
+                type: "GET",
+                data: {'webinterfaceid': webinterfaceid},
+                url: "/interf/get/response/", //后台处理函数的url 这里用的是static url 需要与urls.py中的name一致
+                cache: false,
+                dataType: 'json',
+
+                success: function (result, TextStatus) {
+                    if (result.length > 0) {
+                        for (i = 0; i < result.length; i++){
+                        $("#case"+webinterfaceid+" tbody").append('<tr>'
+                                                        +'<td class="ac-alist-width-overflow">'+result[i].params+'</td>'
+                                                        +'<td>'+result[i].exectime+'</td>'
+                                                        +'<td>'+result[i].expected+'</td>'
+                                                        +'<td>'+result[i].actual+'</td>'
+                                                        +'<td>'+'<span class="label status_'+result[i].status_code+'">'+result[i].status_code+'</span></td>'
+                                                        +'<td class="ac-alist-width-overflow" data-toggle="tooltips" data-placement="top" title="'+result[i].Response_content+'">'+result[i].Response_content+'</td>'
+                                                        +'<td><a href="#" title="执行" id="run'+result[i].id+'" onclick="runcase('+result[i].id+')" class="ke-ablock"><i class="glyphicon glyphicon-play-circle"></i></a>'
+                                                            +'<a href="#" title="查看" onclick="viewdebuginfo('+result[i].id+')" class="ke-ablock" data-toggle="modal" data-target="#debuginfo"><i class="glyphicon glyphicon-fire"></i></a></td>'
+                                +'</tr>')
+                    }
+                    }
+                },
+                error: function (result) {
+{#                    alert(result);#}
+                }
+            });
+            }
+            var target = $(ele).find('i');
+            return target.hasClass('glyphicon-plus') ?
+                    target.removeClass('glyphicon-plus').addClass('glyphicon-minus') :
+                    target.addClass('glyphicon-plus').removeClass('glyphicon-minus');
+        }
+        $('#curpage').keypress(function (event) {
+            console.log(event.which);
+            if (event.which == 13) {
+                btn_skip_click()
+            }
+            event.stopPropagation();
+        })
+    </script>
+{% endblock %}

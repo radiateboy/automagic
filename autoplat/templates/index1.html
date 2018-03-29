@@ -1,0 +1,276 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="msapplication-tap-highlight" content="no" />
+  <title>automagic</title>
+    <!--public css-->
+        <link href="{% static 'css/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'css/ak-base-style.css' %}" rel="stylesheet" type="text/css">
+{#        <link href="{% static 'css/ak-icon.css' %}" rel="stylesheet" type="text/css">#}
+        
+        <!--master page v3 css-->
+        <link href="{% static 'css/master-page-v3/ak-master-page-v3style.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'css/master-page-v3/ak-master-page-v3.css' %}" rel="stylesheet" type="text/css">
+{#        <link rel="stylesheet" href="{% static '' %}plugin/mdi/css/materialdesignicons.min.css">#}
+        <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
+        <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
+        <!--customer css-->
+{#         <link href="{% static 'css/master-page-v3/ak-nav-chat.css' %}" rel="stylesheet" type="text/css">#}
+        <link href="{% static 'css/ak-schedule.css' %}" rel="stylesheet" type="text/css">
+
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+        <!--Custom Scripts-->
+        <script src="{% static 'js/common.js' %}"></script>
+        <script src="{% static 'js/automagic.js' %}"></script>
+
+        <!--public js-->
+        <script type="text/javascript" src="{% static 'js/back-to-top.js' %}"></script>
+        <!--[if lt IE 9]>
+        <script src="{% static 'js/html5shiv/html5shiv.min.js' %}"></script>
+        <script src="{% static 'js/respondjs/respond.min.js' %}"></script>
+       <![endif]-->
+
+</head>
+
+
+<body>
+  <!--Preloader start-->
+  <div id="preloader" class="preloader table-wrapper">
+    <div class="table-row">
+      <div class="table-cell">
+        <div class="la-ball-scale-multiple la-3x">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Preloader end-->
+  <!--top placeholder start-->  
+  <div class="placeholder-top">
+   <ul id="gn-menu" class="navbar gn-menu-main">
+      <li>
+        <a href="{% url 'caselist' %}" class="logo text-uppercase">Automagic</a>
+      </li>
+    
+      <li class="top-clock">
+      
+        <span class="ak-zmaster-paage2-logo"><img src="{% static 'images/logo-automagic.png' %}" class="img-responsive"></span>
+      </li>
+       <li class="container-fluid pull-right">
+            <ul class="nav navbar-right right-menu">
+
+       </li>
+{#                <li class="members-btn max-block" data-href="notice-sidebar"  data-close=".close-notice-sidebar">#}
+{#                    <a class="show-notice"><i class="fa fa-bell-o"></i> <span class="label label-warning">4</span></a>#}
+{#              </li>#}
+
+              <!---->
+                <li class="members-btn dropdown notifications ak-zuser-dropdowndiv"  data-href="view-userinfo">
+                      <a href="javascript:;" class="dropdown-toggle ak-zuser-aimgbox" data-toggle="dropdown" aria-expanded="true"> <img src="{% static 'images/user-13.jpg' %}" class="ak-zuser-aimg" alt=""> </a>
+                     <div class="dropdown-menu animated fadeInDown ak-admin-con ak-user-dropdown-menu ak-zadmin-dropmenu" id="view-userinfo">
+                                <div class="topbox"> <span class="img-box"><img src="{% static 'images/user-13.jpg' %}" class="img-responsive"></span>
+                                  <h4 class="name">{{ request.user }}</h4>
+                                  <p class="email">arlene.li@acorn-net.com</p>
+{#                                  <button class="ak-zadmin-infobtn">查看信息</button>#}
+                                </div>
+                                <div class="footbox clearfix">
+                                  <button class="ak-zadmin-bottombtn"><a href="/logout">切换用户</a></button>
+{#                                  <button class="ak-zadmin-bottombtn pull-right">退出</button>#}
+                                </div>
+                     </div>
+                </li>
+              <!---->
+                 <li class="members-btn max-none" data-href="setting-sidebar"  data-close=".close-notice-sidebar">
+                    <a class="show-notice">
+                      <img src="{% static 'images/setting-top02.png' %}" style="display:inline-block;">
+                    </a>
+                  </li>
+            </ul>
+        </li>
+        </ul>
+      </li>
+    </ul>
+   </div>  
+   <!--top placeholder end--> 
+   <!--left placeholder start-->
+  <div class="placeholder-left"> </div>
+   <!--left placeholder start-->   
+   <!--main placeholder start-->
+
+        <!--========left start======-->
+        <div class="ak-zper-leftbox ak-jsch-border"> 
+          <!--top btn box start-->
+          <!--<div class="ak-zper-ltopbtnbox ak-jsch-top"> 
+               <span class="ak-zper-navbtext">显示日程</span>
+          </div>-->
+          <!--top btn box end--> 
+           <!--mid menu start-->
+                    <div class="ak-zper-adminbox"> <span class="img-box"><img src="{% static 'images/user-13.jpg' %}" /></span> <span class="name">{{ request.user }}</span>
+
+                    </div>
+                    <!--mid menu end-->
+
+                    <div class="ak-zexam-leftmenu clearfix">
+                        <!--第一个ul start-->
+                        
+                        
+                        <ul class="ak-zperleftnav-ul list-group">
+                           <a href="{% url 'caselist' %}"><li class="list-group-item a-listitem"><span class="ak-zper-navicon ak-aper-navicon"><img src="{% static 'images/ak-person-icon01.png' %}"></span><span class="text">用例管理</span>
+                                </li></a>
+                            <a href="{% url 'elementlist' %}"><li class="list-group-item a-listitem"><span class="ak-zper-navicon ak-aper-navicon"><img src="{% static 'images/ak-person-icon05.png' %}"></span><span class="text">元素管理</span>
+                                </li></a>
+                            <a href="{% url 'keywordlist' %}"><li class="list-group-item a-listitem"><span class="ak-zper-navicon ak-aper-navicon"><img src="{% static 'images/ak-person-icon06.png' %}"></span><span class="text">关键字管理</span>
+                            </li></a>
+                            <a href="{% url 'productlist' %}"><li class="list-group-item a-listitem"><span class="ak-zper-navicon ak-aper-navicon"><img src="{% static 'images/ak-person-icon03.png' %}"></span><span class="text">配置管理</span>
+                               </li></a>
+                            <a  href="http://192.168.110.221/#/reporthistory" target="_blank" ><li class="list-group-item a-listitem"><span class="ak-zper-navicon ak-aper-navicon"><img src="{% static 'images/ak-person-icon04.png' %}"></span><span class="text">测试报告</span>
+                               </li></a>
+
+                        </ul>
+                        </li>
+                        </ul>
+                        <!--第一个ul end-->
+                       </div></div>
+           <!--mid menu end-->
+        <!--=======left end=======--> 
+    <!--===================================================main start==================================================================-->
+    <div class="ak-zper-midbox ak-jsch-mid">
+         <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+               <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+                    <span class="ak-zper-remindback"></span>
+                    <span class="inbox-text">用例管理</span>
+               </div>
+{#               <div class="ak-jsch-rightbox">#}
+{#                    <div class="btn-group ak-jsch-dropdown">#}
+{#                         <button type="button" class="btn btn-default dropdown-toggle ak-sch-icon" data-toggle="dropdown"></button>#}
+{#                         <ul class="dropdown-menu" role="menu">#}
+{#                             <li><a href="index1.html"><span class="ak-sch-icon schedule-icon"></span>日程</a></li>#}
+{#                             <li><a href="schedule-day.html"><span class="ak-sch-icon day-icon"></span>天</a></li>#}
+{#                             <li><a href="schedule.html"><span class="ak-sch-icon week-icon"></span>周</a></li>#}
+{#                         </ul>#}
+{#                   </div>#}
+{#                   <a class="ak-jsch-jia" data-toggle="modal" data-target="#addEvent-Modal"></a>#}
+{#               </div>#}
+                <select id="selproductid" name="productname" class="ak-right ak-left ac-aselect">
+                      <option value="0">-产品名称-</option>
+                      {% for i in productlist %}
+                         <option value="{{ i.id }}" {% if request.GET.productname  == i.name %}selected{% endif %}>{{ i.name }}</option>
+                      {% endfor %}
+                    </select>
+          </div>
+
+<!--      ---------------------华丽的分割线 main------------------------ -->
+      	  <div class="col-md-12">
+              <div class="ac-margin-tb15" >
+                    <form class="form-inline" role="form" action="" method="GET">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <select id="selprojectid" name="projectid" class="ak-left ac-aselect col01">
+                              <option value="">所属项目</option>
+{#                              {% for i in projectlist %}#}
+{#                                 <option value="{{ i.pk }}" {% if request.GET.projectid  == i.pk %}selected{% endif %}>{{ i.name }}</option>#}
+{#                              {% endfor %}#}
+                            </select>
+                            <select id="selmoduleid" name="moduleid" class="ak-left ac-aselect col01">
+                              <option value="">所属模块</option>
+                            </select>
+                            <select name="casestatus" class="ak-left ac-aselect col02">
+                              <option value="">状态</option>
+                                 <option value="True" >启 用</option>
+                                 <option value="False" >停 用</option>
+                            </select>
+                              <div class="input-group">
+                                <input type="input" class="form-control" name="keyword" value="{{ request.GET.keyword }}"  placeholder="通过用例ID或描述关键字搜索">
+                                  <span class="input-group-btn">
+                                      <button class="btn btn-primary" type="submit">Go!</button>
+                                  </span>
+                              </div>
+                            <a href="" class="btn btn-sm btn-success ">Run Case</a>
+                            <a href="/case/add/" class="ak-right ac-btn-addcase orange">添加用例</a>
+                              <!-- /input-group -->
+                        </div>
+
+                            <table class="table table-striped table-bordered table-hover table-condensed">
+                                <thead>
+                                  <tr>
+                                      <th>用例ID</th>
+                                      <th>描述</th>
+                                      <th>项目</th>
+                                      <th>模块</th>
+                                      <th>状态</th>
+                                      <th>创建者</th>
+                                      <th>创建时间</th>
+                                  <th></th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {% for case in caselist %}
+                                    <tr>
+                                        <td>{{ case.id }}</td>
+                                        <td class="ac-alist-descp ac-alist-width-overflow" ><a data-toggle="tooltips"  data-placement="top" title="{{ case.casedesc }}" href="{% url 'caseview' case.id %}"/> {{ case.casedesc }}</td>
+                                        <td>{{ case.projectid }}</td>
+                                        <td>{{ case.moduleid }}</td>
+                                        <td>
+                                                {% if case.isenabled == True %}
+                                                    <span ng-if="f.flag==true" class="label label-success ng-scope">启 用</span>
+                                                {% else %}
+                                                    <span ng-if="f.flag==false" class="label label-danger ng-scope">停 用</span>
+                                                {% endif %}
+                                        </td>
+                                        <td>{{ case.createat }}</td>
+                                        <td>{{ case.createtime|date:'Y-m-d H:i:s' }}</td>
+                                        <th>
+                                            <a href="{% url 'caseupdate' case.id %}" class="ac-abtn blue" role="button">编辑</a>
+                                            <a href="{% url 'casedel' case.id %}" class="ac-abtn red" role="button" onclick="return confirm('Are you Sure Deleted.')">删除</a>
+                                            <a href="" class="ac-abtn green" role="button">Run</a>
+                                        </th>
+                                    </tr>
+                                  {% endfor %}
+                                </tbody>
+                            </table>
+                    </div>
+                    {% if is_paginated %}
+                    <div class="panel-default">
+                        <ul class="pagination">
+                              <li><a href="{{ request.path }}?page=1">«</a></li>
+                              {% if page_obj.has_previous %}
+                                <li><a href="{{ request.path }}?&page={{ page_obj.previous_page_number }}">上一页</a></li>
+                              {% else %}
+                                <li class="previous disabled"><a>上一页</a></li>
+                              {% endif %}
+                              {% for i in page_obj.paginator.page_range %}
+                                <li {% if page_obj.number == i %}class="active"{% endif %}><a href="{{ request.path }}?page={{ i }}">{{ i }}</a></li>
+                              {% endfor %}
+                              {% if page_obj.has_next %}
+                                <li><a href="{{ request.path }}?page={{ page_obj.next_page_number }}">下一页</a></li>
+                              {% else %}
+                                <li class="previous disabled"><a>下一页</a></li>
+                              {% endif %}
+                              <li><a href="{{ request.path }}?page={{ page_obj.paginator.num_pages }}">»</a></li>
+                                <li><span>This is {{ page_obj.number }}</span></li>
+                        </ul>
+                    </div>
+                    {% endif %}
+              </form>
+              </div>
+          </div>
+    <!--      ---------------------华丽的分割线 main end------------------------ -->
+                     
+    </div>
+    <!--===================================================main end==================================================================--> 
+
+
+
+</body>
+
+</html>

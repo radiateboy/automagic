@@ -1,0 +1,397 @@
+{% extends 'frame.html' %}
+{% block title %}Automagic{% endblock %}
+{% block slideshow %}
+
+    <div class="ak-zper-midbox ak-jsch-mid">
+        <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+            <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+                <span class="ak-zper-remindback"></span>
+                <span class="inbox-text">编辑任务</span>
+            </div>
+            <div id="log_info" class="ac-addtips"></div>
+
+        </div>
+
+        <div class="col-md-12">
+            <form method='post' id="task_edit">
+                {% csrf_token %}
+                <div class="ak-jsch-modal-row col01">
+                    <div class="ak-jsch-pos">
+                        <div class="ak-jsch-point">
+                        </div>
+                    </div>
+                    <div class="ak-jsch-modal-text col01 clearfix">
+                        <span class="ak-jsch-item-left ak-left ">任务描述</span>
+                        <input id="taskid" value="{{ taskinfo.pk }}" hidden="true">
+                        <div class="ak-jsch-item-right col02 ak-left">
+                            <input id="id_taskname" name="taskname" class="ak-jsch-modal-input" type="text" required=""
+                                   value="{{ taskinfo.taskname }}" placeholder="任务描述">
+                        </div>
+                    </div>
+                </div>
+                <div class="ak-jsch-modal-row col01 ak-jsch-padding">
+                    <div class="ak-jsch-modal-text">
+                        <div class="ak-jsch-modal-item clearfix"><span class="ak-left ak-jsch-item-left ">任务类型</span>
+                            <div style="margin-top:4px;">
+                                {% if taskinfo.tasktype == '1' %}
+                                    <label>&nbsp&nbsp<input class="radioitem" id="runcase" type="radio" name="tasktype"
+                                                            value="1" checked="checked">执行用例</label>
+                                    <label>&nbsp&nbsp<input class="radioitem" id="syncase" type="radio" name="tasktype"
+                                                            value="2">同步用例</label>
+                                    <label>&nbsp&nbsp<input class="radioitem" id="connjenkins" type="radio"
+                                                            name="tasktype" value="3">关联Jenkins</label>
+                                {% else %}
+                                    {% if taskinfo.tasktype == '3' %}
+                                        <label>&nbsp&nbsp<input class="radioitem" id="runcase" type="radio"
+                                                                name="tasktype" value="1">执行用例</label>
+                                        <label>&nbsp&nbsp<input class="radioitem" id="syncase" type="radio"
+                                                                name="tasktype" value="2">同步用例</label>
+                                        <label>&nbsp&nbsp<input class="radioitem" id="connjenkins" type="radio"
+                                                                name="tasktype" value="3"
+                                                                checked="checked">关联Jenkins</label>
+                                    {% else %}
+                                        <label>&nbsp&nbsp<input class="radioitem" id="runcase" type="radio"
+                                                                name="tasktype" value="1">执行用例</label>
+                                        <label>&nbsp&nbsp<input class="radioitem" id="syncase" type="radio"
+                                                                name="tasktype" value="2" checked="checked">同步用例</label>
+                                        <label>&nbsp&nbsp<input class="radioitem" id="connjenkins" type="radio"
+                                                                name="tasktype" value="3">关联Jenkins</label>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if taskinfo.tasktype == '1' %}
+                            <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                                <div id="testrailrunid" class="ak-jsch-modal-item clearfix"><span
+                                        class="ak-left ak-jsch-item-left ">RunID&nbsp</span>
+                                    <input type="text" class="ac-acaseedit-input ac-margin110" name="testrailrunid"
+                                           value="{{ taskinfo.testrailrunid }}">
+                                </div>
+                                <div class="ak-jsch-modal-item clearfix"><span
+                                        class="ak-left ak-jsch-item-left ">用例类型</span>
+
+                                    <select id="issmoke" name="issmoke" class="ak-left ac-aselect col01 ac-margin110"
+                                            required="">
+                                        {% if taskinfo.issmoke %}
+                                            <option value="0">系统测试</option>
+                                            <option value="1" selected>冒烟测试</option>
+                                        {% else %}
+                                            <option value="0" selected>系统测试</option>
+                                            <option value="1">冒烟测试</option>
+                                        {% endif %}
+
+                                    </select>
+                                </div>
+                                <div id="testrailsuites" class="ak-jsch-modal-item clearfix" hidden="true"><span
+                                        class="ak-left ak-jsch-item-left ">SuitesID&nbsp</span>
+                                    <input type="text" class="ac-acaseedit-input ac-margin110" name="testrailsuites"
+                                           value="{{ taskinfo.testrailsuites }}">
+                                </div>
+                                <div id="testsectionid" class="ak-jsch-modal-item clearfix" hidden="true"><span
+                                        class="ak-left ak-jsch-item-left ">SectionID&nbsp</span>
+                                    <input type="text" class="ac-acaseedit-input ac-margin110" name="testsectionid"
+                                           value="{{ taskinfo.testsectionid }}">
+                                </div>
+                                <div id="jenkins_server_url" class="ak-jsch-modal-item clearfix ac-margint10"
+                                     hidden="true">
+                                    <span class="ak-left ak-jsch-item-left ">JenkinsURL&nbsp</span>
+                                    <input type="text" class="ac-acaseedit-input ac-margin110 ac-acode-desc"
+                                           name="jenkins_server_url">
+                                </div>
+                                <div id="user_id" class="ak-jsch-modal-item clearfix ac-margint10" hidden="true"><span
+                                        class="ak-left ak-jsch-item-left ">UserID&nbsp</span>
+                                    <input type="text" class="ac-acaseedit-input ac-margin110 ac-acode-desc"
+                                           name="user_id">
+                                </div>
+                                <div id="api_token" class="ak-jsch-modal-item clearfix ac-margint10" hidden="true"><span
+                                        class="ak-left ak-jsch-item-left ">ApiToken&nbsp</span>
+                                    <input type="text" class="ac-acaseedit-input ac-margin110 ac-acode-desc"
+                                           name="api_token">
+                                </div>
+                                <div id="build_name" class="ak-jsch-modal-item clearfix ac-margint10"
+                                     hidden="true"><span
+                                        class="ak-left ak-jsch-item-left ">BuildName&nbsp</span>
+                                    <input type="text" class="ac-acaseedit-input ac-margin110 ac-acode-desc"
+                                           name="build_name">
+                                </div>
+                            </div>
+                        {% else %}
+                            {% if taskinfo.tasktype == '3' %}
+                                <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                                    <div id="testrailrunid" class="ak-jsch-modal-item clearfix" hidden="true"><span
+                                            class="ak-left ak-jsch-item-left ">RunID&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input ac-margin110" name="testrailrunid">
+                                    </div>
+                                    <div id="testrailsuites" class="ak-jsch-modal-item clearfix" hidden="true"><span
+                                            class="ak-left ak-jsch-item-left ">SuitesID&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input ac-margin110"
+                                               name="testrailsuites">
+                                    </div>
+                                    <div id="testsectionid" class="ak-jsch-modal-item clearfix" hidden="true"><span
+                                            class="ak-left ak-jsch-item-left ">SectionID&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input ac-margin110" name="testsectionid">
+                                    </div>
+                                    <div id="jenkins_server_url" class="ak-jsch-modal-item clearfix ac-margint10"><span
+                                            class="ak-left ak-jsch-item-left ">JenkinsURL&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input ac-margin110 ac-acode-desc"
+                                               name="jenkins_server_url" value="{{ taskinfo.jenkins_server_url }}">
+                                    </div>
+                                    <div id="user_id" class="ak-jsch-modal-item clearfix ac-margint10"><span
+                                            class="ak-left ak-jsch-item-left ">UserID&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input ac-margin110 ac-acode-desc"
+                                               name="user_id" value="{{ taskinfo.user_id }}">
+                                    </div>
+                                    <div id="api_token" class="ak-jsch-modal-item clearfix ac-margint10"><span
+                                            class="ak-left ak-jsch-item-left ">ApiToken&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input ac-margin110 ac-acode-desc"
+                                               name="api_token" value="{{ taskinfo.api_token }}">
+                                    </div>
+                                    <div id="build_name" class="ak-jsch-modal-item clearfix ac-margint10"><span
+                                            class="ak-left ak-jsch-item-left ">BuildName&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input ac-margin110 ac-acode-desc"
+                                               name="build_name" value="{{ taskinfo.build_name }}">
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                                    <div id="testrailrunid" class="ak-jsch-modal-item clearfix" hidden="true"><span
+                                            class="ak-left ak-jsch-item-left ">RunID&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input" name="testrailrunid"
+                                               value="{{ taskinfo.testrailrunid }}">
+                                    </div>
+                                    <div id="testrailsuites" class="ak-jsch-modal-item clearfix"><span
+                                            class="ak-left ak-jsch-item-left ">SuitesID&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input" name="testrailsuites"
+                                               value="{{ taskinfo.testrailsuites }}">
+                                    </div>
+                                    <div id="testsectionid" class="ak-jsch-modal-item clearfix"><span
+                                            class="ak-left ak-jsch-item-left ">SectionID&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input" name="testsectionid"
+                                               value="{{ taskinfo.testsectionid }}">
+                                    </div>
+                                    <div id="jenkins_server_url" class="ak-jsch-modal-item clearfix ac-margint10"
+                                         hidden="true"><span class="ak-left ak-jsch-item-left ">JenkinsURL&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input ac-margin110 ac-acode-desc"
+                                               name="jenkins_server_url">
+                                    </div>
+                                    <div id="user_id" class="ak-jsch-modal-item clearfix ac-margint10" hidden="true">
+                                        <span class="ak-left ak-jsch-item-left ">UserID&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input ac-margin110 ac-acode-desc"
+                                               name="user_id">
+                                    </div>
+                                    <div id="api_token" class="ak-jsch-modal-item clearfix ac-margint10" hidden="true">
+                                        <span class="ak-left ak-jsch-item-left ">ApiToken&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input ac-margin110 ac-acode-desc"
+                                               name="api_token">
+                                    </div>
+                                    <div id="build_name" class="ak-jsch-modal-item clearfix ac-margint10" hidden="true">
+                                        <span class="ak-left ak-jsch-item-left ">BuildName&nbsp</span>
+                                        <input type="text" class="ac-acaseedit-input ac-margin110 ac-acode-desc"
+                                               name="build_name">
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                            <div class="ak-jsch-modal-item clearfix">
+                                <span class="ak-jsch-item-left ak-left">项目</span>
+                                <select id="selprojectid_task_edit" name="projectid"
+                                        class="ak-left ac-aselect col01 ac-margin110"
+                                        required="">
+                                    <option value="0">所属项目</option>
+                                    {% for i in  projectlist %}
+                                        {% if i == taskinfo.projectid %}
+                                            <option value="{{ i.pk }}" selected="selected">{{ i }}</option>
+                                        {% else %}
+                                            <option value="{{ i.pk }}">{{ i }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        {% if taskinfo.tasktype == '3' %}
+                            <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                                <div class="ak-jsch-item-right ak-left">
+                                    <ul id="treeDemo" class="ztree" hidden="true"
+                                        style="height:350px; overflow:auto;font-family:verdana;border-radius:6px;border:2px solid #EE872A;"></ul>
+                                </div>
+                            </div>
+                            <div class="ak-jsch-modal-item ak-jsch-pt clearfix" hidden="true" id="selectedCases">
+                                <div class="ak-jsch-item-right ak-left">
+                                    已经选择用例共{{ casesum }}条
+                                </div>
+                            </div>
+                            <div class="ak-jsch-modal-item ak-jsch-pt clearfix" hidden="true" id="customParameters">
+                                <h5><b>自定义参数</b></h5>
+                                <div class="ak-jsch-item-right ak-left">
+                                    <ul style="height:300px; overflow:auto;font-family:verdana;border-radius:6px;border:1px solid #c1c1c1;">
+                                        <table class="table" id="tab" style="width:72%">
+                                            <caption class="text-left">
+                                                <button type="button" onclick="addtr();"
+                                                        class="text-left ac-btn-adduser blue ac-margin-tb15">添加一行
+                                                </button>
+                                                <input class="ac-acaseedit-input" id="rowid" value="" type="number"
+                                                       placeholder="添加到第N行之后">
+                                            </caption>
+                                            <thead>
+                                            <th>No</th>
+                                            <th>描述</th>
+                                            <th>参数编码</th>
+                                            <th>参数值</th>
+                                            <th>操作</th>
+                                            <input hidden="true" id="linecounter" value=1 type='text'>
+                                            </thead>
+                                            <tbody>
+                                            {% if codelist %}
+                                                {% for c in codelist %}
+                                                    <tr id="row{{ forloop.counter }}">
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td><input name="codedescr" class="ac-acaseedit-input"
+                                                                   placeholder="参数描述" type="input"
+                                                                   value="{{ c.codedescr }}"></td>
+                                                        <td><input name="codename" class="ac-acaseedit-input"
+                                                                   placeholder="参数编码(MWIP)" type="input"
+                                                                   value="{{ c.codename }}"></td>
+                                                        <td><input name="codevalue"
+                                                                   class="ac-acaseedit-input ac-acode-desc"
+                                                                   placeholder="参数值" type="input"
+                                                                   value="{{ c.codevalue }}"></td>
+                                                        <td><a class="btn btn-sm btn-link" role="button"
+                                                               onclick="deltr({{ forloop.counter }})">删除</a></td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                            </tbody>
+                                            <tfoot class="text-left">
+
+                                            </tfoot>
+                                        </table>
+                                    </ul>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                                <div class="ak-jsch-item-right ak-left">
+                                    <ul id="treeDemo" class="ztree"
+                                        style="height:350px; overflow:auto;font-family:verdana;border-radius:6px;border:2px solid #EE872A;"></ul>
+                                </div>
+                            </div>
+                            <div class="ak-jsch-modal-item ak-jsch-pt clearfix" id="selectedCases">
+                                <div class="ak-jsch-item-right ak-left">
+                                    已经选择用例共{{ casesum }}条
+                                </div>
+                            </div>
+                            <div class="ak-jsch-modal-item ak-jsch-pt clearfix" id="customParameters">
+                                <h5><b>自定义参数</b></h5>
+                                <div class="ak-jsch-item-right ak-left">
+                                    <ul style="height:300px; overflow:auto;font-family:verdana;border-radius:6px;border:1px solid #c1c1c1;">
+                                        <table class="table" id="tab" style="width:72%">
+                                            <caption class="text-left">
+                                                <button type="button" onclick="addtr();"
+                                                        class="text-left ac-btn-adduser blue ac-margin-tb15">添加一行
+                                                </button>
+                                                <input class="ac-acaseedit-input" id="rowid" value="" type="number"
+                                                       placeholder="添加到第N行之后">
+                                            </caption>
+                                            <thead>
+                                            <th>No</th>
+                                            <th>描述</th>
+                                            <th>参数编码</th>
+                                            <th>参数值</th>
+                                            <th>操作</th>
+                                            <input hidden="true" id="linecounter" value=1 type='text'>
+                                            </thead>
+                                            <tbody>
+                                            {% if codelist %}
+                                                {% for c in codelist %}
+                                                    <tr id="row{{ forloop.counter }}">
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td><input name="codedescr" class="ac-acaseedit-input"
+                                                                   placeholder="参数描述" type="input" required=""
+                                                                   value="{{ c.codedescr }}"></td>
+                                                        <td><input name="codename" class="ac-acaseedit-input"
+                                                                   placeholder="参数编码(MWIP)" type="input" required=""
+                                                                   value="{{ c.codename }}"></td>
+                                                        <td><input name="codevalue"
+                                                                   class="ac-acaseedit-input ac-acode-desc"
+                                                                   placeholder="参数值" type="input" required=""
+                                                                   value="{{ c.codevalue }}"></td>
+                                                        <td><a class="btn btn-sm btn-link" role="button"
+                                                               onclick="deltr({{ forloop.counter }})">删除</a></td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                            </tbody>
+                                            <tfoot class="text-left">
+
+                                            </tfoot>
+                                        </table>
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div style="text-align: center;">
+                            <input class="btn btn-sm btn-primary" type="submit" value="提交">
+                            <input class="btn btn-sm btn-default" type="reset" value="重置">
+                            <button onclick="goback();" class="btn btn-sm btn-success" type="button">返回>></button>
+                        </div>
+                    </div>
+                </div>
+                <input id="caseids" type="text" name="caseids" style="visibility:hidden" value="">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+{% block script %}
+    {% load staticfiles %}
+    <script type="text/javascript" src="{% static 'js/lodash.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/taskmanage.js' %}"></script>
+    <script>
+        /* 编辑任务页面 通过project关联module树   */
+        $("#selprojectid_task_edit").bind("change", function () {
+            var s1SelectedVal = $('#selprojectid_task_edit').val();
+            var issmoke = $('#issmoke').val();
+            $.ajax({
+                type: "GET",
+                data: {'projectid': s1SelectedVal, 'issmoke': issmoke},
+                url: "/setting/get/moduleList/", //后台处理函数的url 这里用的是static url 需要与urls.py中的name一致
+                cache: false,
+                dataType: 'text',
+                success: function (result, TextStatus) {
+                    zNodes = eval(result)
+                    $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                    if ($("form#task_edit").length > 0) {
+                        setTreeValue("{{ taskinfo.caselist}}");
+                    }
+                },
+                error: function (result) {
+                    alert(result)
+                }
+
+            });
+        });
+        $("#issmoke").bind("change", function () {
+            var s1SelectedVal = $('#selprojectid_task_edit').val();
+            var issmoke = $('#issmoke').val();
+            $.ajax({
+                type: "GET",
+                data: {'projectid': s1SelectedVal, 'issmoke': issmoke},
+                url: "/setting/get/moduleList/", //后台处理函数的url 这里用的是static url 需要与urls.py中的name一致
+                cache: false,
+                dataType: 'text',
+                success: function (result, TextStatus) {
+                    zNodes = eval(result)
+                    $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                    if ($("form#task_edit").length > 0) {
+                        setTreeValue("{{ taskinfo.caselist}}");
+                    }
+                },
+                error: function (result) {
+                    alert(result)
+                }
+
+            });
+        });
+    </script>
+{% endblock %}

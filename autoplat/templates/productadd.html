@@ -1,0 +1,14 @@
+{% extends 'nav.html' %}
+{% block title %}Product Add{% endblock %}
+
+{% block slideshow %}
+    <br/><br/><br/>
+<form method='post'>
+    {% csrf_token %}
+    <table>
+        {{ productform.as_table }}
+    </table>
+    <input class="btn btn-primary" type="submit" value="submit">
+    <input class="btn btn-primary" type="reset" value="reset">
+</form>
+{% endblock %}

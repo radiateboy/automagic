@@ -1,0 +1,113 @@
+/* Required Stylesheets */
+
+a {
+    text-decoration: none;
+}
+
+.wheel-button {
+    position: relative;
+}
+
+.wheel {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 260px; /* this will determine the diameter of the circle  */
+    height: 200px; /* this will determine the diameter of the circle  */
+    visibility: hidden;
+    position: relative;
+    display: none;
+}
+
+.wheel li {
+    overflow: hidden;
+    float: left;
+}
+
+.wheel li a {
+    display: block;
+}
+
+.wheel-button, .wheel-button:visited {
+    line-height: 35px;
+    font-weight: bold;
+    font-size: 36px;
+    background: #df4727;
+    padding: 10px 11px;
+    text-align: center;
+    border-radius: 50px;
+    width: 60px;
+    height: 60px;
+    color: white;
+    display: block;
+    margin: 70px auto 20px;
+    border: 3px solid #92311e;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.wheel-button:hover {
+    color: white;
+}
+
+.wheel-button.ne {
+    border-color: white;
+    background: #35b0ee;
+    color: #0277bd;
+    position: absolute;
+    bottom: 50px;
+    left: 0px;
+}
+
+.wheel-button.nw {
+    border-color: white;
+    background-color: #E67E22;
+    color: #FFFC44;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.wheel-button span, .wheel span {
+    position: relative;
+    -moz-transition: all 1s ease;
+    -webkit-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+    display: block;
+}
+
+.wheel-button.active span {
+    transform: rotate(135deg);
+    -ms-transform: rotate(135deg); /* IE 9 */
+    -webkit-transform: rotate(135deg); /* Safari and Chrome */
+}
+
+.wheel-button.ne span{
+    font-size:28px;
+    line-height:32px;
+    font-family: sans-serif;
+}
+.wheel li a, .wheel li a:visited {
+    background: rgba(0, 0, 0, 0.65);
+    border-radius: 50px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid black;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    color: white;
+    -moz-transition: all 0.25s ease;
+    -webkit-transition: all 0.25s ease;
+    -o-transition: all 0.25s ease;
+    transition: all 0.25s ease;
+}
+
+.wheel li a:hover {
+    background: rgba(0, 0, 0, 0.8);
+}

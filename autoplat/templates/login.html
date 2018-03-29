@@ -1,0 +1,144 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><style type="text/css">[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>用户登录</title>
+    <!-- base href="https://127.0.0.1:8000/" -->
+    <!--<meta name="viewport" content="width=comment_activity.jsdevice-width">-->
+
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="icon" type="image/x-icon" href="{% static 'css/favicon.ico' %}">
+    <link rel="shortcut icon" href="{% static 'css/favicon.ico' %}" type="image/x-icon">
+
+    <link rel="stylesheet" href="{% static 'css/vendor.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/app-bar.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+
+<script charset="utf-8" type="text/javascript">
+
+function submit() {
+
+    alert("this is submit!")
+    }
+</script>
+</head>
+<body ng-app="app" ng-strict-di="" ng-controller="AppController" class="coding-center coding ng-scope random-background account-background" cg-random-background="" ng-class="{'account-background': isAccount}" style="margin: 0px; padding: 0px; background: transparent url(&quot;{% static 'image/background2.jpg' %}&quot;) no-repeat fixed center center / cover ; height: 100%;">
+<div cg-flash=""><div class="cg flash center" ng-class="{active: messages &amp;&amp; messages.length&gt;0}" id="global-flash">
+    <i class="ui close icon" ng-click="onClose()"></i>
+    <div class="outer">
+        <!-- ngRepeat: message in messages.slice(0,limit) -->
+    </div>
+    <!-- ngIf: messages.length>limit -->
+</div>
+</div>
+<div class="ui fixed transparent main menu ng-scope" ng-dblclick="scrollToTop()" id="top-menu">
+<a href="#" class="left logo item ng-scope" ng-if="USER === false" cg-jump-out-angular-href="/" target="_self" style="padding: 0px 0px;">
+    <img src="../static/image/logo.png" height="50">
+</a>
+<div style="left: 0px;" class="left menu ng-scope" data-ng-controller="QuickSearchController" ng-style="{'left':USER === false ? '40px':'75px'}">
+  <div class="public-pages ng-scope" ng-if="USER === false" style="width: 452px;">
+        <div class="normal not-login-menu">
+            <div class="ui simple dropdown">
+                <a href="javascript:void(0);" class="item no-arrow ng-binding">AutoMagic</a>
+                <div class="menu">
+                    <a class="item func-item" href="#" target="_blank">TestReport</a>
+                    <a class="item func-item" href="http://172.17.3.60/" target="_blank">Git Server</a>
+                </div>
+            </div>
+            <a href="http://172.17.3.70/testrail/"  target="_blank" class="item ng-binding">TeamCity</a>
+            <a href="http://172.17.3.70/testrail/ " target="_blank" class="item ng-binding">TestRail</a>
+            <a href="http://172.17.3.71:8112/dashboard" target="_blank" class="item ng-binding">YouTrack</a>
+        </div>
+        
+    </div>
+</div>
+
+<div class="header ng-scope"><span class="top-menu-title ng-binding ng-scope" ng-controller="TopMenuTitleController" ng-bind="top_menu_title">用户登录</span>
+</div>
+
+<!-- ngIf: USER -->
+<!-- ngIf: USER === false --><div class="right menu ng-scope" ng-if="USER === false">
+    <div class="ui item mart-logo">
+
+    </div>
+    <a href="#" class="ui coding register button ng-binding" cg-auto-refresh-href="/register">注册</a>
+    <a href="#" class="ui coding white login button ng-binding" cg-auto-refresh-href="/login">登录</a>
+</div><!-- end ngIf: USER === false -->
+</div>
+
+<!-- ngView:  -->
+<div class="wrapper ng-scope" ng-view=""><div class="account-flex-container ng-scope">
+    <div ng-controller="LoginController" class="account-container ng-scope">
+        <h2>用户登录</h2>
+        <div id="content-main">
+
+
+        <form class="ng-pristine ng-valid" action="submit();">
+            <input-gk-phone-email class="ng-isolate-scope" ret="account">
+                <div class="account-input dirty" ng-class="{dirty: dirty}">
+			<input class="ng-pristine ng-valid ng-touched" autofocus="" ng-model="ret.value" placeholder="用户名" ng-blur="check()" ng-keyup="check()" name="username"></div>
+            </input-gk-phone-email>
+            <input-password class="ng-isolate-scope" ret="password" show-error="false">
+			<div class="account-input" ng-class="{dirty: dirty}">
+			<input class="ng-pristine ng-valid ng-touched" ng-model="ret.value" placeholder="密码" ng-class="{error: !ret.valid}" ng-blur="check()" ng-keyup="check()" name="password" type="password">
+			<span ng-show="!ret.valid" class="error ng-binding ng-hide"></span>
+			</div></input-password>
+
+            <div style="position: relative">
+                <input-remember-me class="ng-isolate-scope" ret="remember_me">
+				<div class="ui checkbox">
+				<input ng-checked="ret.value" type="checkbox"><label>记住我</label>
+				</div>
+				</input-remember-me>
+            </div>
+
+            <button  ng-class="{loading: loading}">登录</button>
+
+            <div class="bottom-link">
+                <a href="#">还没有账户，马上注册</a>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- ngInclude: undefined --><div class="account-about ng-scope" ng-controller="AccountAboutController">
+    <span>Copyright&nbsp;&nbsp;©&nbsp;2016&nbsp; AutoMagic &nbsp;&nbsp;</span>
+    <a href="#">首页</a>
+    <a href="#">关于 AutoMagic</a>
+    <a href="#">招贤纳士</a>
+   
+</div>
+</ng-include>
+</div>
+
+
+<script src="../static/js/vendor.js"></script>
+
+<!-- webpack entry: src/app/app.js -->
+{#<script src="../static/js/common.js"></script>#}
+
+<script src="../static/js/app-banner.js"></script>
+
+<script src="../static/js/app.js"></script>
+{##}
+{#<script src="../static/js/routes.js"></script>#}
+{##}
+{#<script src="../static/js/lib.js"></script>#}
+
+<!-- Google Analytics -->
+{#<script>#}
+{#    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){#}
+{#            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),#}
+{#        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)#}
+{#    })(window,document,'script','static/eed8ec65a6dd9b05eed6d4a02e1439e4.js','ga');#}
+{##}
+{#    ga('create', 'UA-65952334-1', 'auto');#}
+{#    ga('send', 'pageview');#}
+{#</script>#}
+
+</body></html>

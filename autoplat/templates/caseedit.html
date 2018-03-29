@@ -1,0 +1,253 @@
+{% extends 'frame.html' %}
+{% block title %}Automagic{% endblock %}
+{% block slideshow %}
+    <div class="ak-zper-midbox ak-jsch-mid">
+        <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+            <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+                <span class="ak-zper-remindback"></span>
+                <span class="inbox-text">用例编辑</span>
+            </div>
+            <div id="log_info" class="ac-addtips"></div>
+            {#               <div class="ak-jsch-rightbox">#}
+            {#                    <div class="btn-group ak-jsch-dropdown">#}
+            {#                         <button type="button" class="btn btn-default dropdown-toggle ak-sch-icon" data-toggle="dropdown"></button>#}
+            {#                         <ul class="dropdown-menu" role="menu">#}
+            {#                             <li><a href="index1.html"><span class="ak-sch-icon schedule-icon"></span>日程</a></li>#}
+            {#                             <li><a href="schedule-day.html"><span class="ak-sch-icon day-icon"></span>天</a></li>#}
+            {#                             <li><a href="schedule.html"><span class="ak-sch-icon week-icon"></span>周</a></li>#}
+            {#                         </ul>#}
+            {#                   </div>#}
+            {#                   <a class="ak-jsch-jia" data-toggle="modal" data-target="#addEvent-Modal"></a>#}
+            {#               </div>#}
+        </div>
+
+        <div class="col-md-12">
+            <form id="case_edit">
+                {% csrf_token %}
+                <div class="ak-jsch-modal-row col01">
+                    <div class="ak-jsch-pos">
+                        <div class="ak-jsch-point">
+                        </div>
+                    </div>
+                    <div class="ak-jsch-modal-text col01 clearfix">
+                        <span class="ak-jsch-item-left ak-left ac-acase-desc">用例描述</span>
+                        <div class="ak-jsch-item-right col02 ak-left">
+                            <input id="casedesc" name="casedesc" class="ak-jsch-modal-input" type="text" required=""
+                                   placeholder="测试用例描述" value="{{ tcase.casedesc }}">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="ak-jsch-modal-row col01 ak-jsch-padding">
+                    <div class="ak-jsch-modal-text">
+                        <div class="ak-jsch-modal-item clearfix"><span class="ak-left ak-jsch-item-left ">状态</span>
+                            <div class="sky-form col01 ak-left ac-ml10">
+                                <label class="toggle">
+                                    {% if tcase.isenabled %}
+                                        <input type="checkbox" id="id_isenabled" name="isenabled" checked="checked"
+                                               name="checkbox-toggle">
+                                    {% else %}
+                                        <input type="checkbox" id="id_isenabled" name="isenabled"
+                                               name="checkbox-toggle">
+                                    {% endif %}
+                                    <i class="rounded-4x ak-aoffon-btn"></i>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                            <span class="ak-jsch-item-left ak-left">项目</span>
+                            <input id="caseproductid" name="caseproductname" hidden="true"
+                                   value="{{ project.productid.id }}">
+                            <div class="ak-jsch-item-right ak-left">
+                                <select id="selprojectid" name="projectid" class="ak-left ac-aselect col01" required="">
+                                    {% for i in  projectlist %}
+                                        {% if i == tcase.projectid %}
+                                            <option value="{{ i.pk }}" selected="selected">{{ i.name }}</option>
+                                        {% else %}
+                                            <option value="{{ i.pk }}">{{ i.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                            <span class="ak-jsch-item-left ak-left">模块</span>
+                            <div class="ak-jsch-item-right ak-left">
+                                <select id="selmoduleid" name="moduleid" class="ak-left ac-aselect col01" required="">
+                                    {% for i in  modulelist %}
+                                        {% if i == tcase.moduleid %}
+                                            <option value="{{ i.pk }}" selected="selected">{{ i.name }}</option>
+                                        {% else %}
+                                            <option value="{{ i.pk }}">{{ i.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ak-jsch-modal-item clearfix"><span class="ak-left ak-jsch-item-left ">冒烟测试</span>
+                            <div class="sky-form col01 ak-left ac-ml10">
+                                <label class="toggle">
+                                    {% if tcase.issmoke %}
+                                        <input type="checkbox" id="id_issmoke" name="issmoke" checked="checked"
+                                               name="checkbox-toggle">
+                                    {% else %}
+                                        <input type="checkbox" id="id_issmoke" name="issmoke"
+                                               name="checkbox-toggle">
+                                    {% endif %}
+                                    <i class="rounded-4x ak-aoffon-btn"></i>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                            <span class="ak-jsch-item-left ak-left">依赖用例</span>
+                            <div class="ak-jsch-item-right ak-left">
+                                <input id="id_dependent" name="dependent" type="text" placeholder="请输入依赖用例的编号"
+                                       class="ac-acaseedit-input" value="{{ tcase.dependent }}"/>
+                            </div>
+                        </div>
+                        <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                            <span class="ak-jsch-item-left ak-left ac-acase-desc">TestRail ID</span>
+                            <div class="ak-jsch-item-right ak-left">
+                                <input id="id_testrailcaseid" name="testrailcaseid" type="text"
+                                       placeholder="关联TestRail的用例编号" class="ac-acaseedit-input"
+                                       value="{{ tcase.testrailcaseid }}"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <table class="table table-conde" id="tab" style="width: 100%">
+                    <caption class="text-left">
+                        <button type="button" onclick="case_step_addtr();" class="ac-btn-addcase orange ac-margin-tb15">
+                            添加一行
+                        </button>
+                        <input class="ac-acaseedit-input" id="rowid" value="" type="number" placeholder="添加到第N行之后">
+                    </caption>
+                    <thead>
+                    <th>Step No</th>
+                    <th>Step Descr</th>
+                    <th>Keyword</th>
+                    <th>Element</th>
+                    <th>Input</th>
+                    <th>操作</th>
+                    <input hidden="true" id="linecounter" value={{ steplist|length }} type='text'>
+                    </thead>
+                    <tbody>
+                    {% if steplist %}
+                        {% for j in steplist %}
+                            <tr id="row{{ forloop.counter }}">
+                                <td>{{ forloop.counter }}</td>
+                                <td><input name="descr" class="ac-acaseedit-input" placeholder="请输入步骤描述" type="input"
+                                           value="{{ j.descr }}"></td>
+                                <td>
+                                    <select id="id_keyword" name="keyword" class="ak-left ac-aselect col01">
+                                        {% for i in  keywordlist %}
+                                            {% if i == j.keywordid %}
+                                                <option value="{{ i.pk }}" selected="selected">
+                                                    [{{ i.productid }}]{{ i.kwdescr }}</option>
+                                            {% else %}
+                                                <option value="{{ i.pk }}">[{{ i.productid }}]{{ i.kwdescr }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    {% if j.elementid == None or j.elementid == "" %}
+                                        <input id="autocomplete_{{ forloop.counter }}" name="autocomplete"
+                                               class="ui-autocomplete-input ac-element-input" type="input" value="">
+                                        <input id="elementid_{{ forloop.counter }}" type="hidden" name="elementid"
+                                               value="None">
+                                    {% else %}
+                                        <input id="autocomplete_{{ forloop.counter }}" name="autocomplete"
+                                               class="ui-autocomplete-input ac-element-input" type="input"
+                                               value="[{{ j.elementid.id }}][{{ j.elementid.moduleid }}]{{ j.elementid }}">
+                                        <input id="elementid_{{ forloop.counter }}" type="hidden"
+                                               value="{{ j.elementid.id }}" name="elementid">
+                                    {% endif %}
+                                    {#                                <select id="id_elementid" name="elementid" class="ak-left ac-aselect col01">#}
+                                    {#                                    <option value="None">请选择可用元素</option>#}
+                                    {#                                    {% for i in elementlist %}#}
+                                    {#                                        {% if i == j.elementid %}#}
+                                    {#                                            <option value="{{ i.pk }}" title="[{{ i.pk }}]{{ i.locmode }},{{ i.location }}" selected="selected">[{{ i.pk }}]{{ i.descr }}</option>#}
+                                    {#                                        {% else %}#}
+                                    {#                                            <option value="{{ i.pk }}" title="[{{ i.pk }}]{{ i.locmode }},{{ i.location }}">[{{ i.pk }}]{{ i.descr }}</option>#}
+                                    {#                                        {% endif %}#}
+                                    {#                                    {% endfor %}#}
+                                    {#                                </select>#}
+                                </td>
+                                <td><input name="inputtext" class="ac-keywordtext-input" placeholder="" type="input"
+                                           value="{{ j.inputtext }}"></td>
+                                <td>
+                                    <a title="上移" class="ke-ablock" onclick="up(this)"><i
+                                            class="glyphicon glyphicon-chevron-up"></i></a><a title="下移"
+                                                                                              class="ke-ablock"
+                                                                                              onclick="down(this)"><i
+                                        class="glyphicon glyphicon-chevron-down"></i></a>{% if forloop.counter != 1 %}
+                                    <a title="删除" class="ke-ablock" onclick="deltr({{ forloop.counter }})"><i
+                                            class="glyphicon glyphicon-trash"></i></a>{% endif %}<a title="复制"
+                                                                                                    class="ke-ablock"
+                                                                                                    onclick="case_step_copytr(this)"><i
+                                        class="glyphicon glyphicon-copy"></i></a>
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                    <tfoot></tfoot>
+                </table>
+                <button type="button" onclick="case_step_addtr();" class="ac-btn-addcase orange ac-margin-tb15">添加一行
+                </button>
+                <div style="text-align: center;">
+                    <input class="btn btn-sm btn-primary" type="submit" value="提交">
+                    <input class="btn btn-sm btn-default" type="reset" value="重置">
+                    <a onclick="goback();" class="btn btn-sm btn-success">返回>></a>
+                </div>
+                <div><br/><br/></div>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}
+{% block script %}
+    {% load staticfiles %}
+    <script type="text/javascript" src="{% static 'js/casemanage.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajaxSetup({
+                data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+            });
+            /*       编辑测试用例         */
+            $('#case_edit').submit(function () {
+                $('[name="autocomplete"]').each(function () {
+                    if ($(this).val() == '') {
+                        $(this).next().val('None')
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    data: $(this).serialize(),
+                    //data:{casedesc:casedesc, isenabled:isenabled, projectid:projectid, moduleid:moduleid,dependent:dependent,descr:descr,keyword:keyword,elementid:elementid,inputtext:inputtext},
+                    url: "/func/case/update/{{ tcase.pk }}/",
+                    cache: false,
+                    dataType: "html",
+                    success: function (result, statues, xml) {
+                        $('#log_info').addClass('bg-primary');
+                        $('#log_info').css('display', 'block');
+                        $('#log_info').html(result);
+                        setTimeout("$('#log_info').css('display','none');", 1500);
+                        window.location.href = "/func/case/view/{{ tcase.pk }}/"
+                    },
+                    error: function () {
+                        $('#log_info').addClass('bg-primary');
+                        $('#log_info').css('display', 'block');
+                        $('#log_info').html('保存失败');
+                        setTimeout("$('#log_info').css('display','none');", 1500);
+
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+{% endblock %}

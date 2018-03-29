@@ -1,0 +1,263 @@
+{% extends 'frame.html' %}
+{% block title %}Automagic{% endblock %}
+{% block slideshow %}
+    <!--===================================================main start==================================================================-->
+    <div class="ak-zper-midbox ak-jsch-mid">
+         <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+               <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+                    <span class="ak-zper-remindback"></span>
+                    <span class="inbox-text">{{ project.name }}</span>
+               </div>
+               <div id="log_info" class="ac-addtips"></div>
+{#               <div class="ak-jsch-rightbox">#}
+{#                    <div class="btn-group ak-jsch-dropdown">#}
+{#                         <button type="button" class="btn btn-default dropdown-toggle ak-sch-icon" data-toggle="dropdown"></button>#}
+{#                         <ul class="dropdown-menu" role="menu">#}
+{#                             <li><a href="index1.html"><span class="ak-sch-icon schedule-icon"></span>日程</a></li>#}
+{#                             <li><a href="schedule-day.html"><span class="ak-sch-icon day-icon"></span>天</a></li>#}
+{#                             <li><a href="schedule.html"><span class="ak-sch-icon week-icon"></span>周</a></li>#}
+{#                         </ul>#}
+{#                   </div>#}
+{#                   <a class="ak-jsch-jia" data-toggle="modal" data-target="#addEvent-Modal"></a>#}
+{#               </div>#}
+          </div>
+
+<!--      ---------------------华丽的分割线 main------------------------ -->
+ <div class="col-md-12">
+ <div class="ac-margin-tb15">
+ <table>
+    <tr>
+        <th>项目描述:</th>
+        <td>{{ project.descr }}</td>
+    </tr>
+    <tr>
+        <th>状态:</th>
+        <td>
+            {% if project.isenabled == True %}
+                <span ng-if="f.flag==true" class="label label-success ng-scope">启 用</span>
+            {% else %}
+                <span ng-if="f.flag==false" class="label label-danger ng-scope">停 用</span>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>创建者:</th>
+        <td>{{ project.createat }}:</td>
+    </tr>
+    <tr>
+        <th>创建时间</th>
+        <td>{{ project.createtime|date:'Y-m-d H:i:s' }}</td>
+    </tr>
+    <tr>
+        <th>更新者:</th>
+        <td>{{ project.updateat }}:</td>
+    </tr>
+    <tr>
+        <th>更新时间</th>
+        <td>{{ project.updatetime|date:'Y-m-d H:i:s' }}</td>
+    </tr>
+</table>
+<div align="right" class="form-group">
+    <button type="button" class="ak-right ac-btn-addcase orange" data-toggle="modal" data-target="#addModuleModal">创建模块</button>
+</div>
+ <table id="mytable" class="table table-striped table-hover table-condensed ac-aelement-table">
+        <thead>
+          <tr>
+              <th>NO.</th>
+              <th>模块名称</th>
+              <th>状态</th>
+              <th>排序</th>
+              <th>创建者</th>
+              <th>创建时间</th>
+              <th>更新者</th>
+              <th>更新时间</th>
+              <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for module in modulelist %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td class="ac-alist-descp"> {{ module.name }}</td>
+                <td>
+                    {% if module.isenabled == True %}
+                        <span ng-if="f.flag==true" class="label label-success ng-scope">启 用</span>
+                    {% else %}
+                        <span ng-if="f.flag==false" class="label label-danger ng-scope">停 用</span>
+                    {% endif %}
+                </td>
+                <td>{{ module.sortby }}</td>
+                <td>{{ module.createat }}</td>
+                <td>{{ module.createtime|date:'Y-m-d H:i:s' }}</td>
+                <td>{{ module.createat }}</td>
+                <td>{{ module.updatetime|date:'Y-m-d H:i:s' }}</td>
+                <td>
+                    <a href="" onclick="setmoduleValue({{ module.id }})" class="ke-ablock" data-toggle="modal" data-target="#editModuleModal"><i class="glyphicon glyphicon-edit"></i></a>
+                    <a href="{% url 'moduledel' module.id %}" class="ke-ablock" role="button" onclick="return confirm('您确定要删除吗？')"><i class="glyphicon glyphicon-trash"></i></a>
+                </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+<p><button onclick="goback();" class="btn btn-success" role="button">返回>></button></p>
+              </div>
+          </div>
+    <!--      ---------------------华丽的分割线 main end------------------------ -->
+
+    </div>
+    <!--===================================================main end==================================================================-->
+
+    <!--  add  modal -->
+    <div class="modal fade ak-min-fullwidth-modal ak-znews-addsort-modal" id="addModuleModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+              <div class="modal-content">
+                    <div class="modal-header clearfix">
+                          <button type="button" class="close close-back" data-dismiss="modal"> <span class="sr-only">Close</span> </button>
+                          <h4 class="modal-title text-center">创建模块</h4>
+                    </div>
+                    <div class="modal-body ak-main-body">
+                        <form method='post' id="module_add">
+                            {% csrf_token %}
+                           <div class="ak-jsch-modal-row">
+                               <table class="ac-aset-table">
+                                   <tr>
+                                       <div class="ak-jsch-modal-text clearfix">
+                                           <td class="col01"><span class="ak-jsch-item-left">所属项目</span></td>
+                                           <td>
+                                               <div class="ak-jsch-item-right ak-left">
+                                                   <input name="projectid" value = {{ project.id }} hidden="true">
+                                                   <label>{{  project.name }}</label>
+                                               </div>
+                                           </td>
+                                       </div>
+                                   </tr>
+                                   <tr>
+                                       <td class="col01">
+                                           <div class="ak-jsch-pos"><div class="ak-jsch-point"></div></div>
+                                           <span class="ak-jsch-item-left ak-proname">模块名称</span>
+                                       </td>
+                                       <td>
+                                           <div class="ak-jsch-modal-item clearfix">
+                                               <div class="ak-jsch-item-right ak-left">
+                                                   <input name="modulename" class="ak-jsch-modal-input" type="text" placeholder="请输入创建模块名称">
+                                               </div>
+                                           </div>
+                                       </td>
+                                   </tr>
+                                   <tr>
+                                       <div class="ak-jsch-modal-item clearfix">
+                                           <td class="col01"><span class="ak-jsch-item-left ac-apro-span">状态</span></td>
+                                           <td>
+                                               <div class="sky-form ak-left ac-ml10">
+                                                   <label class="toggle">
+                                                       <input id="id_isenabled"  type="checkbox" checked="checked" name="isenabled">
+                                                       <i class="rounded-4x ak-aoffon-btn"></i>
+                                                   </label>
+                                              </div>
+                                           </td>
+                                       </div>
+                                   </tr>
+                                   <tr><div>
+                                           <td class="col01">
+                                               <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                                                   <span class="ak-jsch-item-left">排序</span>
+                                               </div>
+                                           </td>
+                                           <td>
+                                               <div class="ak-jsch-item-right ak-left">
+                                                   <input name="sortby" class="ac-acaseedit-input" type="number" value="0" placeholder="请输入排序号">
+                                               </div>
+                                           </td>
+                                       </div>
+                                   </tr>
+                               </table>
+
+                            <div class="modal-footer">
+                                 <!--===footer button ===-->
+                                 <div class="ak-footer-btn text-left">
+                                     <input class="ak-zdl-createbtn" type="submit" value="提交">
+                                     <input class="ak-zdl-createbtn cancel" type="reset" value="重置">
+                                 </div>
+                                 <!--===End footer button ===-->
+                            </div>
+                           </div>
+                        </form>
+          </div>
+      </div>
+</div>
+</div>
+    <!--  edit  modal -->
+    <div class="modal fade ak-min-fullwidth-modal ak-znews-addsort-modal" id="editModuleModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+              <div class="modal-content">
+                    <div class="modal-header clearfix">
+                          <button type="button" class="close close-back" data-dismiss="modal"> <span class="sr-only">Close</span> </button>
+                          <h4 class="modal-title text-center">编辑模块</h4>
+                    </div>
+                    <div class="modal-body ak-main-body">
+                        <form method='post' id="module_edit">
+                            {% csrf_token %}
+                           <div class="ak-jsch-modal-row">
+                               <table class="ac-aset-table">
+                                   <tr>
+                                       <td class="col01"><span class="ak-jsch-item-left">所属项目</span></td>
+                                           <td>
+                                                 <div class="ak-jsch-item-right ak-left">
+                                                     <input name="projectid" value = {{ project.id }} hidden="true">
+                                                     <label>{{  project.name }}</label>
+                                                 </div>
+                                           </td>
+                                   </tr>
+                                   <tr>
+                                           <td class="col01">
+                                               <div class="ak-jsch-pos"><div class="ak-jsch-point"></div></div>
+                                               <span class="ak-jsch-item-left ak-proname">模块名称</span>
+                                               <input name="moduleid" hidden="true">
+                                           </td>
+                                           <td>
+                                               <div class="ak-jsch-item-right ak-left">
+                                                   <input name="modulename" class="ak-jsch-modal-input" type="text" placeholder="请输入创建模块名称">
+                                               </div>
+                                           </td>
+                                   </tr>
+                                   <tr>
+                                           <td class="col01"><span class="ak-jsch-item-left ac-apro-span">状态</span></td>
+                                           <td>
+                                              <div class="sky-form ak-left ac-ml10">
+                                              <label class="toggle">
+                                                  <input id="id_isenabled"  type="checkbox" checked="checked" name="isenabled">
+                                                  <i class="rounded-4x ak-aoffon-btn"></i>
+                                                  </label>
+                                              </div>
+                                           </td>
+                                   </tr>
+                                   <tr>
+                                           <td class="col01">
+                                               <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                                               <span class="ak-jsch-item-left">排序</span>
+                                               </div>
+                                           </td>
+                                           <td>
+                                               <div class="ak-jsch-item-right ak-left">
+                                                   <input name="sortby" class="ac-acaseedit-input" type="number" value="0" placeholder="请输入排序号">
+                                               </div>
+                                           </td>
+                                   </tr>
+                               </table>
+                           </div>
+
+                            <div class="modal-footer">
+                                 <!--===footer button ===-->
+                                 <div class="ak-footer-btn text-left">
+                                     <input class="ak-zdl-createbtn" type="submit" value="提交">
+                                     <input class="ak-zdl-createbtn cancel" type="reset" value="重置">
+                                 </div>
+                                 <!--===End footer button ===-->
+                            </div>
+                        </form>
+          </div>
+      </div>
+</div>
+</div>
+
+{% endblock %}

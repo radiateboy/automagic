@@ -1,0 +1,132 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><style type="text/css">[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>用户登录</title>
+    <!-- base href="https://127.0.0.1:8000/" -->
+    <!--<meta name="viewport" content="width=comment_activity.jsdevice-width">-->
+
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <link rel="stylesheet" href="{% static 'css/login-vendor.css' %}">
+
+{#    <link rel="stylesheet" href="{% static 'css/login-app-bar.css' %}">#}
+
+    <link rel="stylesheet" href="{% static 'css/login-app.css' %}">
+
+<script charset="utf-8" type="text/javascript">
+
+
+</script>
+</head>
+
+<body ng-app="app" ng-strict-di="" ng-controller="AppController" class="coding-center coding ng-scope random-background account-background" cg-random-background="" ng-class="{'account-background': isAccount}" style="margin: 0px; padding: 0px; background: transparent url(&quot;{% static 'images/background2.jpg' %}&quot;) no-repeat fixed center center / cover ; height: 100%;">
+<div cg-flash="">
+    <div class="cg flash center" ng-class="{active: messages &amp;&amp; messages.length&gt;0}" id="global-flash">
+    <i class="ui close icon" ng-click="onClose()"></i>
+    <div class="outer">
+        <!-- ngRepeat: message in messages.slice(0,limit) -->
+
+    </div>
+    <!-- ngIf: messages.length>limit -->
+</div>
+</div>
+<div class="ui fixed transparent main menu ng-scope" ng-dblclick="scrollToTop()" id="top-menu">
+<a href="#" class="left logo item ng-scope" ng-if="USER === false" cg-jump-out-angular-href="/" target="_self" style="padding: 0px 0px;">
+    <img src="../static/images/logo.png" height="50">
+</a>
+<div style="left: 0px;" class="left menu ng-scope" data-ng-controller="QuickSearchController" ng-style="{'left':USER === false ? '40px':'75px'}">
+  <div class="public-pages ng-scope" ng-if="USER === false" style="width: 452px;">
+        <div class="normal not-login-menu">
+            <div class="ui simple dropdown">
+                <a href="javascript:void(0);" class="item no-arrow ng-binding">AutoMagic</a>
+                <div class="menu">
+                    <a class="item func-item" href="#" target="_blank">TestReport</a>
+                    <a class="item func-item" href="http://172.17.3.60/" target="_blank">Git Server</a>
+                </div>
+            </div>
+            <a href="http://172.17.3.65:8111/"  target="_blank" class="item ng-binding">TeamCity</a>
+            <a href="http://172.17.3.70/testrail/ " target="_blank" class="item ng-binding">TestRail</a>
+            <a href="http://172.17.3.71:8112/dashboard" target="_blank" class="item ng-binding">YouTrack</a>
+        </div>
+
+    </div>
+</div>
+
+<div class="header ng-scope">
+    <span class="top-menu-title ng-binding ng-scope" ng-controller="TopMenuTitleController" ng-bind="top_menu_title">用户登录</span>
+</div>
+
+<!-- ngIf: USER -->
+<!-- ngIf: USER === false -->
+    <div class="right menu ng-scope" ng-if="USER === false">
+        <div class="ui item mart-logo">
+        </div>
+        <a href="#" class="ui coding register button ng-binding" cg-auto-refresh-href="/register">注册</a>
+        <a href="#" class="ui coding white login button ng-binding" cg-auto-refresh-href="/login">登录</a>
+
+    <!-- end ngIf: USER === false -->
+    </div>
+<!-- end ngIf: USER === false -->
+</div>
+{#{% extends "base.html" %}#}
+
+{% block content %}
+
+
+<div class="wrapper ng-scope" ng-view="">
+    <div class="account-flex-container ng-scope">
+        <div ng-controller="LoginController" class="account-container ng-scope">
+            <h2>用户登录</h2>
+            <div id="content-main">
+
+
+            <form method="post">{% csrf_token %}
+
+                    <div class="account-input dirty" ng-class="{dirty: dirty}">
+                    {{ form.username }}
+                    </div>
+
+                <input-password class="ng-isolate-scope" ret="password" show-error="false">
+                <div class="account-input" ng-class="{dirty: dirty}">
+                {{ form.password }}
+                <span ng-show="!ret.valid" class="error ng-binding ng-hide"></span>
+                </div></input-password>
+
+                <div style="position: relative">
+                    <input-remember-me class="ng-isolate-scope" ret="remember_me">
+
+                    </input-remember-me>
+                </div>
+                <button id="login_btn" type="submit"  ng-class="{loading: loading}" value="{{ next }}">登录</button>
+
+                <div class="bottom-link">
+                    <a href="#">还没有账户，联系管理员</a>
+                </div>
+                {% if form.errors %}
+                    <span class="" style="color: red">您输入的用户名或密码不正确，请重试。</span>
+                {% endif %}
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<!-- ngInclude: undefined --><div class="account-about ng-scope" ng-controller="AccountAboutController">
+    <span>Copyright&nbsp;&nbsp;©&nbsp;2016&nbsp; AutoMagic &nbsp;&nbsp;</span>
+    <a href="#">首页</a>
+    <a href="#">关于 AutoMagic</a>
+    <a href="#">招贤纳士</a>
+
+</div>
+</ng-include>
+</div>
+
+</body>
+</html>

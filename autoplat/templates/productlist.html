@@ -1,0 +1,343 @@
+{% extends 'frame.html' %}
+{% block title %}Automagic{% endblock %}
+{% block slideshow %}
+    {% if request.user.is_admin %}
+        <!--===================================================main start==================================================================-->
+        <div class="ak-zper-midbox ak-jsch-mid">
+            <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+                <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+                    <span class="ak-zper-remindback"></span>
+                    <span class="inbox-text">产品管理</span>
+                </div>
+                <div id="log_info" class="ac-addtips"></div>
+            </div>
+
+            <!--      ---------------------华丽的分割线 main------------------------ -->
+            <div class="col-md-12">
+                <div class="ac-margin-tb15">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <form class="form-inline" role="form" method="GET">
+                                <div class="form-group">
+                                    <select id="id_productid" name="productname" class="form-control">
+                                        <option value="">-产品名称-</option>
+                                        {% for i in productlist %}
+                                            <option value="{{ i.name }}"
+                                                    {% if request.GET.productname  == i.name %}selected{% endif %}>{{ i.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input width="300px" type="input" class="form-control search-width"
+                                               name="keyword" value="{{ request.GET.keyword }}"
+                                               placeholder="通过产品名称或描述关键字搜索">
+                                        <span class="input-group-btn">
+                      <button class="btn btn-primary" type="submit">Go!</button>
+                  </span>
+                                    </div><!-- /input-group -->
+                                </div>
+                                <button type="button" class="ak-right ac-btn-adduser blue" data-toggle="modal"
+                                        data-target="#addProductModal">创建产品
+                                </button>
+                            </form>
+                            {#            <div align="right" class="form-group">#}
+                            {#                <a href="/product/add/" class="btn btn-success">创建产品</a>#}
+                            {#                <button type="button" class="ak-left ac-btn-addcase orange" data-toggle="modal" data-target="#addProductModal">创建产品</button>#}
+                            {#            </div>#}
+                        </div>
+                        <table id="mytable" class="table table-striped table-hover table-condensed ac-aelement-table">
+                            <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>产品名称</th>
+                                <th>产品状态</th>
+                                <th>产品描述</th>
+                                <th>排序</th>
+                                <th>创建者</th>
+                                <th>创建时间</th>
+                                <th>更新者</th>
+                                <th>更新时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for product in productlist %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td class="ac-alist-descp"><a
+                                            href="{% url 'productview' product.id %}"/> {{ product.name }}</td>
+                                    <td>
+                                        {% if product.isenabled == True %}
+                                            <span ng-if="f.flag==true" class="label label-success ng-scope">启 用</span>
+                                        {% else %}
+                                            <span ng-if="f.flag==false" class="label label-danger ng-scope">停 用</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="ac-alist-width-overflow-public">{{ product.descr }}</td>
+                                    <td>{{ product.sortby }}</td>
+                                    <td>{{ product.createat }}</td>
+                                    <td>{{ product.createtime|date:'Y-m-d H:i:s' }}</td>
+                                    <td>{{ product.updateat }}</td>
+                                    <td>{{ product.updatetime|date:'Y-m-d H:i:s' }}</td>
+                                    <td>
+                                        <a href="" onclick="setproductValue({{ product.id }})" class="ke-ablock"
+                                           data-toggle="modal" data-target="#editProductModal"><i
+                                                class="glyphicon glyphicon-edit"></i></a>
+                                        <a href="{% url 'productdel' product.id %}" class="ke-ablock" role="button"
+                                           onclick="return confirm('Are you Sure Deleted.')"><i
+                                                class="glyphicon glyphicon-trash"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if is_paginated %}
+                        <div class="panel-default">
+                            <ul class="pagination">
+                                <li><a href="{{ request.path }}?page=1">«</a></li>
+                                {% if page_obj.has_previous %}
+                                    <li><a href="{{ request.path }}?&page={{ page_obj.previous_page_number }}">上一页</a>
+                                    </li>
+                                {% else %}
+                                    <li class="previous disabled"><a>上一页</a></li>
+                                {% endif %}
+                                {% for i in page_obj.paginator.page_range %}
+                                    <li {% if page_obj.number == i %}class="active"{% endif %}><a
+                                            href="{{ request.path }}?page={{ i }}">{{ i }}</a></li>
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                    <li><a href="{{ request.path }}?page={{ page_obj.next_page_number }}">下一页</a></li>
+                                {% else %}
+                                    <li class="previous disabled"><a>下一页</a></li>
+                                {% endif %}
+                                <li><a href="{{ request.path }}?page={{ page_obj.paginator.num_pages }}">»</a></li>
+                                <li><a>当前第{{ page_obj.number }}页/共{{ productsum }}条</a></li>
+                                <li><input id="curpage" class="ac-acaseedit-input" type="number" style="width: 80px;">
+                                </li>
+                                <li>
+                                    <button id="btn_skip" onclick="btn_skip_click()" type="button"
+                                            class="btn btn-sm btn-primary">确定
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!--      ---------------------华丽的分割线 main end------------------------ -->
+        <!--===================================================main end==================================================================-->
+
+        <!--Add Modal -->
+        <div class="modal fade ak-min-fullwidth-modal ak-znews-addsort-modal" id="addProductModal" tabindex="-1"
+             role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header clearfix">
+                        <button type="button" class="close close-back" data-dismiss="modal"><span
+                                class="sr-only">Close</span></button>
+                        <h4 class="modal-title text-center">创建产品</h4>
+                    </div>
+                    <div class="modal-body ak-main-body">
+                        <form method='post' id="product_add">
+                            {% csrf_token %}
+                            <div class="ak-jsch-modal-row">
+
+                                <table class="ac-aset-table">
+                                    <tr>
+                                        <td class="col01">
+                                            <div class="ak-jsch-pos">
+                                                <div class="ak-jsch-point"></div>
+                                            </div>
+                                            <span class="ak-jsch-item-left ac-proname">产品名称</span>
+                                        </td>
+                                        <td>
+                                            <div class="ak-jsch-modal-text clearfix">
+                                                <div class="ak-jsch-item-right col01">
+                                                    <input name="productname" class="ak-jsch-modal-input" type="text"
+                                                           placeholder="产品名称">
+                                                </div>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col01"><span class="ak-jsch-item-left ac-apro-span">状态</span></td>
+                                        <td>
+                                            <div class="ak-jsch-modal-item">
+                                                <div class="sky-form">
+                                                    <label class="toggle">
+                                                        <input id="id_isenabled" type="checkbox" checked="checked"
+                                                               name="isenabled">
+                                                        <i class="rounded-4x ak-aoffon-btn"></i>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col01">
+                                            <div class="ak-jsch-modal-item ak-jsch-pt"><span class="ak-jsch-item-left">描述</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="ak-jsch-item-right col01">
+                                                <textarea id="id_descr" name="descr" class="ac-acaseedit-textarea"
+                                                          rows="3"></textarea>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col01">
+                                            <div class="ak-jsch-modal-item ak-jsch-pt">
+                                                <span class="ak-jsch-item-left">排序</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="ak-jsch-item-right col01">
+                                                <input name="sortby" class="ac-acaseedit-input" type="number" value="0"
+                                                       placeholder="请输入排序号">
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <!--===footer button ===-->
+                                <div class="ak-footer-btn text-left">
+                                    <input class="ak-zdl-createbtn" type="submit" value="提交">
+                                    <input class="ak-zdl-createbtn cancel" type="reset" value="重置">
+                                </div>
+                                <!--===End footer button ===-->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div class="modal fade ak-min-fullwidth-modal ak-znews-addsort-modal" id="editProductModal" tabindex="-1"
+             role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header clearfix">
+                        <button type="button" class="close close-back" data-dismiss="modal"><span
+                                class="sr-only">Close</span></button>
+                        <h4 class="modal-title text-center">编辑产品</h4>
+                    </div>
+                    <div class="modal-body ak-main-body">
+                        <form method='post' id="product_edit">
+                            {% csrf_token %}
+                            <div class="ak-jsch-modal-row">
+                                <table class="ac-aset-table">
+                                    <tr>
+                                        <td class="col01">
+                                            <div class="ak-jsch-pos">
+                                                <div class="ak-jsch-point"></div>
+                                            </div>
+                                            <span class="ak-jsch-item-left ak-proname">产品名称</span>
+                                        </td>
+                                        <td>
+                                            <input name="productid" hidden="true">
+                                            <div class="ak-jsch-item-right ak-left">
+                                                <input name="productname" class="ak-jsch-modal-input" type="text"
+                                                       placeholder="产品名称">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col01"><span class="ak-jsch-item-left ac-apro-span ">状态</span></td>
+                                        <td>
+                                            <div class="sky-form ak-left ac-ml10">
+                                                <label class="toggle">
+                                                    <input id="id_isenabled" type="checkbox" name="isenabled">
+                                                    <i class="rounded-4x ak-aoffon-btn"></i>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col01"><span class="ak-jsch-item-left">描述</span></td>
+                                        <td>
+                                            <div class="ak-jsch-item-right ak-left">
+                                                <textarea id="id_descr" name="descr" class="ac-acaseedit-textarea"
+                                                          rows="3"></textarea>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col01"><span class="ak-jsch-item-left">排序</span></td>
+                                        <td>
+                                            <div class="ak-jsch-item-right ak-left">
+                                                <input name="sortby" class="ac-acaseedit-input" value="0" type="number"
+                                                       placeholder="请输入排序号">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="modal-footer">
+                                <!--===footer button ===-->
+                                <div class="ak-footer-btn text-left">
+                                    <input class="ak-zdl-createbtn" type="submit" value="提交">
+                                    <input class="ak-zdl-createbtn cancel" type="reset" value="重置">
+                                </div>
+                                <!--===End footer button ===-->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="ak-zper-midbox ak-jsch-mid">
+            <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+                <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+                    <span class="ak-zper-remindback"></span>
+                    <span class="inbox-text">产品管理</span>
+                </div>
+                <div id="log_info" class="ac-addtips"></div>
+            </div>
+            <div class="col-md-12">
+                <div style="text-align: center">
+                    <p>形成天才的决定因素应该是勤奋。</p>
+                    <p>……有几分勤学苦练是成正比例的。</p>
+                    <p>加油吧！少年！！！</p>
+                    <p>你没权限访问，可以找找管理员。</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block script %}
+    <script>
+        function btn_skip_click() {
+            var currpage = $('#curpage').val() === '' ? 1 : parseInt($('#curpage').val());
+            // console.log(currpage);
+            if (currpage > {{ page_obj.paginator.num_pages }}) {
+                currpage = {{ page_obj.paginator.num_pages }};
+            }
+            if (currpage < 1) {
+                currpage = 1;
+            }
+            var url = window.location.search.match(/page=(\d+|\s*)/) === null ? window.location.origin + (window.location.pathname + '?page=' + currpage + (window.location.search ? window.location.search.replace('?', '&') : '')) : window.location.search.replace(/page=(\d+|\s*)/, 'page=' + currpage);
+            self.location = url;
+
+            return false;
+        }
+
+        $('#curpage').keypress(function (event) {
+            console.log(event.which);
+            if (event.which == 13) {
+                btn_skip_click()
+            }
+            event.stopPropagation();
+        })
+    </script>
+{% endblock %}

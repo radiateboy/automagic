@@ -1,0 +1,302 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Base{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'css/favicon.ico' %}">
+    <link rel="shortcut icon" href="{% static 'css/favicon.ico' %}" type="image/x-icon">
+
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+<link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap-switch.css' %}">
+
+
+<link rel="stylesheet" href="{% static 'css/automagic.css' %}">
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-switch.js' %}"></script>
+<script src="{% static 'js/automagic.js' %}"></script>
+<script>
+    function addtr() {
+    //行添加
+{#        debugger;#}
+        var len = parseInt($("#linecounter").val())+1;
+
+         $("#tab tbody").append('<tr id=row'+len+' name="rowstep">'
+                                   +'<td>Step'+len+'</td>'
+                                   +'<td><input name="descr" class="form-control" placeholder="请输入步骤描述" type="input"></td>'
+                                   +'<td><select id="id_keyword" name="keyword" class="form-control mb15">{% for i in  keywordlist %}<option value="{{ i.pk }}">{{ i.kwdescr }}</option>{% endfor %}</select></td>'
+                                   +'<td><input name="elementid" class="form-control" placeholder="请选择元素" type="input"></td>'
+                                   +'<td><input name="inputtext" class="form-control" placeholder="" type="input"></td>'
+                                   +'<td><a class="btn btn-small" onclick="deltr('+len+')">删除</a></td>'
+                                   +'</tr>');
+
+
+        $("#linecounter").val(len);
+    }
+//行删除
+   function deltr(index) {
+     $("tr[id='row"+index+"']").remove();//删除当前行
+    }
+
+   $(document).ready(function(){
+       $.ajaxSetup({
+                 data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+            });
+       $('#ele_add').submit(function(){
+                var descr = $("#id_descr").val();      //获得form中用户输入的descr 注意这里的descr 与你html中的id一致
+                var projectid = $("#id_projectid").val(); //同上
+                var moduleid = $("#id_moduleid").val(); //同上
+                var locmode = $("#id_locmode").val();
+                var location = $("#id_location").val();
+           $.ajax({
+                    type:"POST",
+                    data: {descr:descr, projectid:projectid, moduleid:moduleid, locmode:locmode, location:location},
+                    url: "{% url 'elementadd' %}", //后台处理函数的url 这里用的是static url 需要与urls.py中的name一致
+                    cache: false,
+                    dataType: "html",
+
+                    success: function(result, statues, xml){
+                        debugger;
+                        $('#log_info').addClass('bg-success');
+                        $('#log_info').css('display','block');
+                        $('#log_info').html(result);
+                        setTimeout("location.reload()",1500);                                        //成功时弹出view传回来的结果
+                    },
+                    error: function(){
+                        debugger;
+                        $('#log_info').addClass('bg-danger');
+                        $('#log_info').css('display','block');
+                        $('#log_info').html('添加失败。');
+                        setTimeout("location.reload()",1500);
+                    }
+                });
+                return false;
+            });
+
+       $('#add_keyword').submit(function () {
+           var keyword = $('#keyword').val();
+           var kwdescr = $('#kwdescr').val();
+           $.ajax({
+               type:"POST",
+               data:{keyword:keyword,kwdescr:kwdescr},
+               url:"{% url 'keywordadd' %}",
+               cache: false,
+               dataType:"html",
+               success:function (result, statues,xml) {
+                   // debugger;
+                   $('#log_info').addClass('bg-success');
+                   $('#log_info').css('display','block');
+                   $('#log_info').html(result);
+                   setTimeout("location.reload()",1500);
+                   // alert(result);
+               },
+               error:function () {
+                   // debugger;
+                   $('#log_info').addClass('bg-danger');
+                   $('#log_info').css('display','block');
+                   $('#log_info').html('添加失败，关键字可能已经存在。');
+                   setTimeout("location.reload()",1500);
+               }
+           });
+           return false;
+       });
+
+       $('#case_add').submit(function () {
+{#           var casedesc = $('#casedesc').val();#}
+{#           var isenabled = $('#id_isenabled').prop('checked');#}
+{#           var projectid = $('select[name="projectid"]').val();#}
+{#           var moduleid = $('select[name="moduleid"]').val();#}
+{#           var dependent = $('input[name="dependent"]').val();#}
+{#           var descr = $('input[name="descr"]').val();#}
+{#           var keyword = $('select[name="keyword"]').val();#}
+{#           var elementid = $('input[name="elementid"]').val();#}
+{#           var inputtext = $('input[name="inputtext"]').val();#}
+
+           $.ajax({
+               type:"POST",
+               data: $(this).serialize(),
+{#               data:{casedesc:casedesc, isenabled:isenabled, projectid:projectid, moduleid:moduleid,dependent:dependent,descr:descr,keyword:keyword,elementid:elementid,inputtext:inputtext},#}
+               url:"{% url 'caseadd' %}",
+               cache: false,
+               dataType:"html",
+               success:function (result, statues,xml) {
+{#                   debugger;#}
+                   $('#log_info').addClass('bg-success');
+                   $('#log_info').css('display','block');
+                   $('#log_info').html(result);
+                   setTimeout("location.reload()",1500);
+                   // alert(result);
+               },
+               error:function () {
+{#                   debugger;#}
+                   $('#log_info').addClass('bg-danger');
+                   $('#log_info').css('display','block');
+                   $('#log_info').html('保存失败');
+                   setTimeout("$('#log_info').css('display','none');",1500);
+               }
+           });
+           return false;
+       });
+
+       $('#case_edit').submit(function () {
+           var casedesc = $('#casedesc').val();
+           var isenabled = $('#id_isenabled').prop('checked');
+           var projectid = $('select[name="projectid"]').val();
+           var moduleid = $('select[name="moduleid"]').val();
+           var dependent = $('input[name="dependent"]').val();
+           var descr = $('input[name="descr"]').val();
+           var keyword = $('select[name="keyword"]').val();
+           var elementid = $('input[name="elementid"]').val();
+           var inputtext = $('input[name="inputtext"]').val();
+
+           $.ajax({
+               type:"POST",
+               data: $(this).serialize(),
+{#               data:{casedesc:casedesc, isenabled:isenabled, projectid:projectid, moduleid:moduleid,dependent:dependent,descr:descr,keyword:keyword,elementid:elementid,inputtext:inputtext},#}
+               url:"/case/update/{{ tcase.pk }}/",
+               cache: false,
+               dataType:"html",
+               success:function (result, statues,xml) {
+{#                   debugger;#}
+                   $('#log_info').addClass('bg-success');
+                   $('#log_info').css('display','block');
+                   $('#log_info').html(result);
+                   setTimeout("$('#log_info').css('display','none');",1500);
+                   // alert(result);
+               },
+               error:function () {
+{#                   debugger;#}
+                   $('#log_info').addClass('bg-danger');
+                   $('#log_info').css('display','block');
+                   $('#log_info').html('保存失败');
+                   setTimeout("$('#log_info').css('display','none');",1500);
+               }
+           });
+           return false;
+       });
+
+        //产品和项目二级菜单关联
+       $("#selproductid").bind("change",function(){
+            var s1SelectedVal = $('#selproductid').val();
+
+            if($(this).val()==0){
+                $('#id_projectid').empty();
+                return;
+            }
+            else {
+                $.ajax({
+                    type:"GET",
+                    data:{'productid':s1SelectedVal},
+                    url: "{% url 'getproject' %}", //后台处理函数的url 这里用的是static url 需要与urls.py中的name一致
+                    cache: false,
+                    dataType:'json',
+
+                 success: function(result,TextStatus) {
+                     $('#id_projectid').empty();
+                     if (result.length > 0) {
+                         for (i = 0; i < result.length; i++) {
+{#                             alert(result[i].value);#}
+                             $('#id_projectid').append('<option value="' + result[i].key + '">' + result[i].value + '</option>');
+                         }
+                     }
+                 }
+                });
+            }
+        });
+
+       $("#selprojectid").bind("change",function(){
+            var s1SelectedVal = $('#selprojectid').val();
+
+            if($(this).val()==0){
+                $('#selmoduleid').empty();
+                return;
+            }
+            else {
+                $.ajax({
+                    type:"GET",
+                    data:{'projectid':s1SelectedVal},
+                    url: "{% url 'getmodule' %}", //后台处理函数的url 这里用的是static url 需要与urls.py中的name一致
+                    cache: false,
+                    dataType:'json',
+
+                 success: function(result,TextStatus) {
+                     $('#selmoduleid').empty();
+                     if (result.length > 0) {
+                         for (i = 0; i < result.length; i++) {
+{#                              debugger;#}
+{#                             alert(result[i].value);#}
+                             $('#selmoduleid').append('<option value="' + result[i].key + '">' + result[i].value + '</option>');
+                         }
+                     }
+                 }
+                });
+            }
+        });
+
+        });
+</script>
+
+    <link rel="stylesheet" href="{% static 'css/login-vendor.css' %}">
+
+{#    <link rel="stylesheet" href="{% static 'css/login-app-bar.css' %}">#}
+
+    <link rel="stylesheet" href="{% static 'css/login-app.css' %}">
+</head>
+<body>
+<div class="ui fixed transparent main menu ng-scope" ng-dblclick="scrollToTop()" id="top-menu">
+<a href="{% url 'index' %}" class="left logo item ng-scope" ng-if="USER === false" cg-jump-out-angular-href="/" target="_self" style="padding: 0px 0px;">
+    <img src="{% static 'images/logo.png' %}" height="50">
+</a>
+<div style="left: 0px;" class="left menu ng-scope" data-ng-controller="QuickSearchController" ng-style="{'left':USER === false ? '40px':'75px'}">
+  <div class="public-pages ng-scope" ng-if="USER === false" style="width: 452px;">
+        <div class="normal not-login-menu">
+            <div class="ui simple dropdown">
+                <a href="javascript:void(0);" class="item no-arrow ng-binding">AutoMagic</a>
+                <div class="menu">
+                    <a class="item func-item" href="#" target="_blank">TestReport</a>
+                    <a class="item func-item" href="http://172.17.3.60/" target="_blank">Git Server</a>
+                </div>
+            </div>
+            <a href="http://172.17.3.65:8111/"  target="_blank" class="item ng-binding">TeamCity</a>
+            <a href="http://172.17.3.70/testrail/ " target="_blank" class="item ng-binding">TestRail</a>
+            <a href="http://172.17.3.71:8112/dashboard" target="_blank" class="item ng-binding">YouTrack</a>
+        </div>
+
+    </div>
+</div>
+{% if user.is_authenticated %}
+    <!-- ngIf: USER -->
+<!-- ngIf: USER === false -->
+    <div class="right menu ng-scope" ng-if="USER === false">
+        <div class="ui item mart-logo">
+        </div>
+        <i class="icon-user"></i>
+        <button class="btn btn-link">{{ user.username }}</button>
+        <a href="/logout" class="btn btn-link" cg-auto-refresh-href="/logout">Logout</a>
+    </div>
+    <!-- end ngIf: USER === false -->
+    <!-- end ngIf: USER === false -->
+{% else %}
+    <div class="right menu ng-scope" ng-if="USER === false">
+        <div class="ui item mart-logo">
+        </div>
+        <a href="/login" class="btn btn-primary " >Login</a>
+    </div>
+{% endif %}
+</div>
+{% block content %}
+    <div>
+{% block slideshow %}{% endblock %}
+{% block page_content %}{% endblock %}
+    </div>
+{% endblock %}
+</body>

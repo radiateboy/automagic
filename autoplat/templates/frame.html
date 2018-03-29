@@ -1,0 +1,322 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <title>Automagic</title>
+    <!--public css-->
+    <link href="{% static 'css/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/ak-base-style.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet" type="text/css">
+
+
+    <!--master page v3 css-->
+    <link href="{% static 'css/master-page-v3/ak-master-page-v3style.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/master-page-v3/ak-master-page-v3.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/bootstrapValidator.css' %}" rel="stylesheet" type="text/css">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon"/>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon"/>
+    <!--customer css-->
+    {#         <link href="{% static 'css/master-page-v3/ak-nav-chat.css' %}" rel="stylesheet" type="text/css">#}
+    <link href="{% static 'css/ak-schedule.css' %}" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wheelmenu.css' %}"/>
+
+</head>
+
+
+<body>
+<!--Preloader start
+<div id="preloader" class="preloader table-wrapper">
+  <div class="table-row">
+    <div class="table-cell">
+      <div class="la-ball-scale-multiple la-3x">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</div>
+Preloader end-->
+<!--top placeholder start-->
+<div class="placeholder-top">
+    <ul id="gn-menu" class="navbar gn-menu-main">
+        {#        <li>#}
+        {#            <a href="{% url 'caselist' %}" class="logo text-uppercase">Automagic</a>#}
+        {#        </li>#}
+        {##}
+        {#        <li>#}
+        {#            <a class=" " href="http://confluence.acorn-net.com:8090" target="_blank">Confluence</a>#}
+        {#        </li>#}
+        {#        <li>#}
+        {#            <a href="http://172.17.3.70/testrail/ " target="_blank" class=" ">TestRail</a>#}
+        {#        </li>#}
+        {#        <li>#}
+        {#            <a href="http://jira.acorn-net.com:8080" target="_blank" class=" ">Jira</a>#}
+        {#        </li>#}
+        {#        <li>#}
+        {#            <a class=" " href="http://172.17.3.60/" target="_blank">Git Server</a>#}
+        {#        </li>#}
+
+        <li class="top-clock">
+            <span class="ak-zmaster-paage2-logo"><img src="{% static 'images/logo-automagic.png' %}"
+                                                      class="img-responsive"></span>
+        </li>
+        <li class="container-fluid pull-right">
+            <ul class="navbar-right right-menu">
+
+                </li>
+                {#                <li class="members-btn max-block" data-href="notice-sidebar"  data-close=".close-notice-sidebar">#}
+                {#                    <a class="show-notice"><i class="fa fa-bell-o"></i> <span class="label label-warning">4</span></a>#}
+                {#              </li>#}
+
+                <!---->
+                <li class=" dropdown notifications ak-zuser-dropdowndiv" data-href="view-userinfo">
+                    <a href="javascript:;" class="" data-toggle="dropdown"
+                       aria-expanded="true"> <img src="{% static 'images/user-13.jpg' %}" class="ak-zuser-aimg" alt="">
+                        <span>{{ request.user.realname }}</span>
+                    </a>
+
+                    <div class="dropdown-menu animated fadeInDown ak-admin-con ak-user-dropdown-menu ak-zadmin-dropmenu"
+                         id="view-userinfo">
+                        <div class="topbox"><span class="img-box"><img src="{% static 'images/user-13.jpg' %}"
+                                                                       class="img-responsive"></span>
+                            <h4 class="name">{{ request.user.realname }}</h4>
+                            <p class="email">{{ request.user.email }}</p>
+                            {% if request.user.mobile %}
+                                <p class="email">{{ request.user.mobile }}</p>
+                            {% endif %}
+                            {#                                  <button class="ak-zadmin-infobtn">查看信息</button>#}
+                        </div>
+                        <div class="footbox clearfix">
+                            <button class="ak-zadmin-bottombtn"><a href="/logout">切换用户</a></button>
+                            {#                                  <button class="ak-zadmin-bottombtn pull-right">退出</button>#}
+                        </div>
+                    </div>
+                </li>
+                <!---->
+                {#                <li class="members-btn max-none" data-href="setting-sidebar" data-close=".close-notice-sidebar">#}
+                {#                    <a class="show-notice">#}
+                {#                        <img src="{% static 'images/setting-top02.png' %}" style="display:inline-block;">#}
+                {#                    </a>#}
+                {#                </li>#}
+            </ul>
+        </li>
+    </ul>
+    </li>
+    </ul>
+</div>
+<!--top placeholder end-->
+<!--left placeholder start-->
+{#<div class="placeholder-left"></div>#}
+<!--left placeholder start-->
+<!--main placeholder start-->
+
+<!--========left start======-->
+<div class="ak-zper-leftbox ak-jsch-border">
+
+    <div class="ak-zexam-leftmenu clearfix">
+        <!--第一个ul start-->
+        <div class="leftsidebar_box">
+            {#            <div class="ak-zper-adminbox">#}
+            {#                        <span class="img-box">#}
+            {#                            <img src="{% static 'images/user-13.jpg' %}"/>#}
+            {#                        </span>#}
+            {#                <span class="name">{{ request.user.realname }}</span>#}
+            {#            </div>#}
+            {#            <div class="line"></div>#}
+            <dl class="functiontest">
+                <dt>功能测试<img src="{% static 'images/select_xl01.png' %}"></dt>
+                <dd class="first_dd"><a href="{% url 'caselist' %}">用例管理</a></dd>
+                <dd><a href="{% url 'tasklist' %}">任务管理</a></dd>
+                <dd><a href="{% url 'elementlist' %}">元素管理</a></dd>
+                <dd><a href="{% url 'keywordlist' %}">关键字管理</a></dd>
+            </dl>
+
+            <dl class="interfacetest">
+                <dt>接口测试<img src="{% static 'images/select_xl01.png' %}"></dt>
+                <dd class="first_dd"><a href="{% url 'webinterface' %}">Web接口</a></dd>
+            </dl>
+
+
+            <dl class="tools">
+                <dt>其它工具<img src="{% static 'images/select_xl01.png' %}"></dt>
+                <dd class="first_dd"><a href="{% url 'toolsyslog' %}">Syslog</a></dd>
+                <dd><a href="{% url 'toolsnmp' %}">SNMP</a></dd>
+            </dl>
+
+            <dl class="setting">
+                <dt>系统管理<img src="{% static 'images/select_xl01.png' %}"></dt>
+                <dd class="first_dd"><a href="{% url 'userlist' %}">用户管理</a></dd>
+                <dd><a href="{% url 'productlist' %}">产品管理</a></dd>
+            </dl>
+            <div>
+                <a href="#wheel2" class="wheel-button ne">
+                    <span>+</span>
+                </a>
+                <ul id="wheel2" data-angle="NE" class="wheel">
+                    <li class="item"><a href="http://confluence.acorn-net.com:8090" target="_blank" title="confluence">C</a></li>
+                    <li class="item"><a href="http://172.17.3.70/testrail/" target="_blank" title="testrail">T</a></li>
+                    <li class="item"><a href="http://jira.acorn-net.com:8080" target="_blank" title="jira">J</a></li>
+                    <li class="item"><a href="http://172.17.3.60/" target="_blank" title="git">G</a></li>
+{#                    <li class="item"><a href="#home">E</a></li>#}
+                </ul>
+            </div>
+        </div>
+
+        {#                        <ul class="ak-zperleftnav-ul list-group">#}
+        {#                           <a href="{% url 'caselist' %}"><li class="list-group-item a-listitem"><span class="ak-zper-navicon ak-aper-navicon"><img src="{% static 'images/ak-person-icon01.png' %}"></span><span class="text">用例管理</span>#}
+        {#                                </li></a>#}
+        {#                            <a href="{% url 'tasklist' %}"><li class="list-group-item a-listitem"><span class="ak-zper-navicon ak-aper-navicon"><img src="{% static 'images/ak-person-icon02.jpg' %}"></span><span class="text">任务管理</span>#}
+        {#                               </li></a>#}
+        {#                            <a href="{% url 'elementlist' %}"><li class="list-group-item a-listitem"><span class="ak-zper-navicon ak-aper-navicon"><img src="{% static 'images/ak-person-icon05.png' %}"></span><span class="text">元素管理</span>#}
+        {#                                </li></a>#}
+        {#                            {% if request.user.is_admin %}#}
+        {#                            <a href="{% url 'keywordlist' %}"><li class="list-group-item a-listitem"><span class="ak-zper-navicon ak-aper-navicon"><img src="{% static 'images/ak-person-icon06.png' %}"></span><span class="text">关键字管理</span>#}
+        {#                            </li></a>#}
+        {#                            {% endif %}#}
+        {#                            {% if request.user.is_admin %}#}
+        {#                            <a href="{% url 'productlist' %}"><li class="list-group-item a-listitem"><span class="ak-zper-navicon ak-aper-navicon"><img src="{% static 'images/ak-person-icon03.png' %}"></span><span class="text">产品管理</span>#}
+        {#                               </li></a>#}
+        {#                            {% endif %}#}
+        {#                            {% if request.user.is_admin %}#}
+        {#                                <a  href="{% url 'userlist' %}"><li class="list-group-item a-listitem"><span class="ak-zper-navicon ak-aper-navicon"><img src="{% static 'images/ak-person-icon04.png' %}"></span><span class="text">用户管理</span>#}
+        {#                               </li></a>#}
+        {#                            {% endif %}#}
+        {#                        </ul>#}
+        {#        </li>#}
+        {#        </ul>#}
+        <!--第一个ul end-->
+    </div>
+</div>
+<!--mid menu end-->
+<!--=======left end=======-->
+<!--===================================================main start==================================================================-->
+{% block content %}
+    <div>
+        {% block slideshow %}{% endblock %}
+        {% block page_content %}{% endblock %}
+        <div class="ak-clear"></div>
+        <footer style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+            <p>适用浏览器：IE9+、FireFox、Chrome、Safari、Opera、傲游、搜狗、世界之窗</p>
+            <p>Copyright ©2018<a href="#" target="_blank"></a> 开源优测</p>
+        </footer>
+    </div>
+{% endblock %}
+<!--===================================================main end==================================================================-->
+
+</body>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery-ui.js' %}"></script>
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+
+<link rel="stylesheet" href='{% static "zTree_v3/css/zTreeStyle/zTreeStyle.css" %}' type="text/css">
+{#        <script type="text/javascript" src='{% static "zTree_v3/js/jquery-1.4.4.min.js" %}'></script>#}
+<script type="text/javascript" src='{% static "zTree_v3/js/jquery.ztree.core.js" %}'></script>
+<script type="text/javascript" src='{% static "zTree_v3/js/jquery.ztree.excheck.js" %}'></script>
+<script type="text/javascript" src='{% static "zTree_v3/js/jquery.ztree.exedit.js" %}'></script>
+
+<script src="{% static 'js/bootstrapValidator.js' %}"></script>
+
+
+<!--Custom Scripts-->
+<script src="{% static 'js/common.js' %}"></script>
+<script src="{% static 'js/automagic.js' %}"></script>
+
+
+<!--public js-->
+<script type="text/javascript" src="{% static 'js/back-to-top.js' %}"></script>
+<!--[if lt IE 9]>
+        <script src="{% static 'js/html5shiv/html5shiv.min.js' %}"></script>
+        <script src="{% static 'js/respondjs/respond.min.js' %}"></script>
+       <![endif]-->
+
+{#<script src="{% static 'js/xun.js' %}"></script>#}
+<script src="{% static 'js/jquery.wheelmenu.js' %}"></script>
+<script src="{% static 'muti_select/src/MultiSelectDropList.js' %}"></script>
+<link href="{% static 'muti_select/css/multi.css' %}" rel="stylesheet" type="text/css"/>
+
+<script type="text/javascript">
+    $(".leftsidebar_box dt").css({"background-color": "#3992d0"});
+    $(".leftsidebar_box dt img").attr("src", "{% static 'images/select_xl01.png' %}");
+    $(function () {
+        $(".leftsidebar_box dd").hide();
+        $(".leftsidebar_box dt").click(function () {
+            $(".leftsidebar_box dt").css({"background-color": "#3992d0"})
+            $(this).css({"background-color": "#3992D0", "margin-bottom": "1px"});
+            $(this).parent().find('dd').removeClass("menu_chioce");
+            $(".leftsidebar_box dt img").attr("src", "{% static 'images/select_xl01.png' %}");
+            $(this).parent().find('img').attr("src", "{% static 'images/select_xl.png' %}");
+            $(".menu_chioce").slideUp('fast');
+            $(this).parent().find('dd').slideToggle('fast');
+            $(this).parent().find('dd').addClass("menu_chioce");
+        });
+    })
+</script>
+<script>
+    var elementTags = []
+    $(document).ready(function () {
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        });
+
+        if (window.location.pathname === '/') {
+            $('.functiontest dt').click();
+        }
+        if (window.location.pathname.indexOf('func') > 0) {
+            $('.functiontest dt').click();
+        }
+        if (window.location.pathname.indexOf('interf') > 0) {
+            $('.interfacetest dt').click();
+        }
+        if (window.location.pathname.indexOf('tools') > 0) {
+            $('.tools dt').click();
+        }
+        if (window.location.pathname.indexOf('setting') > 0) {
+            $('.setting dt').click();
+        }
+        $(".wheel-button").wheelmenu({
+            trigger: "hover",
+            animation: "fly",
+            animationSpeed: "fast"
+        });
+        $('#mytable').DataTable({
+            {#                                "sScrollX": "100%",   //表格的宽#}
+            {#                                "sScrollXInner": "100%",#}
+            "bPaginate": false,  //是否显示分页
+            "bLengthChange": false,  //每页显示的记录数
+            "bFilter": false, //搜索栏
+            "bSort": true, //是否支持排序功能
+            "bInfo": false, //显示表格信息
+            "bAutoWidth": true,  //自适应宽度
+            "aaSorting": [[0, "desc"]],  //给列表排序 ，第一个参数表示数组 (由0开始)。1 表示Browser列。第二个参数为 desc或是asc
+            "oLanguage": {
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "对不起，查询不到任何相关数据",
+                "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
+                "sInfoEmtpy": "找不到相关数据",
+                "sInfoFiltered": "数据表中共为 _MAX_ 条记录)",
+                "sProcessing": "正在加载中...",
+                "sSearch": "搜索",
+                "sUrl": "", //多语言配置文件，可将oLanguage的设置放在一个txt文件中，例：Javascript/datatable/dtCH.txt
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": " 上一页 ",
+                    "sNext": " 下一页 ",
+                    "sLast": " 最后一页 "
+                }
+            }, //多语言配置
+        });
+
+    });
+</script>
+{% block script %}{% endblock %}
+</html>

@@ -1,0 +1,174 @@
+{% extends 'frame.html' %}
+{% block title %}Automagic{% endblock %}
+{% block slideshow %}
+    <div class="ak-zper-midbox ak-jsch-mid">
+        <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+            <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+                <span class="ak-zper-remindback"></span>
+                <span class="inbox-text">用例详细</span>
+            </div>
+            <div class="text-right case-next">
+                <a onclick="prev_case({{ case.id }})" class="btn btn-sm btn-info">上一条</a>
+                <a onclick="next_case({{ case.id }})" class="btn btn-sm btn-info">下一条</a>
+            </div>
+        </div>
+
+        <!--      ---------------------华丽的分割线 main------------------------ -->
+        <div class="col-md-12">
+            <div class="ac-margin-tb15">
+                <div class="list-group">
+                    <a class="list-group-item active"><h4 class="list-group-item-heading">{{ case.id }}</h4><label class="list-group-item-text">{{ case.casedesc }}</label></a>
+                    <hr>
+                    <h5 class="list-group-item-heading">状态：{% if case.isenabled == True %}
+                                <span ng-if="f.flag==true" class="label label-success ng-scope">启 用</span>
+                            {% else %}
+                                <span ng-if="f.flag==false" class="label label-danger ng-scope">停 用</span>
+                            {% endif %}</h5>
+                    <h5 class="list-group-item-heading">项目：{{ case.projectid }}</h5>
+                    <h5 class="list-group-item-heading">模块：{{ case.moduleid }}</h5>
+                    <h5 class="list-group-item-heading">冒烟测试：{% if case.issmoke == True %}
+                                <span ng-if="f.flag==true" class="label label-success ng-scope">是</span>
+                            {% else %}
+                                <span ng-if="f.flag==false" class="label label-default ng-scope">否</span>
+                            {% endif %}</h5>
+                    <h5 class="list-group-item-heading">TRCaseID：<span class="label label-info">{{ case.testrailcaseid }}</span></h5>
+                    <h5 class="list-group-item-heading">创建时间</h5>{{ case.createat }}|{{ case.createtime|date:'Y-m-d H:i:s' }}
+                    <h5 class="list-group-item-heading">更新时间</h5>{{ case.updateat }}|{{ case.updatetime|date:'Y-m-d H:i:s' }}
+                </div>
+                <!--
+                <table  class="table table-condensed">
+                    <thead>
+                    <h1><span class="label label-info">{{ case.id }}</span></h1>
+                    </thead>
+                    <tr>
+                        <th>描述:</th>
+                        <td>{{ case.casedesc }}</td>
+                    </tr>
+                    <tr>
+                        <th>状态:</th>
+                        <td>
+                            {% if case.isenabled == True %}
+                                <span ng-if="f.flag==true" class="label label-success ng-scope">启 用</span>
+                            {% else %}
+                                <span ng-if="f.flag==false" class="label label-danger ng-scope">停 用</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>项目:</th>
+                        <th>{{ case.projectid }}</th>
+                    </tr>
+                    <tr>
+                        <th>模块:</th>
+                        <td>{{ case.moduleid }}</td>
+                    </tr>
+                    <tr>
+                        <th>冒烟测试:</th>
+                        <td>
+                            {% if case.issmoke == True %}
+                                <span ng-if="f.flag==true" class="label label-success ng-scope">是</span>
+                            {% else %}
+                                <span ng-if="f.flag==false" class="label label-default ng-scope">否</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>TRCaseID:</th>
+                        <td>{{ case.testrailcaseid }}</td>
+                    </tr>
+                    <tr>
+                        <th>创建于:</th>
+                        <td>{{ case.createat }}|{{ case.createtime|date:'Y-m-d H:i:s' }}</td>
+                    </tr>
+                    <tr>
+                        <th>更新于:</th>
+                        <td>{{ case.updateat }}|{{ case.updatetime|date:'Y-m-d H:i:s' }}</td>
+                    </tr>
+                </table>-->
+
+                <div style="text-align: right"><h2><a href="{% url 'caseupdate' case.id %}" class="label label-primary"
+                                                      role="button">编辑</a></h2></div>
+
+                <table class="table table-striped table-bordered table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        <th>Step.</th>
+                        <th>Description</th>
+                        <th>KeyWord</th>
+                        <th>Element</th>
+                        <th>InputText</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for step in steplist %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ step.descr }}</td>
+                            <td>{{ step.keywordid }}</td>
+                            <td class="ac-alist-descp ac-alist-width-overflow" title="{{ step.elementid.location }}">
+                                {% if step.elementid != None %}
+                                    [{{ step.elementid.id }}]{{ step.elementid.locmode }},{{ step.elementid.location }}
+                                {% endif %}
+                            </td>
+                            <td>{{ step.inputtext }}</td>
+
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <p><a onclick="goback();" class="btn btn-sm btn-success">返回>></a></p>
+            </div>
+        </div>
+        <!--      ---------------------华丽的分割线 main end------------------------ -->
+
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        /* case 上一条 */
+        function next_case(caseid) {
+            $.ajax({
+                type: "GET",
+                data: {'caseid': caseid},
+                url: "/func/get/caselist/",
+                cache: false,
+                dataType: "html",
+
+                success: function (result, TextStatus, xml) {
+                    if (result.length > 0) {
+                        var caselist = result.split(',')
+                        for(var i=0; i < caselist.length; i++){
+                            if (caselist[i] == caseid){
+                                var next_id = i+1
+                                next_id+1 === caselist.length ? window.location.href="/func/case/view/"+caselist[i]+"/" : window.location.href="/func/case/view/"+caselist[next_id]+"/"
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        /* case 下一条*/
+        function prev_case(caseid) {
+            $.ajax({
+                type: "GET",
+                data: {'caseid': caseid},
+                url: "/func/get/caselist/",
+                cache: false,
+                dataType: "html",
+
+                success: function (result, TextStatus, xml) {
+                    if (result.length > 0) {
+                        var caselist = result.split(',')
+                        for(var i=0; i < caselist.length; i++){
+                            if (caselist[i] == caseid){
+                                var prev_id = i-1
+                                prev_id < 0 ? window.location.href="/func/case/view/"+caselist[0]+"/":window.location.href="/func/case/view/"+caselist[prev_id]+"/"
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}

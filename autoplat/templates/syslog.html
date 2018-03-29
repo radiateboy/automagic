@@ -1,0 +1,73 @@
+{% extends 'frame.html' %}
+{% block title %}Automagic{% endblock %}
+{% block slideshow %}
+    {% load staticfiles %}
+    <div class="ak-zper-midbox ak-jsch-mid">
+        <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+            <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+{#                <span class="ak-zper-remindback">000000000000000</span>#}
+                <span class="inbox-text">Syslog</span>
+            </div>
+        </div>
+
+        <!--      ---------------------华丽的分割线 main------------------------ -->
+        <div class="col-md-12">
+            <div class="main-mid">
+                <div>
+                    <h4>流量回放模式(Linux)<a href="{% static 'media/sendlog.tar' %}"><img class="btn-img" src="{% static 'images/download.png' %}"></a></h4>
+                    通过回放Syslog流进行发送syslog(UDP支持源地址伪装)|sendingdata.py
+                    <pre class="pre-high">usage:
+sendingdata.py [-h] [-sip SRCIP]
+[-dip DSTIP] [-p PROTOCOL]
+[-dport DPORT] [-c COUNT]
+[-f FILE] [-t THREAD]
+[-s SPEED]
+optional arguments:
+-h, --help    show this help message
+-sip SRCIP    src ip addr
+-dip DSTIP    dst ip addr
+-p PROTOCOL   protocol udp or tcp
+-dport DPORT  send port
+-c COUNT      packets count
+-f FILE       packets file
+-t THREAD     thread number
+-s SPEED      send speed (s)
+                </pre>
+                </div>
+                <div>
+                    <h4>UDP Socket</h4>
+                    通过UDP Socket发送syslog事件|udpsendingsyslog.py
+                    <pre class="pre-high">Usge:
+python sendlog -f [filepath] -c [cycles]
+-t [sleep time]
+-d [Receiver Host] -p [Receiver port]
+Details:
+-C	[开启无限循环]
+-f	[指派日志文件路径]
+-c	[指定循环次数]
+-t	[指定日志发送间隔时间 单位:秒]
+-d	[指定日志接收IP地址]
+-p	[指定日志接收端口（整数）]
+-v	[查看工具版本]
+-h	[查看帮助]
+                </pre>
+                </div>
+                <div>
+                    <h4>TCP Socket</h4>
+                    通过TCP Socket发送syslog事件|tcpsendingsyslog.py
+                    <pre class="pre-high">usage:
+tcpsendingsyslog.py [-h] [-host HOST]
+[-port DPORT] [-c COUNT]
+
+optional arguments:
+  -h, --help   show this help message and exit
+  -host HOST   receive host ip
+  -port DPORT  send port
+  -c COUNT     count number</pre>
+                </div>
+            </div>
+        </div>
+        <!--      ---------------------华丽的分割线 main end------------------------ -->
+
+    </div>
+{% endblock %}

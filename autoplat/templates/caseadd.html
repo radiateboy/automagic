@@ -1,0 +1,127 @@
+{% extends 'frame.html' %}
+{% block title %}Automagic{% endblock %}
+{% block slideshow %}
+    <div class="ak-zper-midbox ak-jsch-mid">
+         <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+               <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+                    <span class="ak-zper-remindback"></span>
+                    <span class="inbox-text">添加用例</span>
+               </div>
+             <div id="log_info" class="ac-addtips"></div>
+            <select id="selproductid" name="caseproductname" class="ak-right ak-left ac-aselect ac-margint8">
+                      <option value="0">-产品名称-</option>
+                          {% for product in userandproduct  %}
+                              {% if product.username == request.user %}
+                                  <option value="{{ product.productname.id }}" {% if request.GET.productname  == product.productname %}selected{% endif %}>{{ product.productname }}</option>
+                              {% endif %}
+                          {% endfor %}
+                </select>
+
+          </div>
+
+      	  <div class="col-md-12">
+ <form method='post'  id="case_add">
+    {% csrf_token %}
+    <div class="ak-jsch-modal-row col01">
+        <div class="ak-jsch-pos">
+            <div class="ak-jsch-point">
+            </div>
+        </div>
+        <div class="ak-jsch-modal-text col01 clearfix">
+            <span class="ak-jsch-item-left ak-left ">用例描述</span>
+            <div class="ak-jsch-item-right col02 ak-left">
+                <input id="casedesc" name="casedesc" class="ak-jsch-modal-input" type="text" required="" placeholder="测试用例描述">
+            </div>
+        </div>
+    </div>
+     <div class="ak-jsch-modal-row col01 ak-jsch-padding">
+         <div class="ak-jsch-modal-text">
+             <div class="ak-jsch-modal-item clearfix"><span class="ak-left ak-jsch-item-left ">状态</span>
+                 <div class="sky-form col01 ak-left ac-ml10">
+                     <label class="toggle">
+                         <input type="checkbox" id="id_isenabled" name="isenabled" checked="checked">
+                         <i class="rounded-4x ak-aoffon-btn"></i>
+                     </label>
+                 </div>
+             </div>
+             <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                 <span class="ak-jsch-item-left ak-left">项目</span>
+                 <div class="ak-jsch-item-right ak-left">
+                     <select id="selprojectid" name="projectid" class="ak-left ac-aselect col01" required=""></select>
+                 </div>
+             </div>
+             <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                 <span class="ak-jsch-item-left ak-left">模块</span>
+                 <div class="ak-jsch-item-right ak-left">
+                     <select id="selmoduleid" name="moduleid" class="ak-left ac-aselect col01" required=""><option value="">所属模块</option></select>
+                 </div>
+             </div>
+             <div class="ak-jsch-modal-item clearfix"><span class="ak-left ak-jsch-item-left ">冒烟测试</span>
+                 <div class="sky-form col01 ak-left ac-ml10">
+                     <label class="toggle">
+                         <input type="checkbox" id="id_issmoke" name="issmoke">
+                         <i class="rounded-4x ak-aoffon-btn"></i>
+                     </label>
+                 </div>
+             </div>
+             <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                 <span class="ak-jsch-item-left ak-left">依赖用例</span>
+                 <div class="ak-jsch-item-right ak-left">
+                     <input id="id_dependent" name="dependent" type="text" placeholder="请输入依赖用例的编号" class="ac-acaseedit-input" />
+                 </div>
+             </div>
+            <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
+                 <span class="ak-jsch-item-left ak-left ac-acase-desc">TestRail ID</span>
+                 <div class="ak-jsch-item-right ak-left">
+                     <input id="id_testrailcaseid" name="testrailcaseid" type="text" placeholder="关联TestRail的用例编号" class="ac-acaseedit-input" />
+                 </div>
+             </div>
+             <table class="table table-conde" id="tab" style="width:100%">
+                 <caption class="text-left">
+                    <button type="button" onclick="case_step_addtr();" class="text-left ac-btn-addcase orange ac-margin-tb15">添加一行</button>
+                     <input class="ac-acaseedit-input" id="rowid" value="" type="number" placeholder="添加到第N行之后">
+                 </caption>
+                 <thead>
+                 <th>Step No</th>
+                 <th>Step Descr</th>
+                 <th>Keyword</th>
+                 <th>Element</th>
+                 <th>Input</th>
+                 <th>操作</th>
+                 <input hidden="true" id="linecounter"   value = 1 type='text' >
+                 </thead>
+                 <tbody>
+                 <tr id="row1">
+                     <td>1</td>
+                     <td><input name="descr" class="ac-acaseedit-input" placeholder="请输入步骤描述" type="input" required=""></td>
+                     <td><select id="keyword_1" name="keyword" class="ak-left ac-aselect col01" required=""></select></td>
+                     <td>
+{#                         <select id="id_elementid" name="elementid" class="ak-left ac-aselect col01"><option value="None">请选择可用元素</option></select>#}
+                         <input id="autocomplete_1" name="autocomplete" class="ui-autocomplete-input ac-element-input" type="input"><input type="hidden" id="elementid_1" name="elementid" value="None">
+                     </td>
+                     <td><input name="inputtext" class="ac-keywordtext-input" placeholder="" type="input" ></td>
+                     <td></td>
+                 </tr>
+                 </tbody>
+                 <tfoot class="text-left">
+
+                 </tfoot>
+             </table>
+             <button type="button" onclick="case_step_addtr();" class="text-left ac-btn-addcase orange ac-margin-tb15">添加一行</button>
+             <div style="text-align: center;">
+                <input  class="btn btn-sm btn-primary" type="submit" value="提交">
+                <input class="btn btn-sm btn-default" type="reset" value="重置">
+                 <button onclick="goback();" class="btn btn-sm btn-success" role="button">取消>></button>
+             </div>
+            <div></div>
+         </div>
+     </div>
+     <div><br><br></div>
+ </form>
+          </div>
+    </div>
+{% endblock %}
+{% block script %}
+{% load staticfiles %}
+<script type="text/javascript" src="{% static 'js/casemanage.js' %}"></script>
+{% endblock %}

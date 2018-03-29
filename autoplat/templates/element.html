@@ -1,0 +1,316 @@
+{% extends 'frame.html' %}
+{% block title %}Automagic{% endblock %}
+{% block slideshow %}
+    <div class="ak-zper-midbox ak-jsch-mid">
+         <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+               <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+                    <span class="ak-zper-remindback"></span>
+                    <span class="inbox-text">元素管理</span>
+               </div>
+                <div id="log_info" class="ac-addtips"></div>
+                <select id="selproductid" name="productname" class="ak-right ak-left ac-aselect ac-margint8">
+                      <option value="0">-请选择产品-</option>
+                          {% for product in userandproduct  %}
+                              {% if product.username == request.user %}
+                                  <option value="{{ product.productname.id }}" {% if request.GET.productname  == product.productname %}selected{% endif %}>{{ product.productname }}</option>
+                              {% endif %}
+                          {% endfor %}
+                </select>
+          </div>
+
+<!--      ---------------------华丽的分割线 main------------------------ -->
+      	  <div class="col-md-12">
+              <div class="ac-margin-tb15">
+<form method='post' id="ele_add">
+    {% csrf_token %}
+    <table class="table table-condensed ac-aelement-table">
+        <tr>
+            <th>元素描述</th>
+            <th>项目</th>
+            <th>模块</th>
+            <th>定位方式</th>
+            <th>定位标识</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>{{ elementform.descr }}</td>
+            <td>
+                <select id="sel_projectid" name="ele_add_projectid" class="ak-left ac-aselect" required="">
+                    <option value="">所属项目</option>
+                </select>
+            </td>
+            <td>
+                <select id="selvalue" name="selmoduleid" class="ak-left ac-aselect" required="">
+                    <option value="">所属模块</option>
+                </select>
+            </td>
+{#            <td style="position: relative;width:170px;" id="mdlist">#}
+{#                <input id="mdlist" type="text" readonly value="" class="select_rel" />#}
+{#                <div class='multi_select'></div>#}
+{##}
+{#            </td>#}
+            <td>
+               {{ elementform.locmode }}
+            </td>
+            <td>{{ elementform.location }}</td>
+            <td>
+                <input class="btn btn-sm btn-success" type="submit" value="添加">
+                <input class="btn btn-sm btn-primary" type="reset" value="重置">
+            </td>
+        </tr>
+{#        {{ elementform.as_table }}#}
+    </table>
+</form>
+
+        <div class="panel panel-default">
+    <div class="panel-heading">
+        <form class="form-inline" role="form" action="" method="GET">
+          <div class="form-group">
+              <input id="check_productid" value="0" name="check_productname" hidden="true">
+          <select id="selprojectid" name="projectid" class="ak-left ac-aselect col01">
+              <option value="">所属项目</option>
+          </select>
+            <select id="selmoduleid" name="moduleid" class="ak-left ac-aselect col01">
+                              <option value="">所属模块</option>
+                            </select>
+          </div>
+
+          <div class="form-group">
+          <div class="input-group">
+                <input type="input" class="form-control " name="keyword" value="{{ request.GET.keyword }}"  placeholder="通过元素ID、描述、定位标识搜索">
+                  <span class="input-group-btn">
+                      <button class="btn btn-primary" id="search_btn" type="submit">Go!</button>
+                  </span>
+          </div>
+          </div>
+        </form>
+      </div>
+        <table id="eletable" class="table table-striped table-hover table-condensed ac-aelement-table">
+        <thead>
+          <tr>
+              <th>元素ID</th>
+              <th>元素描述</th>
+              <th>所属项目</th>
+              <th>所属模块</th>
+              <th>定位方式</th>
+              <th>定位标识</th>
+              <th>创建者</th>
+              <th>创建时间</th>
+          <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for element in elementlist %}
+            <tr>
+                <td>{{ element.id }}</td>
+                <td class="ac-alist-width-overflow-public" title="{{ element.descr }}">{{ element.descr }}</td>
+                <td class="ac-alist-width-overflow-public">{{ element.projectid }}</td>
+                <td>{{ element.moduleid }}</td>
+                <td>{{ element.locmode }}</td>
+                <td class="ac-alist-width-overflow-public" title="{{ element.location }}">{{ element.location }}</td>
+                <td>{{ element.createat }}</td>
+                <td>{{ element.createtime|date:'Y-m-d H:i:s' }}</td>
+                <td>
+                    <a href="" onclick="setelementValue({{ element.id }})" class="ke-ablock" data-toggle="modal" data-target="#editElementModal"><i class="glyphicon glyphicon-edit"></i></a>
+                    <a href="{% url 'elementdel' element.id %}" class="ke-ablock" role="button" onclick="return confirm('Are you Sure Deleted.')"><i class="glyphicon glyphicon-trash"></i></a>
+                </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+        {% if is_paginated %}
+        <div class="panel-default">
+        <ul class="pagination">
+          <li><a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page=1'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page=1')">«</a></li>
+          {% if page_obj.has_previous %}
+            <!--<li><a href="{{ request.get_full_path }}&page={{ page_obj.previous_page_number }}">上一页</a></li>-->
+              <li><a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.href +'?page={{ page_obj.previous_page_number }}': window.location.search.replace(/page=(\d+|\s*)/, 'page={{ page_obj.previous_page_number }}')">上一页</a></li>
+          {% else %}
+            <li class="previous disabled"><a>上一页</a></li>
+          {% endif %}
+
+{#          {% for i in page_obj.paginator.page_range %}#}
+{#              {% if  i  <= 10 %}#}
+{#                <li {% if page_obj.number == i %}class="active"{% endif %}><a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page={{ i }}'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page={{ i }}')">{{ i }}</a></li>#}
+{#               {% elif page_obj.number > 9 %}#}
+{#                   <li {% if page_obj.number == i %}class="active"{% endif %}><a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page={{ i }}'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page={{ i }}')">{{ i }}</a></li>#}
+{##}
+{#              {% endif %}#}
+{#          {% endfor %}#}
+
+          {% if page_obj.has_next %}
+            <li><a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page={{ page_obj.next_page_number }}'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page={{ page_obj.next_page_number }}')">下一页</a></li>
+          {% else %}
+            <li class="previous disabled"><a>下一页</a></li>
+          {% endif %}
+          <li><a href="javascript:window.location.href=window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page={{ page_obj.paginator.num_pages  }}'+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page={{ page_obj.paginator.num_pages  }}')">»</a></li>
+          <li><a>当前第{{ page_obj.number }}页/共{{ elementsum }}条</a></li>
+          <li><input type="number" id="curpage" class="ac-acaseedit-input" style="width: 80px;"></li>
+          <li><button id="btn_skip" onclick="btn_skip_click()" type="button" class="btn btn-sm btn-primary">确定</button></li>
+        </ul>
+    </div>
+        {% endif %}
+              </div>
+          </div>
+    </div>
+    <!--      ---------------------华丽的分割线 main end------------------------ -->
+
+
+    <div class="modal fade ak-min-fullwidth-modal ak-znews-addsort-modal" id="editElementModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                  <div class="modal-content">
+                        <div class="modal-header clearfix">
+                              <button type="button" class="close close-back" data-dismiss="modal"> <span class="sr-only">Close</span> </button>
+                              <h4 class="modal-title text-center">编辑元素</h4>
+                        </div>
+                        <div class="modal-body ak-main-body">
+                            <form method='post' id="element_edit">
+                                {% csrf_token %}
+                               <div class="ak-jsch-modal-row">
+                                    <table class="ac-aset-table"  border="0">
+                                        <tr>
+                                           <td class="col01">
+                                                <div class="ak-jsch-pos"><div class="ak-jsch-point"></div></div>
+                                               <span class="ak-jsch-item-left ak-proname">元素描述</span>
+                                           </td>
+                                            <td colspan="3">
+                                                <input name="elementid" hidden="true">
+                                                <div class="ak-jsch-item-right ak-left">
+                                                    <input style="width:500px;" name="eledescr" class="ac-acaseedit-input" type="text" placeholder="元素描述">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                   <td class="col01"><span class="ak-jsch-item-left">所属项目</span></td>
+                                                   <td>
+                                                   <div class="ak-jsch-item-right ak-left">
+                                                      <select id="eleprojectid" name="ele_add_projectid" class="ak-left ac-aselect col01">
+                                                            <option value="">所属项目</option>
+                                                      </select>
+                                                   </div>
+                                                   </td>
+                                            <td class="col01"><span class="ak-jsch-item-left">所属模块</span></td>
+                                                   <td>
+                                                   <div class="ak-jsch-item-right ak-left">
+                                                       <select id="elemoduleid" name="moduleid" class="ak-left ac-aselect col01">
+                                                            <option value="">所属模块</option>
+                                                        </select>
+                                                   </div>
+                                                   </td>
+                                        </tr>
+                                        <tr>
+                                               <td class="col01"><span class="ak-jsch-item-left">定位方式</span></td>
+                                               <td>
+                                               <div class="ak-jsch-item-right ak-left">
+                                                    <select name="locmode" class="ak-left ac-aselect col01">
+                                                        <option value="id">id</option>
+                                                        <option value="name">name</option>
+                                                        <option value="css selector">css</option>
+                                                        <option value="xpath">xpath</option>
+                                                        <option value="class_name">class name</option>
+                                                        <option value="tag_name">tag name</option>
+                                                        <option value="link_text">link text</option>
+                                                        <option value="portial_link_text">portial link text</option>
+                                                    </select>
+                                               </div>
+                                               </td>
+                                        </tr>
+
+                                        <tr>
+                                               <td class="col01"><span class="ak-jsch-item-left">定位标识</span></td>
+                                               <td colspan="3">
+                                               <div class="ak-jsch-item-right ak-left">
+                                                    <input style="width:500px;" name="elelocation" class="ac-acaseedit-input" placeholder="请输入定位标识">
+                                               </div>
+                                               </td>
+                                        </tr>
+                                        </table>
+                               </div>
+
+                                <div class="modal-footer">
+                                     <!--===footer button ===-->
+                                     <div class="ak-footer-btn text-left">
+                                         <input class="ak-zdl-createbtn" type="submit" value="提交">
+                                         <input class="ak-zdl-createbtn cancel" type="reset" value="重置">
+                                     </div>
+                                     <!--===End footer button ===-->
+                                </div>
+                            </form>
+              </div>
+          </div>
+    </div>
+    </div>
+{% endblock %}
+{% block script %}
+    {% load staticfiles %}
+    <script>
+            $(document).ready(function(){
+                $('#eletable').DataTable({
+{#                    "sScrollX": "100%",   //表格的宽#}
+{#                    "sScrollXInner": "100%",   //表格的内容宽度#}
+{#                    "bScrollCollapse": false,  //当显示的数据不足以支撑表格的默认的高度时，依然显示纵向的滚动条。(默认是false)#}
+                    "bPaginate": false,  //是否显示分页
+                    "bLengthChange": false,  //每页显示的记录数
+                    "bFilter": false, //搜索栏
+                    "bSort": true, //是否支持排序功能
+                    "bInfo": false, //显示表格信息
+                    "bAutoWidth": true,  //自适应宽度
+                    "aaSorting": [[0, "desc"]],  //给列表排序 ，第一个参数表示数组 (由0开始)。1 表示Browser列。第二个参数为 desc或是asc
+{#                    "aoColumns": [#}
+{#                            null,#}
+{#                        null,#}
+{#                        {#}
+{#                            "bVisible": true, //不可见#}
+{#                            "bSearchable": false, //参与搜索#}
+{#                        },#}
+{#                        null,#}
+{#                        null#}
+{#                    ], //列设置，表有几列，数组就有几项#}
+{#                    "bStateSave": true, //保存状态到cookie *************** 很重要 ， 当搜索的时候页面一刷新会导致搜索的消失。使用这个属性就可避免了#}
+{#                    "sPaginationType": "full_numbers", //分页，一共两种样式，full_numbers和two_button(默认)#}
+                    "oLanguage": {
+                        "sLengthMenu": "每页显示 _MENU_ 条记录",
+                        "sZeroRecords": "对不起，查询不到任何相关数据",
+                        "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
+                        "sInfoEmtpy": "找不到相关数据",
+                        "sInfoFiltered": "数据表中共为 _MAX_ 条记录)",
+                        "sProcessing": "正在加载中...",
+                        "sSearch": "搜索",
+                        "sUrl": "", //多语言配置文件，可将oLanguage的设置放在一个txt文件中，例：Javascript/datatable/dtCH.txt
+                        "oPaginate": {
+                            "sFirst":    "第一页",
+                            "sPrevious": " 上一页 ",
+                            "sNext":     " 下一页 ",
+                            "sLast":     " 最后一页 "
+                        }
+                    }, //多语言配置
+{#                    "bJQueryUI": false, //可以添加 jqury的ui theme  需要添加css#}
+{#                    "aLengthMenu": [[10, 25, 50, -1, 0], ["每页10条", "每页25条", "每页50条", "显示所有数据", "不显示数据"]]  //设置每页显示记录的下拉菜单#}
+                });
+            });
+
+            function btn_skip_click() {
+            var currpage = $('#curpage').val() === '' ? 1 : parseInt($('#curpage').val());
+            // console.log(currpage);
+            if (currpage > {{ page_obj.paginator.num_pages }}){
+                currpage = {{ page_obj.paginator.num_pages }};
+            }
+            if (currpage < 1){
+                currpage =1;
+            }
+            var url = window.location.search.match(/page=(\d+|\s*)/)===null? window.location.origin+(window.location.pathname +'?page='+currpage+(window.location.search?window.location.search.replace('?','&'):'')):window.location.search.replace(/page=(\d+|\s*)/, 'page='+currpage);
+            self.location = url;
+
+            return false;
+        }
+
+        $('#curpage').keypress(function(event){
+            console.log(event.which);
+            if(event.which==13){
+                btn_skip_click()
+            }
+            event.stopPropagation();
+        })
+    </script>
+{% endblock %}

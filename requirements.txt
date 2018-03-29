@@ -1,0 +1,13 @@
+# django 依赖包
+django==1.11.1
+MySQL-Python==1.2.3
+django-users2==0.2.1
+django-cors-headers==2.0.2
+djangorestframework==3.6.3
+python-jenkins==0.4.14
+
+# seleniumkeyword 依赖包
+selenium
+requests
+paramiko==2.1.2
+scapy==2.3.3

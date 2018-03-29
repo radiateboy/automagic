@@ -1,0 +1,291 @@
+{% extends 'frame.html' %}
+{% block title %}Automagic{% endblock %}
+{% block slideshow %}
+    <!--===================================================main start==================================================================-->
+    <div class="ak-zper-midbox ak-jsch-mid">
+         <div class="ak-zper-inbox-title ak-jsch-title clearfix">
+               <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
+                    <span class="ak-zper-remindback"></span>
+                    <span class="inbox-text">{{ product.name }}</span>
+               </div>
+               <div id="log_info" class="ac-addtips"></div>
+          </div>
+
+<!--      ---------------------华丽的分割线 main------------------------ -->
+      	  <div class="col-md-12">
+              <div class="ac-margin-tb15">
+                  <table>
+                    <tr>
+                        <th>产品描述:</th>
+                        <td>{{ product.descr }}</td>
+                    </tr>
+                    <tr>
+                        <th>产品状态:</th>
+                        <td>
+                            {% if product.isenabled == True %}
+                                <span ng-if="f.flag==true" class="label label-success ng-scope">启 用</span>
+                            {% else %}
+                                <span ng-if="f.flag==false" class="label label-danger ng-scope">停 用</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>创建者:</th>
+                        <td>{{ product.createat }}</td>
+                    </tr>
+                   <tr>
+                        <th>创建时间:</th>
+                        <td>{{ product.createtime|date:"Y-m-d H:i:s" }}</td>
+                    </tr>
+                    <tr>
+                        <th>更新者:</th>
+                        <td>{{ product.updateat }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>更新时间:</th>
+                        <td>{{ product.updatetime|date:"Y-m-d H:i:s" }}</td>
+                    </tr>
+                </table>
+                    <div align="right" class="form-group">
+                        <button type="button" class="ak-right ac-btn-addcase orange" data-toggle="modal" data-target="#addProjectModal">创建项目</button>
+                    </div>
+                     <table id="mytable" class="table table-striped table-hover table-condensed ac-aelement-table">
+                            <thead>
+                              <tr>
+                                  <th>NO.</th>
+                                  <th>项目名称</th>
+                                  <th>版本</th>
+                                  <th>项目状态</th>
+                                  <th>项目描述</th>
+                                  <th>排序</th>
+                                  <th>创建者</th>
+                                  <th>创建时间</th>
+                                  <th>操作</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for project in projectlist %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td class="ac-alist-descp"><a href="{% url 'projectview' project.id %}"/> {{ project.name }}</td>
+                                    <td>{{ project.version }}</td>
+                                    <td>
+                                        {% if project.isenabled == True %}
+                                            <span ng-if="f.flag==true" class="label label-success ng-scope">启 用</span>
+                                        {% else %}
+                                            <span ng-if="f.flag==false" class="label label-danger ng-scope">停 用</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ project.descr }}</td>
+                                    <td>{{ project.sortby }}</td>
+                                    <td>{{ project.createat }}</td>
+                                    <td>{{ project.createtime|date:"Y-m-d H:i:s" }}</td>
+                                    <td>
+                                        <a href="" onclick="setprojectValue({{ project.id }})" class="ke-ablock" data-toggle="modal" data-target="#editProjectModal"><i class="glyphicon glyphicon-edit"></i></a>
+                                        <a href="{% url 'projectdel' project.id %}" class="ke-ablock" role="button" onclick="return confirm('您确定要删除吗？')"><i class="glyphicon glyphicon-trash"></i></a>
+                                    </td>
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        <p><button onclick="goback();" class="btn btn-success" role="button">返回>></button></p>
+                    </div>
+              </div>
+    <!--      ---------------------华丽的分割线 main end------------------------ -->
+
+    </div>
+    <!--===================================================main end==================================================================-->
+    <!-- add modal -->
+    <div class="modal fade ak-min-fullwidth-modal ak-znews-addsort-modal" id="addProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+              <div class="modal-content">
+                    <div class="modal-header clearfix">
+                          <button type="button" class="close close-back" data-dismiss="modal"> <span class="sr-only">Close</span> </button>
+                          <h4 class="modal-title text-center">创建项目</h4>
+                    </div>
+                    <div class="modal-body ak-main-body">
+                        <form method='post' id="project_add">
+                            {% csrf_token %}
+                           <div class="ak-jsch-modal-row">
+                               <table class="ac-aset-table">
+                                   <tr>
+                                           <td class="col01"><span class="ak-jsch-item-left">所属产品</span></td>
+                                           <td>
+                                                 <div class="ak-jsch-item-right">
+                                                     <input name="productid" value = {{ product.id }} hidden="true">
+                                                     <label>{{  product.name }}</label>
+                                                 </div>
+                                           </td>
+                                   </tr>
+                                   <tr>
+                                       <td class="col01">
+                                           <div class="ak-jsch-pos"><div class="ak-jsch-point"></div></div>
+                                           <span class="ak-jsch-item-left ak-proname">项目名称</span>
+                                           </td>
+                                           <td>
+                                               <div class="ak-jsch-item-right ak-left">
+                                               <input name="projectname" class="ak-jsch-modal-input" type="text" placeholder="请输入创建项目名称">
+                                               </div>
+                                           </td>
+                                   </tr>
+                                  <tr>
+                                      <td class="col01"><span class="ak-jsch-item-left ac-apro-span">状态</span></td>
+                                      <td>
+                                          <div class="ak-jsch-modal-item">
+                                              <div class="sky-form">
+                                                  <label class="toggle">
+                                                      <input id="id_isenabled"  type="checkbox" checked="checked" name="isenabled">
+                                                      <i class="rounded-4x ak-aoffon-btn"></i>
+                                                  </label>
+                                              </div>
+                                          </div>
+                                      </td>
+                                  </tr>
+                                   <tr>
+
+                                           <td class="col01">
+                                               <div class="ak-jsch-modal-item ak-jsch-pt">
+                                                   <span class="ak-jsch-item-left">版本</span>
+                                               </div>
+                                           </td>
+                                           <td>
+                                               <div class="ak-jsch-item-right ak-left">
+                                                   <input name="version" class="ac-acaseedit-input" type="text" placeholder="请输入项目版本号">
+                                               </div>
+                                           </td>
+
+                                   </tr>
+                                   <tr>
+
+                                           <td class="col01"><span class="ak-jsch-item-left">描述</span></td>
+
+                                           <td>
+                                               <div class="ak-jsch-item-right ak-left">
+                                                   <textarea id="id_descr" name="descr" class="ac-acaseedit-textarea" rows="3"></textarea>
+                                               </div>
+                                           </td>
+
+                                   </tr>
+                                   <tr>
+                                           <td class="col01"><span class="ak-jsch-item-left">排序</span></td>
+                                           <td>
+                                               <div class="ak-jsch-item-right ak-left">
+                                                   <input name="sortby" class="ac-acaseedit-input" type="number" value="0" placeholder="请输入排序号">
+                                               </div>
+                                           </td>
+                                   </tr>
+                               </table>
+                           </div>
+
+                            <div class="modal-footer">
+                                 <!--===footer button ===-->
+                                 <div class="ak-footer-btn text-left">
+                                     <input class="ak-zdl-createbtn" type="submit" value="提交">
+                                     <input class="ak-zdl-createbtn cancel" type="reset" value="重置">
+                                 </div>
+                                 <!--===End footer button ===-->
+                            </div>
+                        </form>
+          </div>
+      </div>
+</div>
+</div>
+    <!-- edit modal -->
+    <div class="modal fade ak-min-fullwidth-modal ak-znews-addsort-modal" id="editProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+              <div class="modal-content">
+                    <div class="modal-header clearfix">
+                          <button type="button" class="close close-back" data-dismiss="modal"> <span class="sr-only">Close</span> </button>
+                          <h4 class="modal-title text-center">编辑项目</h4>
+                    </div>
+                    <div class="modal-body ak-main-body">
+                        <form method='post' id="project_edit">
+                            {% csrf_token %}
+                           <div class="ak-jsch-modal-row">
+                               <table class="ac-aset-table">
+                                   <tr>
+                                       <td class="col01">
+                                           <span class="ak-jsch-item-left ak-proname" >所属产品</span>
+                                       </td>
+                                       <td>
+
+                                                 <div class="ak-jsch-item-right ak-left">
+                                                     <input name="productid" value = {{ product.id }} hidden="true">
+                                                     <label>{{  product.descr }}</label>
+                                                 </div>
+                                       </td>
+                                       </tr>
+                                   <tr>
+                                       <td class="col01">
+                                                   <div class="ak-jsch-pos"><div class="ak-jsch-point"></div></div>
+                                                   <span class="ak-jsch-item-left ak-proname">项目名称</span>
+                                           </td>
+                                           <td>
+                                                   <input name="projectid" hidden="true">
+                                                   <div class="ak-jsch-item-right ak-left">
+                                                       <input name="projectname" class="ak-jsch-modal-input" type="text" placeholder="请输入创建项目名称">
+                                                   </div>
+                                           </td>
+
+                                   </tr>
+                                   <tr>
+                                       <td class="col01"><span class="ak-jsch-item-left ac-apro-span ">状态</span></td>
+                                           <td><div class="sky-form ak-left ac-ml10">
+                                                  <label class="toggle">
+                                                      <input id="id_isenabled"  type="checkbox" name="isenabled">
+                                                      <i class="rounded-4x ak-aoffon-btn"></i>
+                                                      </label>
+                                                  </div>
+                                           </td>
+                                       </tr>
+                                   <tr>
+                                           <td class="col01">
+                                               <div class="ak-jsch-modal-item ak-jsch-pt">
+                                               <span class="ak-jsch-item-left">版本</span>
+                                                   </div>
+                                           </td>
+                                           <td>
+                                               <div class="ak-jsch-item-right ak-left">
+                                                   <input name="version" class="ac-acaseedit-input" type="text" placeholder="请输入项目版本号">
+                                               </div>
+                                           </td>
+                                       </tr>
+                                   <tr>
+                                           <td class="col01">
+                                               <span class="ak-jsch-item-left">描述</span>
+                                           </td>
+                                           <td>
+                                               <div class="ak-jsch-item-right ak-left">
+                                                   <textarea id="id_descr" name="descr" class="ac-acaseedit-textarea" rows="3"></textarea>
+                                               </div>
+                                           </td>
+                                   </tr>
+                                   <tr>
+                                           <td class="col01">
+                                               <span class="ak-jsch-item-left">排序</span>
+                                           </td>
+                                           <td>
+                                               <div class="ak-jsch-item-right ak-left">
+                                                   <input name="sortby" class="ac-acaseedit-input" type="number" value="0" placeholder="请输入排序号">
+                                               </div>
+                                           </td>
+                                   </tr>
+                                   </table>
+                           </div>
+
+                            <div class="modal-footer">
+                                 <!--===footer button ===-->
+                                 <div class="ak-footer-btn text-left">
+                                     <input class="ak-zdl-createbtn" type="submit" value="提交">
+                                     <input class="ak-zdl-createbtn cancel" type="reset" value="重置">
+                                 </div>
+                                 <!--===End footer button ===-->
+                            </div>
+                        </form>
+          </div>
+      </div>
+</div>
+</div>
+
+{% endblock %}
