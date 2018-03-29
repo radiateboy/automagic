@@ -18,3 +18,14 @@ DATABASES = {
 #### runserver
 ```manage.py runserver 0.0.0.0:8000```
 
+## 安装
+### 方式一 (本地安装)
+```bash
+python setup install
+```
+### 方式二（打包安装）
+```bash
+python setup sdist
+cd dist
+pip install automagic-0.1.tar.gz
+```
