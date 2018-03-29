@@ -48,7 +48,7 @@ python manage.py createsuperuser
 ```bash
 manage.py runserver 0.0.0.0:8000
 ```
-_http://127.0.0.1:8000访问登录即可_
+_http://127.0.0.1:8000_   访问登录即可
 
 ## django admin 
 http://127.0.0.1:8000/admin/
