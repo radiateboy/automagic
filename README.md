@@ -1,8 +1,6 @@
-#自动化测试平台 
-####python2.7
-Django 1.10框架
-
-####Mysql 数据库 automated/settings.py
+# 自动化测试平台 
+## python2.7 Django 1.10框架
+### Mysql 数据库 automated/settings.py
 ```python
 DATABASES = {
     'default': {
