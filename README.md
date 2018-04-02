@@ -31,7 +31,7 @@ pip install automagic-0.1.tar.gz
 #### 数据库初始化
 ```bash
 cd automagic
-python manager.py makemigrations
+python manage.py makemigrations
 python manage.py migrate
 ```
 _初始化会报createSuperuser的错误，此处忽略即可，下面会用命令创建用户。_
