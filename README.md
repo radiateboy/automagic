@@ -1,5 +1,10 @@
 # 自动化测试平台 
 ## python2.7 Django 1.10框架
+
+依赖包安装
+
+> pip install -r requirements.txt
+
 ### Mysql 数据库 automated/settings.py
 ```python
 DATABASES = {
@@ -56,9 +61,6 @@ http://127.0.0.1:8000/admin/
 ## Restful api
 http://127.0.0.1:8000/api/
 
-cd automagic#
-cd automagic 
-cd automagic
 
 ## 公众号
 扫一扫关注公众号
