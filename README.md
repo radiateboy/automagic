@@ -55,3 +55,10 @@ http://127.0.0.1:8000/admin/
 
 ## Restful api
 http://127.0.0.1:8000/api/
+
+## 公众号
+扫一扫关注公众号
+![开源优测](公众号.jpg)
+cd automagic#
+cd automagic 
+cd automagic
