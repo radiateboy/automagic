@@ -1,5 +1,5 @@
 # django 依赖包
-django==1.11.1
+django==1.11.23
 MySQL-Python==1.2.3
 django-users2==0.2.1
 django-cors-headers==2.0.2
