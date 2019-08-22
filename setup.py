@@ -35,7 +35,7 @@ def do_setup():
             'MySQL-Python>=1.2.3',
             'django-users2==0.2.1',
             'django-cors-headers==2.0.2',
-            'djangorestframework==3.6.3',
+            'djangorestframework==3.9.1',
             'python-jenkins==0.4.14',
             # seleniumKeyword Lib
             'selenium',
