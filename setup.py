@@ -41,7 +41,7 @@ def do_setup():
             'selenium',
             'requests',
             'paramiko == 2.1.2',
-            'scapy == 2.3.3',
+            'scapy == 2.4.1',
         ],
         setup_requires=[
         ],
