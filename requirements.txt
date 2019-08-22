@@ -9,5 +9,5 @@ python-jenkins==0.4.14
 # seleniumkeyword 依赖包
 selenium
 requests
-paramiko==2.1.2
+paramiko==2.1.6
 scapy==2.3.3

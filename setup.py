@@ -40,7 +40,7 @@ def do_setup():
             # seleniumKeyword Lib
             'selenium',
             'requests',
-            'paramiko == 2.1.2',
+            'paramiko == 2.1.6',
             'scapy == 2.3.3',
         ],
         setup_requires=[
