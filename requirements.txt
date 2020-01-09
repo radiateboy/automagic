@@ -5,6 +5,7 @@ django-users2==0.2.1
 django-cors-headers==2.0.2
 djangorestframework==3.9.1
 python-jenkins==0.4.14
+django-model-utils==3.2.0
 
 # seleniumkeyword 依赖包
 selenium
