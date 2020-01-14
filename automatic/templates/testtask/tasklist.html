@@ -55,7 +55,7 @@
                                       <th>任务类型</th>
                                       <th>任务状态</th>
                                       <th>用例集</th>
-                                      <th>任务/用例</th>
+{#                                      <th>任务/用例</th>#}
                                       <th>创建者</th>
                                       <th>创建时间</th>
                                   <th>操作</th>
@@ -78,13 +78,13 @@
                                             {% endif %}
                                         </td>
                                         <td class="ac-alist-width-overflow-public" title="{{ task.caselist }}">{{ task.caselist }}</td>
-                                        <td class="ac-alist-descp ac-alist-width-overflow">
-                                            {% if task.tasktype == '1' %}
-                                                <a target="_blank" href="http://172.17.3.70/testrail/index.php?/runs/view/{{ task.testrailrunid }}"/>{{ task.testrailrunid }}
-                                            {% elif task.tasktype == '2' %}
-                                                <a target="_blank" href="http://172.17.3.70/testrail/index.php?/suites/view/{{ task.testrailsuites }}&group_by=cases:section_id&group_oder=asc&group_id={{ task.testsectionid }}"/>{{ task.testsectionid }}
-                                            {% endif %}
-                                        </td>
+{#                                        <td class="ac-alist-descp ac-alist-width-overflow">#}
+{#                                            {% if task.tasktype == '1' %}#}
+{#                                                <a target="_blank" href="http://172.17.3.70/testrail/index.php?/runs/view/{{ task.testrailrunid }}"/>{{ task.testrailrunid }}#}
+{#                                            {% elif task.tasktype == '2' %}#}
+{#                                                <a target="_blank" href="http://172.17.3.70/testrail/index.php?/suites/view/{{ task.testrailsuites }}&group_by=cases:section_id&group_oder=asc&group_id={{ task.testsectionid }}"/>{{ task.testsectionid }}#}
+{#                                            {% endif %}#}
+{#                                        </td>#}
                                         <td>{{ task.createat }}</td>
                                         <td>{{ task.createtime|date:'Y-m-d H:i:s' }}</td>
                                         <td>

@@ -36,24 +36,24 @@
                                 {% if taskinfo.tasktype == '1' %}
                                     <label>&nbsp&nbsp<input class="radioitem" id="runcase" type="radio" name="tasktype"
                                                             value="1" checked="checked">执行用例</label>
-                                    <label>&nbsp&nbsp<input class="radioitem" id="syncase" type="radio" name="tasktype"
-                                                            value="2">同步用例</label>
+{#                                    <label>&nbsp&nbsp<input class="radioitem" id="syncase" type="radio" name="tasktype"#}
+{#                                                            value="2">同步用例</label>#}
                                     <label>&nbsp&nbsp<input class="radioitem" id="connjenkins" type="radio"
                                                             name="tasktype" value="3">关联Jenkins</label>
                                 {% else %}
                                     {% if taskinfo.tasktype == '3' %}
                                         <label>&nbsp&nbsp<input class="radioitem" id="runcase" type="radio"
                                                                 name="tasktype" value="1">执行用例</label>
-                                        <label>&nbsp&nbsp<input class="radioitem" id="syncase" type="radio"
-                                                                name="tasktype" value="2">同步用例</label>
+{#                                        <label>&nbsp&nbsp<input class="radioitem" id="syncase" type="radio"#}
+{#                                                                name="tasktype" value="2">同步用例</label>#}
                                         <label>&nbsp&nbsp<input class="radioitem" id="connjenkins" type="radio"
                                                                 name="tasktype" value="3"
                                                                 checked="checked">关联Jenkins</label>
                                     {% else %}
                                         <label>&nbsp&nbsp<input class="radioitem" id="runcase" type="radio"
                                                                 name="tasktype" value="1">执行用例</label>
-                                        <label>&nbsp&nbsp<input class="radioitem" id="syncase" type="radio"
-                                                                name="tasktype" value="2" checked="checked">同步用例</label>
+{#                                        <label>&nbsp&nbsp<input class="radioitem" id="syncase" type="radio"#}
+{#                                                                name="tasktype" value="2" checked="checked">同步用例</label>#}
                                         <label>&nbsp&nbsp<input class="radioitem" id="connjenkins" type="radio"
                                                                 name="tasktype" value="3">关联Jenkins</label>
                                     {% endif %}
@@ -62,11 +62,11 @@
                         </div>
                         {% if taskinfo.tasktype == '1' %}
                             <div class="ak-jsch-modal-item ak-jsch-pt clearfix">
-                                <div id="testrailrunid" class="ak-jsch-modal-item clearfix"><span
-                                        class="ak-left ak-jsch-item-left ">RunID&nbsp</span>
-                                    <input type="text" class="ac-acaseedit-input ac-margin110" name="testrailrunid"
-                                           value="{{ taskinfo.testrailrunid }}">
-                                </div>
+{#                                <div id="testrailrunid" class="ak-jsch-modal-item clearfix"><span#}
+{#                                        class="ak-left ak-jsch-item-left ">RunID&nbsp</span>#}
+{#                                    <input type="text" class="ac-acaseedit-input ac-margin110" name="testrailrunid"#}
+{#                                           value="{{ taskinfo.testrailrunid }}">#}
+{#                                </div>#}
                                 <div class="ak-jsch-modal-item clearfix"><span
                                         class="ak-left ak-jsch-item-left ">用例类型</span>
 
@@ -201,9 +201,9 @@
                                     <option value="0">所属项目</option>
                                     {% for i in  projectlist %}
                                         {% if i == taskinfo.projectid %}
-                                            <option value="{{ i.pk }}" selected="selected">{{ i }}</option>
+                                            <option value="{{ i.pk }}" selected="selected">{{ i.name }}</option>
                                         {% else %}
-                                            <option value="{{ i.pk }}">{{ i }}</option>
+                                            <option value="{{ i.pk }}">{{ i.name }}</option>
                                         {% endif %}
                                     {% endfor %}
                                 </select>
