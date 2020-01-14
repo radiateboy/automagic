@@ -160,7 +160,7 @@
                                     {% else %}
                                         <input id="autocomplete_{{ forloop.counter }}" name="autocomplete"
                                                class="ui-autocomplete-input ac-element-input" type="input"
-                                               value="[{{ j.elementid.id }}][{{ j.elementid.moduleid }}]{{ j.elementid }}">
+                                               value="[{{ j.elementid.id }}][{{ j.elementid.moduleid.name }}]{{ j.elementid.descr }}">
                                         <input id="elementid_{{ forloop.counter }}" type="hidden"
                                                value="{{ j.elementid.id }}" name="elementid">
                                     {% endif %}
