@@ -31,7 +31,7 @@
                             {% else %}
                                 <span ng-if="f.flag==false" class="label label-default ng-scope">否</span>
                             {% endif %}</h5>
-                    <h5 class="list-group-item-heading">TRCaseID：<span class="label label-info">{{ case.testrailcaseid }}</span></h5>
+{#                    <h5 class="list-group-item-heading">TRCaseID：<span class="label label-info">{{ case.testrailcaseid }}</span></h5>#}
                     <h5 class="list-group-item-heading">创建时间</h5>{{ case.createat }}|{{ case.createtime|date:'Y-m-d H:i:s' }}
                     <h5 class="list-group-item-heading">更新时间</h5>{{ case.updateat }}|{{ case.updatetime|date:'Y-m-d H:i:s' }}
                 </div>
