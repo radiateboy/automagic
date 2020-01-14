@@ -87,7 +87,7 @@ def generateDpiLog(simulatorIP, testServerIP, dpisn, type):
 
 if '__main__' == __name__:
     #sendFlowData('127.0.0.1:4000', '192.168.1.135', 'all')
-    for i in xrange(1):
-        #sendEventAndIncident('192.168.116.3:4000', '172.18.51.111', 'ZB0202C400000092', 'incident')
-        sendTrafoFlowData('192.168.110.77:4000', '192.168.110.77', 'dnp3', timeoutSeconds=None)
-        # sendFlowData('192.168.116.3:4000', '192.168.110.114', 'modbus')
+	for i in xrange(1):
+		#sendEventAndIncident('192.168.116.3:4000', '172.18.51.111', 'ZB0202C400000092', 'incident')
+		sendTrafoFlowData('192.168.110.77:4000', '192.168.110.77', 'dnp3', timeoutSeconds=None)
+		# sendFlowData('192.168.116.3:4000', '192.168.110.114', 'modbus')

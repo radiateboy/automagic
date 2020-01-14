@@ -40,8 +40,8 @@ def add_cass(user, password, section_id, case_data):
             else:
                 testrailcaseid_new = client.send_post('add_case/%s' % section_id, data).get('id', '')
                 result.append((case_id, testrailcaseid_new))
-    except Exception, e:
-        print e
+    except Exception as e:
+        print(e)
     finally:
         return result
 
@@ -83,7 +83,7 @@ if "__main__" == __name__:
     password = None
     case_ids = None
 
-    my_py_sql.execute(ur'''UPDATE autoplat_task SET status = 1 WHERE id = %s''' % args.task_id)
+    my_py_sql.execute(r'''UPDATE autoplat_task SET status = 1 WHERE id = %s''' % args.task_id)
     my_py_sql.commit()
 
     if args.user_id is not None and args.task_id is not None:
@@ -146,13 +146,13 @@ if "__main__" == __name__:
         if add_result:
             when_list = []
             for result in add_result:
-                when_list.append(ur'''WHEN %s THEN "%s"''' % result)
+                when_list.append(r'''WHEN %s THEN "%s"''' % result)
 
-            sql_str = ur'''UPDATE autoplat_case SET testrailcaseid = CASE id %s END WHERE id in (%s)''' % (ur' '.join(when_list), case_ids)
+            sql_str = r'''UPDATE autoplat_case SET testrailcaseid = CASE id %s END WHERE id in (%s)''' % (r' '.join(when_list), case_ids)
             my_py_sql.execute(sql_str)
             my_py_sql.commit()
 
-    my_py_sql.execute(ur'''UPDATE autoplat_task SET status = 2 WHERE id = %s''' % args.task_id)
+    my_py_sql.execute(r'''UPDATE autoplat_task SET status = 2 WHERE id = %s''' % args.task_id)
     my_py_sql.commit()
     my_py_sql.close()
 

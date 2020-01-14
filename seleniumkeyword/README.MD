@@ -36,16 +36,16 @@ Exp:
 ```python
 @Action.add_action('InputText')
 def action_InputText(action_object, step_desc, value, loc):
-    """
-    文本框输入内容
-    :param action_object:
-    :param step_desc:
-    :param value: text
-    :param loc:
-    :return:
-    """
-    print loc, value
-    action_object.send_keys(loc, value)
+	"""
+	文本框输入内容
+	:param action_object:
+	:param step_desc:
+	:param value: text
+	:param loc:
+	:return:
+	"""
+	print loc, value
+	action_object.send_keys(loc, value)
 ```
 
 **AddCase.py 同步用例到TestRail到脚本**

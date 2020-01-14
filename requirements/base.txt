@@ -1,0 +1,5 @@
+django==3.0.2
+mysqlclient==1.4.6
+testrail==0.3.12
+python-jenkins==1.6.0
+requests==2.22.0

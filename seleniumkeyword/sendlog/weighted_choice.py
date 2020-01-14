@@ -11,12 +11,12 @@ import random
 from collections import Counter
 
 def weighted_choice_sub(weights):
-    rnd = random.random() * sum(weights)
-    for i, w in enumerate(weights):
-        rnd -= w
-        if rnd < 0:
-            # print w
-            return i
+	rnd = random.random() * sum(weights)
+	for i, w in enumerate(weights):
+		rnd -= w
+		if rnd < 0:
+			# print w
+			return i
 
 weights = [0.03, 0.04, 0.05, 0.07, 0.1, 0.2, 0.5, 0.01]
 
@@ -25,10 +25,10 @@ weights = [0.03, 0.04, 0.05, 0.07, 0.1, 0.2, 0.5, 0.01]
 # count =Counter()
 #
 # for x in xrange(10000):
-#     index = weighted_choice_sub(weights)
-#     count[index] += 1
+# 	index = weighted_choice_sub(weights)
+# 	count[index] += 1
 #
 # count_sum = sum(count.values())
 #
 # for key, value in count.iteritems():
-#     print float(value)/count_sum
+# 	print float(value)/count_sum
