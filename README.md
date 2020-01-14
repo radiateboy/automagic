@@ -4,6 +4,7 @@
 依赖包安装
 
 > pip install -r requirements/base.txt
+
 > pip install -r requirements/seleniumreq.txt
 
 ### Mysql/Mariadb 数据库 automatic/settings/common.py
