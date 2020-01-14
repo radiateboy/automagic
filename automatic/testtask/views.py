@@ -108,9 +108,9 @@ def update_task(request,id):
 	if request.method == 'POST':
 		post_dict = request.POST
 		taskname = post_dict['taskname']
-		testrailrunid = post_dict['testrailrunid']
-		testsectionid = post_dict['testsectionid']
-		suitesid = post_dict['testrailsuites']
+		testrailrunid = post_dict['testrailrunid'] if 'testrailrunid' in post_dict else None
+		testsectionid = post_dict['testsectionid'] if 'testsectionid' in post_dict else None
+		suitesid = post_dict['testrailsuites'] if 'testrailsuites' in post_dict else None
 		api_token = post_dict['api_token']
 		jenkins_server_url = post_dict['jenkins_server_url']
 		user_id = post_dict['user_id']
