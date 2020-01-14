@@ -4,12 +4,12 @@ __author__ = 'Ray'
 mail:tsbc@vip.qq.com
 2020-01-06
 """
-import logging,json,os,time
+import os
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-
+from django.utils import timezone
 from automatic.testcase.forms import *
 from django.views.generic import ListView
 from automatic.management.models import Project, Module, UserAndProduct
@@ -89,7 +89,7 @@ def update_case(request, id):
                      "moduleid": post_dict['moduleid'],
                      "casedesc": post_dict['casedesc'],
                      "dependent": post_dict['dependent'],
-                     "testrailcaseid": post_dict['testrailcaseid']
+                     "testrailcaseid": post_dict['testrailcaseid'] if 'testrailcaseid' in post_dict else None
                      }
 
         projectid = Project.objects.get(pk=int(case_dict.get('projectid')))
@@ -106,7 +106,7 @@ def update_case(request, id):
             issmoke = False
         dependent = case_dict.get('dependent')
         updateat = request.user.username
-        updatetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+        updatetime = timezone.now()
         case.update(projectid=projectid, moduleid=moduleid, casedesc=casedesc, isenabled=isenabled,
                     updateat=updateat, dependent=dependent,testrailcaseid=testrailcaseid,updatetime=updatetime,issmoke=issmoke)
         keyword_list, element_list = post_dict.getlist("keyword"), post_dict.getlist("elementid")

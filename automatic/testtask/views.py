@@ -4,9 +4,9 @@ __author__ = 'Ray'
 mail:tsbc@vip.qq.com
 2020-01-06
 """
-import logging,json,os,time
+import logging, json, os
 import jenkins
-from django.contrib.auth.hashers import make_password
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
@@ -124,7 +124,7 @@ def update_task(request,id):
 		else:
 			issmoke = False
 		updateat = request.user.username
-		updatetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+		updatetime = timezone.now()
 		task = Task.objects.filter(pk= id)
 		task.update(projectid=projectid, taskname=taskname, tasktype=tasktype, status = 0,caselist=caseids, testrailrunid=testrailrunid,
 					api_token=api_token,jenkins_server_url=jenkins_server_url,updateat=updateat, updatetime=updatetime,
@@ -165,7 +165,7 @@ def run_task(request):
 			os.system("python seleniumkeyword/TestSuite.py -t %s &" % taskid )
 	elif tasktype == '2':
 		os.system("python seleniumkeyword/AddCase.py -t %s -u %s -s %s &" % (taskid, userid, sectionid))
-		starttime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+		starttime = timezone.now()
 		task.status = 1
 		task.save()
 		caselist = task.caselist
@@ -178,7 +178,7 @@ def run_task(request):
 		build_name = task.build_name
 
 		server = jenkins.Jenkins(jenkins_server_url,user_id,api_token)
-		starttime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+		starttime = timezone.now()
 		server.build_job(build_name)
 		task.status=1
 		task.save()

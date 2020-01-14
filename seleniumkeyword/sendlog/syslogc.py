@@ -9,14 +9,11 @@ mail：tsbc@vip.qq.com
 
 import socket
 import threading
-import ConfigParser
+from configparser import ConfigParser
 import random
 import randomip
 import weighted_choice
 import time
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 class send:
 	def __init__(self, message, host, port):
@@ -59,12 +56,12 @@ class send:
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		try:
 			sock.connect(ADDR)
-		except Exception,E:
-			print "Connect Error",E
+		except Exception as e:
+			print("Connect Error", e)
 			return False
 
 		data = '<%d>%s' % (self.levl + self.FACILITY['local7']*8, self.message)
-		print data
+		print(data)
 		# sock.sendto(data, (self.host, self.port))
 		while True:
 			try:
@@ -72,9 +69,9 @@ class send:
 				data = sock.recv(BUFSIZE)
 				if not data:
 					break
-				print "Server:",data
-			except Exception,e:
-				print "Error",e
+				print("Server:",data)
+			except Exception as e:
+				print("Error", e)
 		sock.close()
 
 if __name__ == '__main__':
@@ -103,8 +100,8 @@ if __name__ == '__main__':
 	'''Cisco路由器'''
 	# 管理员操作
 	csicolog1 = '29: *' + nowstr + '.' + str(
-		random.randint(001, 999)) + ': %SYS-5-CONFIG_I: Configured from console by admin on vty0 (10.0.1.49)'
-	print csicolog1
+		random.randint(1, 999)) + ': %SYS-5-CONFIG_I: Configured from console by admin on vty0 (10.0.1.49)'
+	print(csicolog1)
 	threadcisco1 = send(csicolog1, host[0], port)
 
 	threadcisco1.run()

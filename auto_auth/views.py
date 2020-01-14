@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth import views
 from django.views.decorators.http import require_GET
 from django.utils.translation import ugettext_lazy as _
+# from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, authenticate, login
 from django.shortcuts import render, redirect, get_object_or_404
@@ -237,7 +238,7 @@ def update_user(request):
         is_active = is_active
         testrailuser = user_dict.get('testrailuser')
         testrailpass = user_dict.get('testrailpass')
-        # updatetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+        # updatetime = timezone.now()
         u = User.objects.filter(id=int(userid))
         # passwd = user_dict.get('password')
         if user_dict.get('password') == '':

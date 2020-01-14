@@ -4,7 +4,8 @@ __author__ = 'Ray'
 mail:tsbc@vip.qq.com
 2020-01-06
 """
-import logging,json,os,time
+import logging,json
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
@@ -62,7 +63,7 @@ def update_product(request):
         descr = product_dict.get('descr')
         sortby = product_dict.get('sortby')
         updateat = request.user.username
-        updatetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+        updatetime = timezone.now()
         p = Product.objects.filter(id=int(id))
         p.update(name=name, isenabled=isenabled,descr=descr,sortby=sortby, updateat=updateat, updatetime=updatetime)
         return HttpResponse('修改成功')
@@ -208,7 +209,7 @@ def update_project(request):
         version = project_dict.get('version')
         sortby = project_dict.get('sortby')
         updateat = request.user.username
-        updatetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+        updatetime = timezone.now()
         p = Project.objects.filter(id=int(id))
         p.update(name=name, isenabled=isenabled,descr=descr, version=version ,sortby=sortby, updateat=updateat, updatetime=updatetime)
         return HttpResponse('修改成功')
@@ -313,7 +314,7 @@ def update_module(request):
         isenabled = isenabled
         sortby = module_dict.get('sortby')
         updateat = request.user.username
-        updatetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+        updatetime = timezone.now()
         m = Module.objects.filter(id=int(id))
         m.update(name=name, isenabled=isenabled,sortby=sortby, updateat=updateat, updatetime=updatetime)
         return HttpResponse('修改成功')

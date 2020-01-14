@@ -4,9 +4,9 @@ __author__ = 'Ray'
 mail:tsbc@vip.qq.com
 2020-01-08
 """
-import time, json
+import json
 
-
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
@@ -72,7 +72,7 @@ def update_keyword(request):
         descr = request.POST['kwdescr']
         productid = request.POST['productname']
         updateat = request.user.username
-        updatetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+        updatetime = timezone.now()
         k = Keyword.objects.filter(id=int(id))
         k.update(productid=productid, keyword=name, kwdescr=descr, updateat=updateat, updatetime=updatetime)
         return HttpResponse('修改关键字成功。')

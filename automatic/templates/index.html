@@ -57,7 +57,7 @@
                                 <thead>
                                   <tr>
                                       <th>用例ID</th>
-                                      <th>关联TestRail</th>
+{#                                      <th>关联TestRail</th>#}
                                       <th>描述</th>
                                       <th>项目</th>
                                       <th>冒烟测试</th>
@@ -73,13 +73,13 @@
                                   {% for case in caselist %}
                                     <tr>
                                         <td>{{ case.id }}</td>
-                                        <td class="ac-alist-descp ac-alist-width-overflow"> <a target="_blank" href="http://172.17.3.70/testrail/index.php?/cases/view/{{ case.testrailcaseid }}"/>
-                                            {% if case.testrailcaseid == 'None' or case.testrailcaseid == None %}
-
-                                            {% else %}
-                                                {{ case.testrailcaseid }}
-                                            {% endif %}
-                                        </td>
+{#                                        <td class="ac-alist-descp ac-alist-width-overflow"> <a target="_blank" href="http://172.17.3.70/testrail/index.php?/cases/view/{{ case.testrailcaseid }}"/>#}
+{#                                            {% if case.testrailcaseid == 'None' or case.testrailcaseid == None %}#}
+{##}
+{#                                            {% else %}#}
+{#                                                {{ case.testrailcaseid }}#}
+{#                                            {% endif %}#}
+{#                                        </td>#}
                                         <td class="ac-alist-descp ac-alist-width-overflow" ><a data-toggle="tooltips"  data-placement="top" title="{{ case.casedesc }}" href="{% url 'caseview' case.id %}"/> {{ case.casedesc }}</td>
                                         <td>{{ case.projectid.name }}</td>
                                         <td>

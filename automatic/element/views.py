@@ -4,9 +4,8 @@ __author__ = 'Ray'
 mail:tsbc@vip.qq.com
 2020-01-08
 """
-import time, json
-
-
+import json
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
@@ -98,7 +97,7 @@ def update_element(request):
         locmode = element_dict.get('locmode')
         location = element_dict.get('location')
         updateat = request.user.username
-        updatetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+        updatetime = timezone.now()
         e = Element.objects.filter(id=int(id))
         e.update(descr=descr, projectid=projectid,moduleid=moduleid,locmode=locmode, location=location,updateat=updateat,updatetime=updatetime)
         return HttpResponse('修改成功')
