@@ -2,7 +2,7 @@
 """
 __author__ = 'Ray'
 mail:tsbc@vip.qq.com
-2016-08-03
+2020-01-14
 """
 
 import argparse
@@ -11,13 +11,14 @@ import time
 import unittest
 import json
 import subprocess
-import popautomagic
-import testrail
+# import testrail
 import MySQLdb
-import HTMLTestRunner
 import datetime
-from CustomKeyword import *
+import HTMLTestRunner
+import popautomagic
 from Base import Action
+from CustomKeyword import *
+from settings import *
 
 
 class TestSuite(unittest.TestCase):
@@ -37,12 +38,12 @@ class TestSuite(unittest.TestCase):
 		'''
 		self.case_id, self.testrail_case_id, case_desc = step_list[0][0:3]
 		result = None
-		print "[%s]" % case_desc
+		print("[%s]" % case_desc)
 		text = u'[%d:' % self.case_id + case_desc + u']'
 		try:
 			for idx, step_info in enumerate(step_list):
 				stepid = idx
-				print u'step%d' % (stepid + 1),
+				print(u'step%d' % (stepid + 1),)
 				if stepid >= 0:
 					textstr = text + u'step%d:' % (stepid + 1) + step_info[3:][1]
 					try:
@@ -53,10 +54,10 @@ class TestSuite(unittest.TestCase):
 				if result is not None:
 					result = u'step%d: %s' % (idx + 1, result)
 					break
-		except Exception, e:
+		except Exception as e:
 			self.result_flag = 2
 			text_result = u'【case_%d ERROR】 step%d: %s' % (self.case_id, idx + 1, e)
-			print text_result
+			print(text_result)
 			Controller.action.save_runing_log(text_result)
 			if Controller.video is not None:
 				subprocess.Popen("pkill -2 recordmydesktop", shell=True)
@@ -67,14 +68,14 @@ class TestSuite(unittest.TestCase):
 			if result is None:
 				self.result_flag = 1
 				text_result =  u'【case_%d PASS】' % self.case_id
-				print text_result
+				print(text_result)
 				Controller.action.save_runing_log(text_result)
 				if Controller.video is not None:
 					subprocess.Popen("pkill -2 recordmydesktop", shell=True)
 			else:
 				self.result_flag = 5
 				text_result =  u'【case_%d FAIL】 %s' % (self.case_id, result)
-				print text_result
+				print(text_result)
 				Controller.action.save_runing_log(text_result)
 				if Controller.video is not None:
 					subprocess.Popen("pkill -2 recordmydesktop", shell=True)
@@ -121,12 +122,12 @@ class Controller(object):
 	def update_task_history(cls):
 		if Controller.args.user_id is not None:
 			user_id = Controller.args.user_id
-			Controller.my_execute(ur'''SELECT id FROM autoplat_user WHERE username = '%s' ''' % Controller.args.user_id)
+			Controller.my_execute(u'''SELECT id FROM auto_auth_user WHERE username = '%s' ''' % Controller.args.user_id)
 			task_info = Controller.cur.fetchall()
 			if task_info:
 				user_id = task_info[0][0]
 			exectime = datetime.datetime.now() - Controller.start
-			sql_str = ur"""INSERT INTO autoplat_taskhistory (tasktype, taskname, case_tag_all, case_tag_pass,
+			sql_str = u"""INSERT INTO testtask_taskhistory (tasktype, taskname, case_tag_all, case_tag_pass,
 						case_tag_fail, case_tag_error, starttime, exectime, taskid_id, userid_id, reporturl, build_name, build_number)
 						VALUES (%s, '%s', %s, %s, %s, %s, '%s', '%s', %s, %s, '%s', '', '')""" % \
 					  (Controller.task_type, Controller.task_name, Controller.tag_list[0], Controller.tag_list[1],
@@ -160,7 +161,7 @@ class Controller(object):
 		:return: 返回testrail接口对象
 		'''
 		if cls.client is None:
-			cls.client = testrail.APIClient('http://172.17.3.70/testrail/')
+			cls.client = testrail.APIClient(TESTRAIL_URL)
 			cls.client.user = cls.user
 			cls.client.password = cls.password
 
@@ -181,7 +182,7 @@ class Controller(object):
 
 	@classmethod
 	def set_conn(cls):
-		cls.conn = MySQLdb.connect(host='172.21.129.32', port=3306, user='automagic', passwd='admin@123', db='autoplat',
+		cls.conn = MySQLdb.connect(host=DB_HOST, port=DB_PORT, user=DB_USER, passwd=DB_PASS, db=DB_NAME,
 								   charset='utf8')
 		cls.cur = cls.conn.cursor()
 
@@ -211,7 +212,7 @@ class Controller(object):
 
 	@classmethod
 	def set_expand_paras_dict(cls, task_id):
-		Controller.my_execute(u'''SELECT codename, codevalue FROM autoplat_codelist WHERE taskid_id = %s''' % task_id)
+		Controller.my_execute(u'''SELECT codename, codevalue FROM testtask_codelist WHERE taskid_id = %s''' % task_id)
 		expand_paras = Controller.cur.fetchall()
 		cls.expand_paras_dict = {}
 		for code_name, code_value in expand_paras:
@@ -229,20 +230,20 @@ class Controller(object):
 		将测试用例结果更新到数据库
 		:return: None
 		'''
-		case_id_str = ur'(%s)' % ur','.join(unicode(case_id) for case_id in Controller.case_id_list)
+		case_id_str = '(%s)' % ','.join(str(case_id) for case_id in Controller.case_id_list)
 		when_list = []
-		for idx in xrange(len(Controller.result_list)):
-			when_list.append(ur'''WHEN %s THEN "%s"''' % (Controller.case_id_list[idx],
+		for idx in range(len(Controller.result_list)):
+			when_list.append('''WHEN %s THEN "%s"''' % (Controller.case_id_list[idx],
 														  Controller.result_list[idx].replace('"', "'") + (
 														  u'\n运行时间：%s' % time.ctime(time.time()))))
-		sql_str = ur'''UPDATE autoplat_case SET debuginfo = CASE id %s END WHERE id IN %s''' % (
+		sql_str = '''UPDATE testcase_case SET debuginfo = CASE id %s END WHERE id IN %s''' % (
 		u' '.join(when_list), case_id_str)
 		Controller.my_execute(sql_str)
 		Controller.conn.commit()
 
 	@classmethod
 	def update_testrail(cls):
-		print u"testrail update start..."
+		print("testrail update start...")
 		try:
 			client = Controller.get_client()
 			for flag_info, result in zip(cls.flag_list, cls.result_list):
@@ -250,11 +251,11 @@ class Controller(object):
 					para_str = u'add_result_for_case/%s/%s' % (cls.run_id, flag_info[0])
 					try:
 						client.send_post(para_str, {'status_id': flag_info[1], 'comment': result})
-					except Exception, E:
-						print E
-		except Exception, e:
-			print e
-		print u"testrail update end..."
+					except Exception as e:
+						print(e)
+		except Exception as e:
+			print(e)
+		print("testrail update end...")
 
 
 def get_args():
@@ -299,12 +300,12 @@ def gen_test_cass(suite):
 		user_id = Controller.args.user_id
 		if user_id is not None:
 			Controller.my_execute(
-				u"""SELECT testrailuser, testrailpass FROM autoplat_user WHERE username = '%s'""" % user_id)
+				u"""SELECT testrailuser, testrailpass FROM auto_auth_user WHERE username = '%s'""" % user_id)
 			user_info = Controller.cur.fetchall()
 			if user_info:
 				Controller.user, Controller.password = user_info[0]
 
-		Controller.my_execute(u'''SELECT caselist FROM autoplat_task WHERE id = %s''' % task_id)
+		Controller.my_execute(u'''SELECT caselist FROM testtask_task WHERE id = %s''' % task_id)
 		caseid = Controller.cur.fetchall()
 		if caseid:
 			case_id = caseid[0][0]
@@ -322,20 +323,20 @@ def gen_test_cass(suite):
 			caselist = {}
 			for i in casedict:
 				caselist[int(i)] = casedict[i]
-			casedict = sorted(caselist.iteritems())
+			casedict = sorted(caselist.items())
 			for i in casedict:
 				case_id = case_id + ',' + i[1]
 			case_id = case_id[1:]
 		cid_info = u'AND tb4.id IN (%s)' % case_id
 
 	Controller.my_execute(u'''SELECT tb4.id, tb4.testrailcaseid, tb4.casedesc, tb6.keyword, tb5.descr, tb5.inputtext, tb7.locmode, tb7.location
-							FROM autoplat_product AS tb1
-							RIGHT JOIN autoplat_project tb2 ON tb2.productid_id = tb1.id
-							RIGHT JOIN autoplat_module tb3 ON tb3.projectid_id = tb2.id
-							RIGHT JOIN autoplat_case AS tb4 ON tb4.moduleid_id = tb3.id
-							RIGHT JOIN autoplat_step AS tb5 ON tb5.caseid_id = tb4.id
-							LEFT JOIN autoplat_keyword AS tb6 ON tb6.id = tb5.keywordid_id
-							LEFT JOIN autoplat_element AS tb7 ON tb7.id = tb5.elementid_id
+							FROM management_product AS tb1
+							RIGHT JOIN management_project tb2 ON tb2.productid_id = tb1.id
+							RIGHT JOIN management_module tb3 ON tb3.projectid_id = tb2.id
+							RIGHT JOIN testcase_case AS tb4 ON tb4.moduleid_id = tb3.id
+							RIGHT JOIN testcase_step AS tb5 ON tb5.caseid_id = tb4.id
+							LEFT JOIN keywords_keyword AS tb6 ON tb6.id = tb5.keywordid_id
+							LEFT JOIN element_element AS tb7 ON tb7.id = tb5.elementid_id
 							WHERE tb1.isenabled = 1 AND tb2.isenabled = 1 AND tb3.isenabled AND tb4.isenabled = 1
 							%s %s
 							ORDER BY tb3.sortby DESC , tb4.id ASC, tb5.id ASC''' % (pid_info, cid_info))
@@ -389,12 +390,12 @@ def run_suite():
 
 	Controller.tag_list[4] = os.path.join(day, "%s_result.html" % now)
 
-	fp = file(filename, 'wb')
+	fp = open(filename, 'wb')
 
 	report_title = u'自动化测试报告'
 	if Controller.args.task_id is not None:
 		Controller.my_execute(
-			u'''SELECT taskname, tasktype FROM autoplat_task WHERE id = %s''' % Controller.args.task_id)
+			u'''SELECT taskname, tasktype FROM testtask_task WHERE id = %s''' % Controller.args.task_id)
 		task_info = Controller.cur.fetchall()
 		if task_info:
 			report_title = u'%s报告' % task_info[0][0]
@@ -417,19 +418,19 @@ if "__main__" == __name__:
 	Controller.init()
 	try:
 		if Controller.args.task_id is not None:
-			Controller.my_execute(ur'''UPDATE autoplat_task SET status = 1 WHERE id = %s''' % Controller.args.task_id)
+			Controller.my_execute('''UPDATE testtask_task SET status = 1 WHERE id = %s''' % Controller.args.task_id)
 			Controller.conn.commit()
 
 		run_suite()
 
 		Controller.update_result()
-		Controller.update_testrail()
+		# Controller.update_testrail()
 	except KeyboardInterrupt:
 		run_suite()
 	finally:
 		# 释放控制类对象信息：关闭浏览器实例
 		if Controller.args.task_id is not None:
-			Controller.my_execute(ur'''UPDATE autoplat_task SET status = 2 WHERE id = %s''' % Controller.args.task_id)
+			Controller.my_execute('''UPDATE testtask_task SET status = 2 WHERE id = %s''' % Controller.args.task_id)
 			Controller.conn.commit()
 
 		Controller.conn.close()

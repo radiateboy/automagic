@@ -3,7 +3,7 @@ __author__ = 'ray'
 import random
 import socket
 import struct
-import ConfigParser
+from configparser import ConfigParser
 
 # cf = ConfigParser.ConfigParser()
 # cf.read('send.config')

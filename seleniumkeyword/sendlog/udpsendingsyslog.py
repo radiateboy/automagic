@@ -8,13 +8,11 @@ mail：tsbc@vip.qq.com
 """
 import socket
 import threading
-import ConfigParser
+from configparser import ConfigParser
 import random
-import randomip
-import weighted_choice
+from sendlog import randomip
+from sendlog import weighted_choice
 import sys, time, os, getopt
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 class sending(threading.Thread):
 	"""send log"""
@@ -24,7 +22,7 @@ class sending(threading.Thread):
 		try:
 			self.opts, self.args = getopt.getopt(sys.argv[1:], "hvCf:c:t:d:p:")
 		except:
-			print u"命令语法错误，可使用 -h 查看帮助。"
+			print(u"命令语法错误，可使用 -h 查看帮助。")
 			sys.exit()
 		cf = ConfigParser.ConfigParser()
 		cf.read('send.config')
@@ -142,7 +140,7 @@ class sending(threading.Thread):
 
 		'''Cisco路由器'''
 		#管理员操作
-		csicolog1 = '29: *'+nowstr+'.'+ str(random.randint(001, 999)) +': %SYS-5-CONFIG_I: Configured from console by admin on vty0 (10.0.1.49)'
+		csicolog1 = '29: *'+nowstr+'.'+ str(random.randint(1, 999)) +': %SYS-5-CONFIG_I: Configured from console by admin on vty0 (10.0.1.49)'
 		self.message.append(csicolog1)
 
 
@@ -170,13 +168,13 @@ class sending(threading.Thread):
 				self.input_file = value
 				self.fx = False
 			if op == '-v':
-				print "SendingTools Version 1.0"
+				print("SendingTools Version 1.0")
 				sys.exit()
 			elif op == "-c":
 				try:
 					self.count = int(value)
 				except:
-					print u'-c 参数值错误, 可使用 -h 查看帮助。'
+					print(u'-c 参数值错误, 可使用 -h 查看帮助。')
 					sys.exit()
 			elif op == "-C":
 				self.x = True
@@ -187,20 +185,20 @@ class sending(threading.Thread):
 				try:
 					self.port = int(value)
 				except:
-					print u'-p 参数值错误, 可使用 -h 查看帮助。'
+					print(u'-p 参数值错误, 可使用 -h 查看帮助。')
 					sys.exit()
 			elif op == "-t":
 				try:
 					self.n = float(value)
 				except:
-					print u'-t 参数值错误, 可使用 -h 查看帮助。'
+					print(u'-t 参数值错误, 可使用 -h 查看帮助。')
 					sys.exit()
 			elif op == "-h" or op =="-help":
 				self.usage()
 				sys.exit()
 	def usage(self):
 		"""帮助文档"""
-		print u"""			This is a Sending log Tools:
+		print(u"""			This is a Sending log Tools:
 -------------------------------------------------------------------------------------------
 	Usge:
 		python sendlog -f [filepath] -c [cycles] -t [sleep time]
@@ -213,7 +211,7 @@ class sending(threading.Thread):
 	-d	Specify Receive log IP Addr 		[指定日志接收IP地址]
 	-p	Specify Receive log Dst Prot 		[指定日志接收端口（整数）]
 	-v	Show version 				[查看工具版本]
-	-h	Show help info 				[查看帮助]"""
+	-h	Show help info 				[查看帮助]""")
 
 	def run(self):
 		"""
@@ -226,72 +224,72 @@ class sending(threading.Thread):
 				while True:
 					time.sleep(float(self.n))
 					for h in self.host:
-						for i in xrange(0, self.count):
+						for i in range(0, self.count):
 							for msg in self.message:
 								data = '<%d>%s' % (self.levl + self.FACILITY['local7']*8, msg)
 								time.sleep(self.n)
 								try:
 									sock.sendto(data, (h, self.port))
-									print data
+									print(data)
 								except:
-									print u"参数取值出现错误，使用 -h 查看帮助。"
+									print(u"参数取值出现错误，使用 -h 查看帮助。")
 									sys.exit()
 				sock.close()
 			else:
 				sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 				for h in self.host:
 					#print h
-					for i in xrange(0, self.count):
+					for i in range(0, self.count):
 						for msg in self.message:
 							data = '<%d>%s' % (self.levl + self.FACILITY['local7']*8, msg)
 							time.sleep(self.n)
 							#print self.n
 							try:
 								sock.sendto(data, (h, self.port))
-								print data
+								print(data)
 							except:
-								print u"参数取值出现错误，使用 -h 查看帮助。"
+								print(u"参数取值出现错误，使用 -h 查看帮助。")
 								sys.exit()
 				sock.close()
 		else:#-f 读取日志文件
 			if self.x:
 				sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 				while True:
-					for i in xrange(0, self.count):
+					for i in range(0, self.count):
 						try:
 							f = open(self.input_file, 'r')
 							lines = f.readlines()
 						except IOError:
-							print u'读取的日志文件不存在，请更正后再试。'
+							print(u'读取的日志文件不存在，请更正后再试。')
 							sys.exit()
 						for line in lines:
 							time.sleep(self.n)
 							for h in self.host:
 								try:
 									sock.sendto(line, (h, self.port))
-									print line
+									print(line)
 								except:
-									print u"参数取值出现错误，使用 -h 查看帮助。"
+									print(u"参数取值出现错误，使用 -h 查看帮助。")
 									sys.exit()
 						f.close()
 				sock.close()
 			else:
 				sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-				for j in xrange(0, self.count):
+				for j in range(0, self.count):
 					try:
 						f = open(self.input_file, 'r')
 						lines = f.readlines()
 					except IOError:
-						print u'-f 文件路径不存在，可使用 -h 查看帮助。'
+						print(u'-f 文件路径不存在，可使用 -h 查看帮助。')
 						sys.exit()
 					for line in lines:
 						time.sleep(self.n)
 						for h in self.host:
 							try:
 								sock.sendto(line, (h, self.port))
-								print line
+								print(line)
 							except:
-								print u"参数取值出现错误，使用 -h 查看帮助。"
+								print(u"参数取值出现错误，使用 -h 查看帮助。")
 								sys.exit()
 					f.close()
 				sock.close()
@@ -304,6 +302,6 @@ def sendfile():
 	thread1.stop()
 
 if __name__ == '__main__':
-	for i in xrange(1):
+	for i in range(1):
 		# print i
 		sendfile()

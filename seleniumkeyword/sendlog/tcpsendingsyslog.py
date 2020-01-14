@@ -36,7 +36,7 @@ def get_args():
 
 def run(host,port,data,count):
 	address = (host, port)
-	for i in xrange(count):
+	for i in range(count):
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		s.connect(address)
 		s.send(data)
@@ -48,7 +48,7 @@ def run(host,port,data,count):
 def senddata():
 	data = '''<188> 2017-02-27 17:29:30 %SYS-5-CONFIG_I: Configured from console by admin on vty0 (10.0.1.49)'''
 	if Controller.args.host is None:
-		print "Receiver IP(host) is Null!"
+		print("Receiver IP(host) is Null!")
 		return False
 	else:
 		host = Controller.args.host
