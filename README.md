@@ -1,11 +1,11 @@
 # 自动化测试平台 
-## python2.7 Django 1.10框架
+## python3.6  Django 3.0.2框架
 
 依赖包安装
 
-> pip install -r requirements.txt
+> pip install -r requirements/base.txt
 
-### Mysql 数据库 automated/settings.py
+### Mysql/Mariadb 数据库 automatic/settings/common.py
 ```python
 DATABASES = {
     'default': {
@@ -19,22 +19,11 @@ DATABASES = {
         'PORT':'3306'
     }
 }
-```
 
-
-## 安装
-#### 方式一 (本地安装)
-```bash
-python setup install
-```
-#### 方式二（打包安装）
-```bash
-python setup sdist
-cd dist
-pip install automagic-0.1.tar.gz
-```
 #### 数据库初始化
+
 ```bash
+python init_database.py
 cd automagic
 python manage.py makemigrations
 python manage.py migrate
@@ -57,9 +46,6 @@ _http://127.0.0.1:8000_   访问登录即可
 
 ## django admin 
 http://127.0.0.1:8000/admin/
-
-## Restful api
-http://127.0.0.1:8000/api/
 
 
 ## 公众号
