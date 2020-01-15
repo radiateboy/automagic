@@ -60,7 +60,7 @@
                                     <td>{{ user.username }}</td>
                                     <td>{{ user.realname }}</td>
                                     <td>
-                                        {% if user.is_admin == 1 %}
+                                        {% if user.is_staff == 1 %}
                                             <span ng-if="f.flag==true" class="label label-success ng-scope">YES</span>
                                         {% else %}
                                             <span ng-if="f.flag==false" class="label label-danger ng-scope">NO</span>
