@@ -1,7 +1,9 @@
 # 自动化测试平台 
 ## python3.6  Django 3.0.2框架
 
-依赖包安装
+[新用户指导使用指南](https://github.com/radiateboy/automagic/wiki)
+
+手动安装环境
 
 > pip install -r requirements/base.txt
 
@@ -24,10 +26,13 @@ DATABASES = {
 
 #### 数据库初始化
 
-```bash
+```shell
 python init_database.py
+
 cd automagic
+
 python manage.py makemigrations
+
 python manage.py migrate
 ```
 _初始化会报createSuperuser的错误，此处忽略即可，下面会用命令创建用户。_
