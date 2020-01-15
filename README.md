@@ -1,7 +1,7 @@
 # 自动化测试平台 
 ## python3.6  Django 3.0.2框架
 
-[新用户指导使用指南](https://github.com/radiateboy/automagic/wiki)
+###[新用户指导使用指南](https://github.com/radiateboy/automagic/wiki)
 
 手动安装环境
 
@@ -16,14 +16,14 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE':'django.db.backends.mysql',
-        'NAME':'autoplat',
+        'NAME':'automatic',
         'USER':'root',
         'PASSWORD':'123456',
         'HOST':'127.0.0.1',
         'PORT':'3306'
     }
 }
-
+```
 #### 数据库初始化
 
 ```shell
