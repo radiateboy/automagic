@@ -48,7 +48,7 @@
                                 <th>状态</th>
                                 <th>邮箱</th>
                                 <th>手机</th>
-                                <th>TestRail用户名</th>
+{#                                <th>TestRail用户名</th>#}
                                 <th>关联产品</th>
                                 <th>操作</th>
                             </tr>
@@ -80,15 +80,15 @@
                                             {{ user.mobile }}
                                         {% endif %}
                                     </td>
-                                    <td title="{{ user.testrailpass }}">
-                                        {% if user.testrailuser %}
-                                            {{ user.testrailuser }}
-                                        {% endif %}
-                                    </td>
+{#                                    <td title="{{ user.testrailpass }}">#}
+{#                                        {% if user.testrailuser %}#}
+{#                                            {{ user.testrailuser }}#}
+{#                                        {% endif %}#}
+{#                                    </td>#}
                                     <td class="ac-alist-width-overflow-public">
                                         {% for i in userandproduct %}
                                             {% if i.username == user %}
-                                                {{ i.productname }};
+                                                {{ i.productname.name }};
                                             {% endif %}
                                         {% endfor %}
                                     </td>
@@ -235,20 +235,20 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label">TestRail用户名</label>
-                                <div class="col-lg-5">
-                                    <input type="text" class="form-control" name="testrailuser"
-                                           placeholder="请填写TestRail的登录用户名"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label">TestRail密码</label>
-                                <div class="col-lg-5">
-                                    <input type="text" class="form-control" name="testrailpass"
-                                           placeholder="请填写TestRail的登录密码"/>
-                                </div>
-                            </div>
+{#                            <div class="form-group">#}
+{#                                <label class="col-lg-3 control-label">TestRail用户名</label>#}
+{#                                <div class="col-lg-5">#}
+{#                                    <input type="text" class="form-control" name="testrailuser"#}
+{#                                           placeholder="请填写TestRail的登录用户名"/>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="form-group">#}
+{#                                <label class="col-lg-3 control-label">TestRail密码</label>#}
+{#                                <div class="col-lg-5">#}
+{#                                    <input type="text" class="form-control" name="testrailpass"#}
+{#                                           placeholder="请填写TestRail的登录密码"/>#}
+{#                                </div>#}
+{#                            </div>#}
                             <div class="form-group modal-footer">
                                 <div class="col-lg-9 col-lg-offset-3">
                                     <!--===footer button ===-->
@@ -322,7 +322,10 @@
                             <div class="form-group">
                                 <label class="col-lg-3 control-label">部门</label>
                                 <div class="col-lg-5">
-                                    <input type="text" class="form-control" name="dept" placeholder="请填写部门"/>
+                                    <select name="dept" class="ak-left ac-aselect">
+                                        <option value="研发">研 发</option>
+                                        <option value="测试">测 试</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -330,7 +333,7 @@
                                 <div class="col-lg-3">
                                     <div class="sky-form">
                                         <label class="toggle">
-                                            <input id="id_is_active" type="checkbox" checked="checked" name="is_active">
+                                            <input id="edit_id_is_active" type="checkbox" checked="checked" name="is_active">
                                             <i class="rounded-4x ak-aoffon-btn col01"></i>
                                         </label>
                                     </div>
@@ -341,27 +344,27 @@
                                 <div class="col-lg-3">
                                     <div class="sky-form">
                                         <label class="toggle">
-                                            <input id="id_is_admin" type="checkbox" checked="checked" name="is_admin">
+                                            <input id="edit_id_is_admin" type="checkbox" checked="checked" name="is_admin">
                                             <i class="rounded-4x ak-aoffon-btn col01"></i>
                                         </label>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label">TestRail用户名</label>
-                                <div class="col-lg-5">
-                                    <input type="text" class="form-control" name="testrailuser"
-                                           placeholder="请填写TestRail的登录用户名"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label">TestRail密码</label>
-                                <div class="col-lg-5">
-                                    <input type="text" class="form-control" name="testrailpass"
-                                           placeholder="请填写TestRail的登录密码"/>
-                                </div>
-                            </div>
+{#                            <div class="form-group">#}
+{#                                <label class="col-lg-3 control-label">TestRail用户名</label>#}
+{#                                <div class="col-lg-5">#}
+{#                                    <input type="text" class="form-control" name="testrailuser"#}
+{#                                           placeholder="请填写TestRail的登录用户名"/>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="form-group">#}
+{#                                <label class="col-lg-3 control-label">TestRail密码</label>#}
+{#                                <div class="col-lg-5">#}
+{#                                    <input type="text" class="form-control" name="testrailpass"#}
+{#                                           placeholder="请填写TestRail的登录密码"/>#}
+{#                                </div>#}
+{#                            </div>#}
                             <div class="form-group modal-footer">
                                 <div class="col-lg-9 col-lg-offset-3">
                                     <!--===footer button ===-->

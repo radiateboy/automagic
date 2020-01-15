@@ -165,8 +165,8 @@ def add_user(request):
                      "email": post_dict['email'],
                      "mobile": post_dict['mobile'],
                      "dept": post_dict['dept'],
-                     "testrailuser": post_dict['testrailuser'],
-                     "testrailpass": post_dict['testrailpass'],
+                     "testrailuser": post_dict['testrailuser'] if 'testrailuser' in post_dict else None,
+                     "testrailpass": post_dict['testrailpass'] if 'testrailpass' in post_dict else None,
                      }
         if 'is_admin' in post_dict:
             is_admin = True
@@ -216,8 +216,8 @@ def update_user(request):
                          "mobile": post_dict['mobile'],
                          "dept": post_dict['dept'],
                          "realname": post_dict['realname'],
-                         "testrailuser": post_dict['testrailuser'],
-                         "testrailpass": post_dict['testrailpass']
+                         "testrailuser": post_dict['testrailuser'] if 'testrailuser' in post_dict else None,
+                         "testrailpass": post_dict['testrailpass'] if 'testrailpass' in post_dict else None,
                          }
         if 'is_admin' in post_dict:
             is_admin = True
@@ -275,6 +275,7 @@ def set_edit_user(request):
     userinfo['is_admin'] = user.is_admin
     userinfo['is_active'] = user.is_active
     userinfo['realname'] = user.realname
+    userinfo['dept'] = user.dept
     userinfo['testrailuser'] = user.testrailuser
     userinfo['testrailpass'] = user.testrailpass
     userlist = [userinfo]

@@ -688,9 +688,15 @@ function setuserValue(id) {
                     $('#editUserModal [name="email"]').val(result[i].email);
                     $('#editUserModal [name="realname"]').val(result[i].realname);
                     $('#editUserModal [name="mobile"]').val(result[i].mobile);
-                    $('#editUserModal [name="testrailuser"]').val(result[i].testrailuser);
-                    $('#editUserModal [name="testrailpass"]').val(result[i].testrailpass);
-                    if (result[i].is_active) {
+                    // $('#editUserModal [name="testrailuser"]').val(result[i].testrailuser);
+                    // $('#editUserModal [name="testrailpass"]').val(result[i].testrailpass);
+                    if (result[i].dept){
+                        $('#editUserModal select[name="dept"]').get(0).value = result[i].dept;
+                    }
+                    else{
+                        console.log(result[i]);
+                    }
+                    if (result[i].is_active){
                         $('#editUserModal input[name="is_active"]').attr("checked", "checked");
                     }
                     else {
