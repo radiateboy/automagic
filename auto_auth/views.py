@@ -170,8 +170,11 @@ def add_user(request):
                      }
         if 'is_admin' in post_dict:
             is_admin = True
+            is_staff = True
         else:
             is_admin = False
+            is_staff = False
+
         if 'is_active' in post_dict:
             is_active = True
         else:
@@ -182,8 +185,8 @@ def add_user(request):
         email = user_dict.get('email')
         mobile = user_dict.get('mobile')
         dept = user_dict.get('dept')
-        is_admin = is_admin
-        is_active = is_active
+        # is_admin = is_admin
+        # is_active = is_active
         testrailuser = user_dict.get('testrailuser')
         testrailpass = user_dict.get('testrailpass')
         # print username,password,realname,email,mobile,is_admin,is_active,testrailuser,testrailpass
@@ -197,7 +200,9 @@ def add_user(request):
             return HttpResponse('邮箱地址已经被注册')
         except:
             pass
-        user = User(username=username, password=password, realname=realname, email=email, mobile=mobile, dept=dept, is_active=is_active, is_admin=is_admin, testrailuser=testrailuser, testrailpass=testrailpass)
+        user = User(username=username, password=password, realname=realname, email=email, mobile=mobile, dept=dept,
+                    is_active=is_active, is_admin=is_admin, is_staff=is_staff,
+                    testrailuser=testrailuser, testrailpass=testrailpass)
         user.save()
         return HttpResponse('创建成功')
     else:
@@ -221,8 +226,10 @@ def update_user(request):
                          }
         if 'is_admin' in post_dict:
             is_admin = True
+            is_staff = True
         else:
             is_admin = False
+            is_staff = False
         if 'is_active' in post_dict:
             is_active = True
         else:
@@ -234,8 +241,8 @@ def update_user(request):
         mobile = user_dict.get('mobile')
         dept_str = user_dict.get('dept')
         dept = dept_str if dept_str else '测试'
-        is_admin = is_admin
-        is_active = is_active
+        # is_admin = is_admin
+        # is_active = is_active
         testrailuser = user_dict.get('testrailuser')
         testrailpass = user_dict.get('testrailpass')
         # updatetime = timezone.now()
@@ -243,7 +250,8 @@ def update_user(request):
         # passwd = user_dict.get('password')
         if user_dict.get('password') == '':
             # print "AAA",username,user_dict.get('password')
-            u.update(username=username, realname=realname, email=email,mobile=mobile, dept=dept,is_active=is_active,is_admin=is_admin,testrailuser=testrailuser,testrailpass=testrailpass)
+            u.update(username=username, realname=realname, email=email,mobile=mobile, dept=dept,is_active=is_active,
+                     is_admin=is_admin, is_staff=is_staff, testrailuser=testrailuser,testrailpass=testrailpass)
         else:
             # print "BBB", username, user_dict.get('password')
             password = make_password(user_dict.get('password'), None, 'pbkdf2_sha256')
@@ -273,6 +281,7 @@ def set_edit_user(request):
     userinfo['email'] = user.email
     userinfo['mobile'] = user.mobile
     userinfo['is_admin'] = user.is_admin
+    userinfo['is_staff'] = user.is_staff
     userinfo['is_active'] = user.is_active
     userinfo['realname'] = user.realname
     userinfo['dept'] = user.dept

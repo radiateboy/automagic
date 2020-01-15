@@ -1,7 +1,7 @@
 {% extends 'frame.html' %}
 {% block title %}Automagic{% endblock %}
 {% block slideshow %}
-    {% if request.user.is_admin %}
+    {% if request.user.is_staff %}
         <div class="ak-zper-midbox ak-jsch-mid">
             <div class="ak-zper-inbox-title ak-jsch-title clearfix">
                 <div class="ak-left ak-jsch-row3 ak-zper-fix-btnbox">
