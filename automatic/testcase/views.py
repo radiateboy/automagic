@@ -29,7 +29,7 @@ def add_case(request):
         case_dict = {"projectid": post_dict['projectid'],
                      "moduleid": post_dict['moduleid'],
                      "casedesc": post_dict['casedesc'],
-                     "testrailcaseid": post_dict['testrailcaseid'],
+                     "testrailcaseid": post_dict['testrailcaseid'] if 'testrailcaseid' in post_dict else None
                      "dependent": post_dict['dependent']
                      }
 
@@ -142,7 +142,7 @@ def copy_case(request, id):
                      "moduleid": post_dict['moduleid'],
                      "casedesc": post_dict['casedesc'],
                      "dependent": post_dict['dependent'],
-                     "testrailcaseid": post_dict['testrailcaseid']
+                     "testrailcaseid": post_dict['testrailcaseid'] if 'testrailcaseid' in post_dict else None
                      }
 
         projectid = Project.objects.get(pk=int(case_dict.get('projectid')))
