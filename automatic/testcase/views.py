@@ -29,7 +29,7 @@ def add_case(request):
         case_dict = {"projectid": post_dict['projectid'],
                      "moduleid": post_dict['moduleid'],
                      "casedesc": post_dict['casedesc'],
-                     "testrailcaseid": post_dict['testrailcaseid'] if 'testrailcaseid' in post_dict else None
+                     "testrailcaseid": post_dict['testrailcaseid'] if 'testrailcaseid' in post_dict else None,
                      "dependent": post_dict['dependent']
                      }
 
