@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -93,6 +92,11 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+
+#RabbitMq
+
+RABBITMQ_STATUS = False
+RABBITMQ_CONFIG = {'AMQP_URI': "amqp://guest:guest@192.168.72.127:31141"}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
