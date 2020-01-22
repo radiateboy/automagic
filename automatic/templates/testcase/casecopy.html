@@ -94,13 +94,13 @@
                                        class="ac-acaseedit-input" value="{{ tcase.dependent }}"/>
                             </div>
                         </div>
-{#                        <div class="ak-jsch-modal-item ak-jsch-pt clearfix">#}
-{#                            <span class="ak-jsch-item-left ak-left ac-acase-desc">TestRail ID</span>#}
-{#                            <div class="ak-jsch-item-right ak-left">#}
-{#                                <input id="id_testrailcaseid" name="testrailcaseid" type="text"#}
-{#                                       placeholder="关联TestRail的用例编号" class="ac-acaseedit-input" value="{{ tcase.testrailcaseid }}"/>#}
-{#                            </div>#}
-{#                        </div>#}
+                        {#                        <div class="ak-jsch-modal-item ak-jsch-pt clearfix">#}
+                        {#                            <span class="ak-jsch-item-left ak-left ac-acase-desc">TestRail ID</span>#}
+                        {#                            <div class="ak-jsch-item-right ak-left">#}
+                        {#                                <input id="id_testrailcaseid" name="testrailcaseid" type="text"#}
+                        {#                                       placeholder="关联TestRail的用例编号" class="ac-acaseedit-input" value="{{ tcase.testrailcaseid }}"/>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
 
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                                         {% else %}
                                             <input id="autocomplete_1" name="autocomplete"
                                                    class="ui-autocomplete-input ac-element-input" type="input"
-                                                   value="[{{ j.elementid.id }}][{{ j.elementid.moduleid }}]{{ j.elementid }}">
+                                                   value="[{{ j.elementid.id }}][{{ j.elementid.moduleid.name }}]{{ j.elementid.descr }}">
                                             <input id="elementid_1" type="hidden" value="{{ j.elementid.id }}"
                                                    name="elementid">
                                         {% endif %}
@@ -202,7 +202,7 @@
                                         {% else %}
                                             <input id="autocomplete_{{ forloop.counter }}" name="autocomplete"
                                                    class="ui-autocomplete-input ac-element-input" type="input"
-                                                   value="[{{ j.elementid.id }}][{{ j.elementid.moduleid }}]{{ j.elementid }}">
+                                                   value="[{{ j.elementid.id }}][{{ j.elementid.moduleid.name }}]{{ j.elementid.descr }}">
                                             <input id="elementid_{{ forloop.counter }}" type="hidden"
                                                    value="{{ j.elementid.id }}" name="elementid">
                                         {% endif %}
