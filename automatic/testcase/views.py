@@ -18,7 +18,8 @@ from automatic.keywords.models import Keyword
 from automatic.element.models import Element
 from django.db.models import Q
 from django.urls import reverse
-
+from nameko.standalone.rpc import ClusterRpcProxy
+from automatic.settings.common import RABBITMQ_CONFIG, RABBITMQ_STATUS
 # Create your views here.
 
 
@@ -270,9 +271,15 @@ def get_caselist(request):
 def run_case(request):
     caseid = request.GET['caseid']
     depentid = Case.objects.get(pk=caseid).dependent
-    if depentid == u'':
-        os.system("python seleniumkeyword/TestSuite.py -c %d" % int(caseid))
+    if RABBITMQ_STATUS:
+        with ClusterRpcProxy(RABBITMQ_CONFIG) as rpc:
+            result = rpc.greeting_service.say_hello(caseid)
+            print(result)
+            return HttpResponse('true')
     else:
-        os.system("python seleniumkeyword/TestSuite.py -c " + depentid + "," + caseid)
-    # print caseid
-    return HttpResponse('true')
+        if depentid == u'':
+            os.system("python seleniumkeyword/TestSuite.py -c %d" % int(caseid))
+        else:
+            os.system("python seleniumkeyword/TestSuite.py -c " + depentid + "," + caseid)
+        # print caseid
+        return HttpResponse('true')
