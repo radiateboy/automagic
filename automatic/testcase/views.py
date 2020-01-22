@@ -180,7 +180,7 @@ def copy_case(request, id):
         return HttpResponse('添加成功')
     else:
         modulelist = Module.objects.filter(projectid=tcase.projectid).order_by('-sortby')
-        project = Project.objects.get(name=tcase.projectid)
+        project = Project.objects.get(name=tcase.projectid.name)
         projectlist = Project.objects.filter(productid=project.productid)
         keywordlist = Keyword.objects.filter(Q(productid=0) | Q(productid=project.productid.pk))
         elementlist = Element.objects.filter(moduleid=tcase.moduleid)
