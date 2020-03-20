@@ -66,9 +66,9 @@ def add_task(request):
 	if request.method == 'POST':
 		post_dict = request.POST
 		taskname = post_dict['taskname']
-		runid = post_dict['testrailrunid']
-		sectionid = post_dict['testsectionid']
-		suitesid = post_dict['testrailsuites']
+		runid = post_dict['testrailrunid'] if 'testrailrunid' in post_dict else None
+		sectionid = post_dict['testsectionid'] if 'testsectionid' in post_dict else None
+		suitesid = post_dict['testrailsuites'] if 'testsectionid' in post_dict else None
 		api_token = post_dict['api_token']
 		jenkins_server_url = post_dict['jenkins_server_url']
 		user_id = post_dict['user_id']
