@@ -273,6 +273,7 @@
                     //data:{casedesc:casedesc, isenabled:isenabled, projectid:projectid, moduleid:moduleid,dependent:dependent,descr:descr,keyword:keyword,elementid:elementid,inputtext:inputtext},
                     url: "/func/case/copy/{{ tcase.pk }}/",
                     cache: false,
+                    async: false,
                     dataType: "html",
                     success: function (result, statues, xml) {
                         $('#log_info').addClass('bg-primary');

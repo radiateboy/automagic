@@ -136,7 +136,8 @@
                     {% if steplist %}
                         {% for j in steplist %}
                             <tr id="row{{ forloop.counter }}">
-                                <td>{{ forloop.counter }}</td>
+                                <td>{{ forloop.counter }}<input type="hidden" name="stepid" value="{{ forloop.counter }}">
+                                </td>
                                 <td><input name="descr" class="ac-acaseedit-input" placeholder="请输入步骤描述" type="input"
                                            value="{{ j.descr }}"></td>
                                 <td>
@@ -230,6 +231,7 @@
                     //data:{casedesc:casedesc, isenabled:isenabled, projectid:projectid, moduleid:moduleid,dependent:dependent,descr:descr,keyword:keyword,elementid:elementid,inputtext:inputtext},
                     url: "/func/case/update/{{ tcase.pk }}/",
                     cache: false,
+                    async: false,
                     dataType: "html",
                     success: function (result, statues, xml) {
                         $('#log_info').addClass('bg-primary');

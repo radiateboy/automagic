@@ -183,6 +183,7 @@ $(document).ready(function () {
             //             data:{casedesc:casedesc, isenabled:isenabled, issmoke:issmoke, projectid:projectid, moduleid:moduleid,dependent:dependent,descr:descr,keyword:keyword,elementid:elementid,inputtext:inputtext},
             url: "/func/case/add/",
             cache: false,
+            async: false,
             dataType: "html",
             success: function (result, statues, xml) {
                 $('#log_info').addClass('bg-primary');
