@@ -6,6 +6,7 @@ mail:tsbc@vip.qq.com
 """
 import logging, json, os
 import jenkins
+import time
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -19,6 +20,32 @@ from automatic.management.models import Product,Project,Module,User,UserAndProdu
 from automatic.testtask.models import Task, Taskhistory, Codelist
 # Create your views here.
 
+def duration_change(num):
+    if num == 0:
+        x = 0
+    else:
+        x = str(num)[:-3]
+    if int(x) <= 60:
+        return str(x)+'s'
+    elif int(x) < 3600:
+        y = float(x)/60
+        z = str(y).split('.')
+        return z[0]+'min:'+ str(int(z[1])*6)[:2]+'s'
+    else:
+        y = divmod(int(x), 3600)
+        z = float(y[1])/60
+        m = str(z).split('.')
+        return str(y[0])+'h:'+m[0]+'min:'+ str(int(m[1])*6)[:2]+'s'
+
+def timeStamp(timastamp):
+    timastamp = str(timastamp)[:10]
+    timeArray = time.localtime(int(timastamp))
+    chartime = time.strftime('%Y-%m-%d %H:%M:%S',timeArray)
+    return chartime
+
+def testreport(path):
+    path = path[7:]
+    return path
 
 class TaskListIndex(ListView):
 	context_object_name = 'tasklist'
