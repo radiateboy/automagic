@@ -1,5 +1,5 @@
 # 自动化测试平台 
-## python3.6  Django 3.0.2框架
+## python3.6+   Django 3.0.6框架
 
 ### [新用户指导使用指南](https://github.com/radiateboy/automagic/wiki)
 
