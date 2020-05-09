@@ -220,14 +220,14 @@ $(document).ready(function () {
                 dataType: "html",
 
                 success: function (result, statues, xml) {
-                    debugger;
+                    // debugger;
                     $('#log_info').addClass('bg-primary');
                     $('#log_info').css('display', 'block');
                     $('#log_info').html(result);
                     setTimeout("$('#log_info').css('display', 'None');$('#id_location').val('');", 1500);  //成功时弹出view传回来的结
                 },
                 error: function () {
-                    debugger;
+                    // debugger;
                     $('#log_info').addClass('bg-primary');
                     $('#log_info').css('display', 'block');
                     $('#log_info').html('添加失败。');
@@ -945,7 +945,7 @@ function runcase(id) {
         dataType: "html",
 
         success: function (result, TextStatus, xml) {
-            debugger;
+            // debugger;
             // alert(result);
             // $('#run'+id).attr('disabled',false);
             // $('#run'+id).addClass('green');
