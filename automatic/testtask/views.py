@@ -20,6 +20,8 @@ from automatic.management.models import Product,Project,Module,User,UserAndProdu
 from automatic.testtask.models import Task, Taskhistory, Codelist
 # Create your views here.
 
+
+# fixed #27
 def duration_change(num):
     if num == 0:
         x = 0
@@ -37,15 +39,18 @@ def duration_change(num):
         m = str(z).split('.')
         return str(y[0])+'h:'+m[0]+'min:'+ str(int(m[1])*6)[:2]+'s'
 
+
 def timeStamp(timastamp):
     timastamp = str(timastamp)[:10]
     timeArray = time.localtime(int(timastamp))
     chartime = time.strftime('%Y-%m-%d %H:%M:%S',timeArray)
     return chartime
 
+
 def testreport(path):
     path = path[7:]
     return path
+# fixed #27
 
 class TaskListIndex(ListView):
 	context_object_name = 'tasklist'
