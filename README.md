@@ -58,4 +58,4 @@ http://127.0.0.1:8000/admin/
 ## 公众号
 扫一扫关注公众号
 
-![开源优测](公众号.jpg)
+![开源优测](https://gitee.com/tsbc/automagic/raw/master/%E5%85%AC%E4%BC%97%E5%8F%B7.jpg)
