@@ -14,12 +14,6 @@ class FormCase(forms.ModelForm):
         fields = ('casedesc','testrailcaseid','projectid','moduleid','isenabled','dependent')
 
 
-class FormCaseset(forms.ModelForm):
-    class Meta:
-        model = Caseset
-        fields = ('descr', 'caseid', 'isenabled')
-
-
 class FormStep(forms.ModelForm):
     class Meta:
         model = Step

@@ -10,16 +10,10 @@ class CaseAdmin(admin.ModelAdmin):
     search_fields = ('casedesc', 'projectid')
 
 
-class CasesetAdmin(admin.ModelAdmin):
-    list_display = (id, 'descr', 'caseid', 'isenabled', 'createat', 'createtime', 'updateat', 'updatetime')
+class StepAdmin(admin.ModelAdmin):
+    list_display = (id, 'caseid', 'stepid', 'descr', 'keywordid', 'elementid', 'inputtext')
     search_fields = ('descr',)
 
 
-class StepAdmin(admin.ModelAdmin):
-    list_display = (id, 'caseid', 'stepid', 'descr', 'keywordid', 'elementid', 'inputtext')
-    search_fields = ('caseid',)
-
-
 admin.site.register(models.Case, CaseAdmin)
-admin.site.register(models.Caseset, CasesetAdmin)
 admin.site.register(models.Step, StepAdmin)
