@@ -6,6 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support.select import Select
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.chrome.options import Options
 import SimulatorUtil
 # import paramiko
 import re
@@ -217,11 +218,13 @@ def action_openBrowser(action_object, step_desc, value, loc):
 	:return:
 	"""
 	# if action_object[0].driver is None:
-	option = webdriver.ChromeOptions()
+	option = Options()
 	downloaddir = os.path.abspath(os.curdir)+"/data"
 	prefs = {"download.default_directory":downloaddir}
 	option.add_experimental_option("prefs",prefs)
-	option.add_argument('--no-sandbox')
+	option.add_argument('–no-sandbox')
+	# option.add_argument('-headless')  # 不打开图形界面
+	option.add_argument('–disable-dev-shm-usage')
 	# action_object.driver = webdriver.Chrome(chrome_options=option)
 
 	browser = value #传入浏览器对象
