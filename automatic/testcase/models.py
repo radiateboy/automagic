@@ -8,7 +8,7 @@ from django.db import models
 from automatic.management.models import Project, Module
 from automatic.keywords.models import Keyword
 from automatic.element.models import Element
-from django.core.validators import validate_comma_separated_integer_list
+# from django.core.validators import validate_comma_separated_integer_list
 # Create your models here.
 
 
@@ -29,17 +29,17 @@ class Case(models.Model):
     def __unicode__(self):
         return self.casedesc
 
-class Caseset(models.Model):
-    descr = models.CharField(max_length=200)
-    caseid = models.CharField(validators=[validate_comma_separated_integer_list],max_length=255)
-    isenabled = models.BooleanField(default=True)
-    createtime = models.DateTimeField(auto_now_add=True)
-    createat = models.CharField(max_length=32, null=True, blank=True, editable=True)
-    updatetime = models.DateTimeField(auto_now=True)
-    updateat = models.CharField(max_length=32, null=True, blank=True, editable=True)
-
-    def __unicode__(self):
-        return self.descr
+# class Caseset(models.Model):
+#     descr = models.CharField(max_length=200)
+#     caseid = models.CharField(validators=[validate_comma_separated_integer_list],max_length=255)
+#     isenabled = models.BooleanField(default=True)
+#     createtime = models.DateTimeField(auto_now_add=True)
+#     createat = models.CharField(max_length=32, null=True, blank=True, editable=True)
+#     updatetime = models.DateTimeField(auto_now=True)
+#     updateat = models.CharField(max_length=32, null=True, blank=True, editable=True)
+#
+#     def __unicode__(self):
+#         return self.descr
 
 
 class Step(models.Model):
@@ -55,4 +55,4 @@ class Step(models.Model):
     updateat = models.CharField(max_length=32, null=True, blank=True, editable=True)
 
     def __unicode__(self):
-        return  self.descr
+        return self.descr
