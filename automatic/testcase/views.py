@@ -6,14 +6,14 @@ mail:tsbc@vip.qq.com
 """
 import os
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from automatic.testcase.forms import *
 from django.views.generic import ListView
 from automatic.management.models import Project, Module, UserAndProduct
-from automatic.testcase.models import Case, Caseset
+from automatic.testcase.models import Case
 from automatic.keywords.models import Keyword
 from automatic.element.models import Element
 from django.db.models import Q
@@ -33,7 +33,6 @@ def add_case(request):
                      "testrailcaseid": post_dict['testrailcaseid'] if 'testrailcaseid' in post_dict else None,
                      "dependent": post_dict['dependent']
                      }
-
         projectid = Project.objects.get(pk=int(case_dict.get('projectid')))
         moduleid = Module.objects.get(pk=int(case_dict.get('moduleid')))
         casedesc = case_dict.get('casedesc')
@@ -56,15 +55,17 @@ def add_case(request):
         element_list = post_dict.getlist("elementid")
         keyword_list = post_dict.getlist("keyword")
         value_list, desc_list = post_dict.getlist("inputtext"), post_dict.getlist("descr")
+        s = 1
         for keyword, element, inputtext, descr in zip(keyword_list, element_list, value_list, desc_list):
             kw = Keyword.objects.get(pk=int(keyword))
             if element != 'None':
                 # print "aaaa", type(element)
                 ele = Element.objects.get(pk=int(element))
-                case.step_set.create(stepid=keyword, descr=descr, keywordid=kw, elementid=ele, inputtext=inputtext)
+                case.step_set.create(stepid=s, descr=descr, keywordid=kw, elementid=ele, inputtext=inputtext)
             else:
                 # print "bbbb",element
-                case.step_set.create(stepid=keyword, descr=descr, keywordid=kw,inputtext=inputtext)
+                case.step_set.create(stepid=s, descr=descr, keywordid=kw,inputtext=inputtext)
+            s += 1
         return HttpResponse('添加成功')
     else:
         userandproduct = UserAndProduct.objects.all()
@@ -82,7 +83,7 @@ def add_case(request):
 @login_required()
 def update_case(request, id):
     tcase = Case.objects.get(id=int(id))
-    steplist = Step.objects.filter(caseid=tcase.id)
+    steplist = Step.objects.filter(caseid=tcase.id).order_by('stepid')
     if request.method == 'POST':
         post_dict = request.POST
         case = Case.objects.filter(id=int(id))
@@ -113,16 +114,18 @@ def update_case(request, id):
         keyword_list, element_list = post_dict.getlist("keyword"), post_dict.getlist("elementid")
         value_list, desc_list = post_dict.getlist("inputtext"), post_dict.getlist("descr")
         tcase.step_set.all().delete()
+        s = 1
         for keyword, element, inputtext, descr in zip(keyword_list, element_list, value_list, desc_list):
             kw = Keyword.objects.get(pk=int(keyword))
             #print element
             if element != 'None':
                 # print "ccc",element
                 elementid = Element.objects.get(pk=int(element))
-                tcase.step_set.create(stepid=keyword, descr=descr, keywordid=kw, elementid=elementid, inputtext=inputtext)
+                tcase.step_set.create(stepid=s, descr=descr, keywordid=kw, elementid=elementid, inputtext=inputtext)
             else:
                 # print "ddd",element
-                tcase.step_set.create(stepid=keyword, descr=descr, keywordid=kw, inputtext=inputtext)
+                tcase.step_set.create(stepid=s, descr=descr, keywordid=kw, inputtext=inputtext)
+            s += 1
         return HttpResponse('添加成功')
     else:
         modulelist = Module.objects.filter(projectid=tcase.projectid).order_by('-sortby')
@@ -132,11 +135,12 @@ def update_case(request, id):
         elementlist = Element.objects.filter(projectid=project.pk)
         return render(request, 'testcase/caseedit.html', {'project':project,'modulelist':modulelist,'elementlist':elementlist,'projectlist':projectlist,'keywordlist':keywordlist,'steplist':steplist,'tcase':tcase})
 
+
 @csrf_exempt
 @login_required()
 def copy_case(request, id):
     tcase = Case.objects.get(id=int(id))
-    steplist = Step.objects.filter(caseid=tcase.id)
+    steplist = Step.objects.filter(caseid=tcase.id).order_by('stepid')
     if request.method == 'POST':
         post_dict = request.POST
         case_dict = {"projectid": post_dict['projectid'],
@@ -168,16 +172,18 @@ def copy_case(request, id):
 
         keyword_list, element_list = post_dict.getlist("keyword"), post_dict.getlist("elementid")
         value_list, desc_list = post_dict.getlist("inputtext"), post_dict.getlist("descr")
+        s = 1
         for keyword, element, inputtext, descr in zip(keyword_list, element_list, value_list, desc_list):
             kw = Keyword.objects.get(pk=int(keyword))
             # print element
             if element != 'None':
                 # print "ccc",element
                 elementid = Element.objects.get(pk=int(element))
-                case.step_set.create(stepid=keyword, descr=descr, keywordid=kw, elementid=elementid, inputtext=inputtext)
+                case.step_set.create(stepid=s, descr=descr, keywordid=kw, elementid=elementid, inputtext=inputtext)
             else:
                 # print "ddd",element
-                case.step_set.create(stepid=keyword, descr=descr, keywordid=kw, inputtext=inputtext)
+                case.step_set.create(stepid=s, descr=descr, keywordid=kw, inputtext=inputtext)
+            s += 1
         return HttpResponse('添加成功')
     else:
         modulelist = Module.objects.filter(projectid=tcase.projectid).order_by('-sortby')
@@ -207,8 +213,9 @@ def del_step(request, id):
 @login_required()
 def view_case(request, id):
     case = get_object_or_404(Case, pk=int(id))
-    steplist = case.step_set.all()
+    steplist = case.step_set.all().order_by('stepid')
     return render(request, 'testcase/caseview.html', locals())
+
 
 class CaseListIndex(ListView):
     context_object_name = 'caselist'
