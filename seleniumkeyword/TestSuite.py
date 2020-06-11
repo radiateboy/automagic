@@ -184,6 +184,7 @@ class Controller(object):
 	def set_conn(cls):
 		cls.conn = MySQLdb.connect(host=DB_HOST, port=DB_PORT, user=DB_USER, passwd=DB_PASS, db=DB_NAME,
 								   charset='utf8')
+		print("Mysql Connet Info", "host:", DB_HOST, "port:", DB_PORT)
 		cls.cur = cls.conn.cursor()
 
 	@classmethod
