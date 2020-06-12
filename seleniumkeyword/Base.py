@@ -6,7 +6,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support.select import Select
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.chrome.options import Options
 import SimulatorUtil
 # import paramiko
 import re
@@ -218,27 +217,50 @@ def action_openBrowser(action_object, step_desc, value, loc):
 	:return:
 	"""
 	# if action_object[0].driver is None:
-	option = Options()
 	downloaddir = os.path.abspath(os.curdir)+"/data"
 	prefs = {"download.default_directory":downloaddir}
-	option.add_experimental_option("prefs",prefs)
-	option.add_argument('–no-sandbox')
+
+
 	# option.add_argument('-headless')  # 不打开图形界面
-	option.add_argument('–disable-dev-shm-usage')
+	# option.add_argument('–disable-dev-shm-usage')
 	# action_object.driver = webdriver.Chrome(chrome_options=option)
 
 	browser = value #传入浏览器对象
 	if action_object.driver == None:
-		if browser.upper() == 'IE': action_object.driver = webdriver.Ie()
-		elif browser.upper() == 'CHROME': action_object.driver = webdriver.Chrome(chrome_options=option)
-		elif browser.upper() == 'FIREFOX': action_object.driver = webdriver.Firefox()
-		elif browser.upper() == 'SAFARI': action_object.driver = webdriver.Safari()
+		if browser.upper() == 'IE':
+			action_object.driver = webdriver.Ie()
+		elif browser.upper() == 'CHROME':
+			option = webdriver.ChromeOptions()
+			option.add_experimental_option("prefs", prefs)
+			option.add_argument('–no-sandbox')
+			action_object.driver = webdriver.Chrome(chrome_options=option)
+		elif browser.upper() == 'CHROME-HEADLESS':
+			option = webdriver.ChromeOptions()
+			option.add_experimental_option("prefs", prefs)
+			option.add_argument('–no-sandbox')
+			option.add_argument('-headless')  # 不打开图形界面
+			action_object.driver = webdriver.Chrome(chrome_options=option)
+		elif browser.upper() == 'FIREFOX':
+			action_object.driver = webdriver.Firefox()
+		elif browser.upper() == 'FIREFOX-HEADLESS':
+			option = webdriver.FirefoxOptions()
+			option.set_headless()
+			action_object.driver = webdriver.Firefox(firefox_options=option)
+		elif browser.upper() == 'SAFARI':
+			action_object.driver = webdriver.Safari()
 		elif browser.upper() == 'NW':
+			option = webdriver.ChromeOptions()
+			option.add_experimental_option("prefs", prefs)
+			option.add_argument('–no-sandbox')
 			chromedriver = os.path.abspath(os.curdir)+"\\nwjs-sdk-v0.19.3-win-x64\\chromedriver.exe"
 			action_object.driver = webdriver.Chrome(chromedriver, chrome_options=option)
 			js = "var gui=require(\"nw.gui\"); var win=gui.Window.get(); win.maximize()"
 			action_object.driver.execute_script(js)
-		else: action_object.driver = webdriver.Chrome(chrome_options=option)
+		else:
+			option = webdriver.ChromeOptions()
+			option.add_experimental_option("prefs", prefs)
+			option.add_argument('–no-sandbox')
+			action_object.driver = webdriver.Chrome(chrome_options=option)
 		if browser.upper() != 'NW':
 			action_object.driver.set_window_size(1600, 900)
 			action_object.driver.maximize_window()
