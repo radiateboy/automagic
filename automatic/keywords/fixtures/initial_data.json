@@ -209,19 +209,6 @@
     },
     {
         "model": "keywords.keyword",
-        "pk": 17,
-        "fields": {
-            "productid": 0,
-            "keyword": "openBrowser",
-            "kwdescr": "打开浏览器",
-            "createtime": "2016-09-19T10:17:50Z",
-            "createat": "tsbc",
-            "updatetime": "2016-09-19T10:17:50Z",
-            "updateat": "tsbc"
-        }
-    },
-    {
-        "model": "keywords.keyword",
         "pk": 18,
         "fields": {
             "productid": 0,
