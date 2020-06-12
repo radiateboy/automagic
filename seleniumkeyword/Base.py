@@ -221,10 +221,6 @@ def action_openBrowser(action_object, step_desc, value, loc):
 	prefs = {"download.default_directory":downloaddir}
 
 
-	# option.add_argument('-headless')  # 不打开图形界面
-	# option.add_argument('–disable-dev-shm-usage')
-	# action_object.driver = webdriver.Chrome(chrome_options=option)
-
 	browser = value #传入浏览器对象
 	if action_object.driver == None:
 		if browser.upper() == 'IE':
@@ -243,9 +239,9 @@ def action_openBrowser(action_object, step_desc, value, loc):
 		elif browser.upper() == 'FIREFOX':
 			action_object.driver = webdriver.Firefox()
 		elif browser.upper() == 'FIREFOX-HEADLESS':
-			option = webdriver.FirefoxOptions()
-			option.set_headless()
-			action_object.driver = webdriver.Firefox(firefox_options=option)
+			firefox_option = webdriver.FirefoxOptions()
+			firefox_option.set_headless()
+			action_object.driver = webdriver.Firefox(firefox_options=firefox_option)
 		elif browser.upper() == 'SAFARI':
 			action_object.driver = webdriver.Safari()
 		elif browser.upper() == 'NW':
