@@ -317,20 +317,23 @@ def gen_test_cass(suite):
 
 	if case_id is not None:
 		casedict = eval(case_id)
-		if type(casedict) is int:
-			case_id = case_id
+		if isinstance(casedict, int):
+			pass
 		else:
 			case_id = ''
-			caselist = {}
-			for i in casedict:
-				caselist[int(i)] = casedict[i]
-			casedict = sorted(caselist.items())
-			for i in casedict:
-				case_id = case_id + ',' + i[1]
-			case_id = case_id[1:]
+			# caselist = {}
+			# for i in casedict:
+			# 	print(i)
+			# 	caselist[int(i)] = casedict[i]
+			# casedict = sorted(caselist.items())
+			# print(list(casedict))
+			# for i in casedict:
+			case_id = ','.join([str(s) for s in casedict])
+
+			print(case_id)
 		cid_info = u'AND tb4.id IN (%s)' % case_id
 
-	Controller.my_execute(u'''SELECT tb4.id, tb4.testrailcaseid, tb4.casedesc, tb6.keyword, tb5.descr, tb5.inputtext, tb7.locmode, tb7.location
+	Controller.my_execute(u'''SELECT tb4.id, tb5.stepid, tb4.casedesc, tb6.keyword, tb5.descr, tb5.inputtext, tb7.locmode, tb7.location
 							FROM management_product AS tb1
 							RIGHT JOIN management_project tb2 ON tb2.productid_id = tb1.id
 							RIGHT JOIN management_module tb3 ON tb3.projectid_id = tb2.id
@@ -340,12 +343,12 @@ def gen_test_cass(suite):
 							LEFT JOIN element_element AS tb7 ON tb7.id = tb5.elementid_id
 							WHERE tb1.isenabled = 1 AND tb2.isenabled = 1 AND tb3.isenabled AND tb4.isenabled = 1
 							%s %s
-							ORDER BY tb3.sortby DESC , tb4.id ASC, tb5.id ASC''' % (pid_info, cid_info))
+							ORDER BY tb3.sortby DESC , tb4.id ASC, tb5.stepid ASC''' % (pid_info, cid_info))
 	case_list = Controller.cur.fetchall()
 	# 输出Case步骤
-	# for x in case_list:
-	#	 x = str(x).replace('u\'','\'')
-	#	 print x.decode("unicode-escape")
+	for x in case_list:
+		x = str(x).replace('u\'','\'')
+		print(x)
 	case_flag = None
 	step_flag = 0
 	test_attr = [int(idx.strip()) for idx in case_id.split(',')] if case_id not in ['', None, 'None'] else []
