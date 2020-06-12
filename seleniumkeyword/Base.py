@@ -219,9 +219,8 @@ def action_openBrowser(action_object, step_desc, value, loc):
 	# if action_object[0].driver is None:
 	downloaddir = os.path.abspath(os.curdir)+"/data"
 	prefs = {"download.default_directory":downloaddir}
-
-
 	browser = value #传入浏览器对象
+
 	if action_object.driver == None:
 		if browser.upper() == 'IE':
 			action_object.driver = webdriver.Ie()
@@ -237,11 +236,21 @@ def action_openBrowser(action_object, step_desc, value, loc):
 			option.add_argument('-headless')  # 不打开图形界面
 			action_object.driver = webdriver.Chrome(chrome_options=option)
 		elif browser.upper() == 'FIREFOX':
-			action_object.driver = webdriver.Firefox()
+			fp = webdriver.FirefoxProfile()
+			fp.set_preference('browser.download.manager.showWhenStarting', False)
+			# fp.set_preference('browser.download.folderList', 2)  # 设置Firefox的默认下载文件夹。0是桌面；1是“我的下载”；2是自定义。
+			fp.set_preference('browser.download.dir', downloaddir)  # 设置自定义路径时，定义的路径
+			fp.set_preference('browser.helperApps.neverAsk.saveToDisk', 'binary/octet-stream')  # application/zip 不询问下载路径；后面的参数为要下载页面的文件类型的值。
+			action_object.driver = webdriver.Firefox(firefox_profile=fp)
 		elif browser.upper() == 'FIREFOX-HEADLESS':
+			fp = webdriver.FirefoxProfile()
+			fp.set_preference('browser.download.manager.showWhenStarting', False)
+			# fp.set_preference('browser.download.folderList', 2)  # 设置Firefox的默认下载文件夹。0是桌面；1是“我的下载”；2是自定义。
+			fp.set_preference('browser.download.dir', downloaddir)  # 设置自定义路径时，定义的路径
+			fp.set_preference('browser.helperApps.neverAsk.saveToDisk', 'binary/octet-stream')
 			firefox_option = webdriver.FirefoxOptions()
 			firefox_option.set_headless()
-			action_object.driver = webdriver.Firefox(firefox_options=firefox_option)
+			action_object.driver = webdriver.Firefox(firefox_profile=fp, firefox_options=firefox_option)
 		elif browser.upper() == 'SAFARI':
 			action_object.driver = webdriver.Safari()
 		elif browser.upper() == 'NW':
