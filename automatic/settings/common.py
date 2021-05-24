@@ -87,11 +87,13 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'automatic',
         'USER': 'root',
-        'PASSWORD': '123456',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 #RabbitMq
 
