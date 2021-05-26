@@ -55,7 +55,7 @@ docker run -d -p 8000:8000 \
 tsbc520/automagic:2.0 
 ```
 
-## 方法一: docker-compose
+## 方法二: docker-compose
 ```shell script
 docker-compose up
 ```
