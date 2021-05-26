@@ -4,7 +4,7 @@
 
 ### [新用户指导使用指南](https://github.com/radiateboy/automagic/wiki)
 
-#(一)源码安装
+# (一)源码安装
 > pip3 install -r requirements/base.txt
 >
 > pip3 install -r requirements/seleniumreq.txt
@@ -39,7 +39,7 @@ python3 start.py
 _http://127.0.0.1:8000_   访问登录即可
 
 默认管理员用户：admin， 密码：admin@123 
-#(二)docker安装
+# (二)docker安装
 ## 方法一: 命令安装启动
 ```shell script
 docker pull tsbc520/automagic:2.0
