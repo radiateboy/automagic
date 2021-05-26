@@ -82,14 +82,20 @@ WSGI_APPLICATION = 'automatic.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+MYSQL_USERNAME = os.environ.get('MYSQL_USERNAME', 'root')
+MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD', '123456')
+MYSQL_HOST = os.environ.get('MYSQL_HOST', 'localhost')
+MYSQL_PORT = os.environ.get('MYSQL_PORT', '3306')
+MYSQL_DBNAME = os.environ.get('MYSQL_DBNAME', 'automatic')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'automatic',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': MYSQL_DBNAME,
+        'USER': MYSQL_USERNAME,
+        'PASSWORD': MYSQL_PASSWORD,
+        'HOST': MYSQL_HOST,
+        'PORT': MYSQL_PORT,
     }
 }
 
