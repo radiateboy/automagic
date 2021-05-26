@@ -1,0 +1,14 @@
+version: '2.0'
+services:
+  mariadb:
+    image: tsbc520/automagic:2.0
+    container_name: "automagic"
+    restart: always
+    environment:
+      MYSQL_USERNAME: "root"
+      MYSQL_PASSWORD: "123456"
+      MYSQL_HOST: "192.168.10.167"
+      MYSQL_PORT: 3306
+      MYSQL_DBNAME: "autodb"
+    ports:
+      - "8000:8000"
