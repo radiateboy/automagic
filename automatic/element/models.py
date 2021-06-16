@@ -14,10 +14,10 @@ class Element(models.Model):
         ('name','name'),
         ('css selector','css selector'),
         ('xpath','xpath'),
-        ('class_name','class name'),
-        ('tag_name','tag name'),
-        ('link_text','link text'),
-        ('portial_link_text','portial link text')
+        ('class name','class name'),
+        ('tag name','tag name'),
+        ('link text','link text'),
+        ('portial link_text','portial link text')
     )
     projectid = models.ForeignKey(Project, editable=True, on_delete=models.DO_NOTHING)
     moduleid = models.ForeignKey(Module, editable=True, on_delete=models.DO_NOTHING)
