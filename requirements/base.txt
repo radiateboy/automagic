@@ -3,4 +3,4 @@ pyMySql==1.0.2
 testrail==0.3.13
 python-jenkins==1.7.0
 requests==2.25.1
-nameko==2.13.0
+nameko==2.14.0
