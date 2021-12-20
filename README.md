@@ -1,5 +1,5 @@
 # 自动化测试平台 
-## python3.8+   Django 3.2.3框架
+## python3.8+   Django 3.2.10框架
 >python3.8以下版本 使用Django 3.0.5 以上版本 ，django的 /admin/后台会异常退出，不使用/admin/后台不影响，安装请注意版本
 
 ### [新用户指导使用指南](https://github.com/radiateboy/automagic/wiki)
