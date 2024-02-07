@@ -1,4 +1,4 @@
-django==3.2.18
+django==3.2.24
 pyMySql==1.0.2
 testrail==0.3.13
 python-jenkins==1.7.0
